@@ -4,7 +4,19 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { ChevronDown, Menu, X, ExternalLink } from 'lucide-react'
 
-const navigation = {
+interface NavItem {
+  label: string
+  href: string
+  description: string
+  external?: boolean
+}
+
+interface NavSection {
+  label: string
+  items: NavItem[]
+}
+
+const navigation: Record<string, NavSection> = {
   eval: {
     label: 'Eval',
     items: [
@@ -105,7 +117,7 @@ export function Header() {
   )
 }
 
-function Dropdown({ section }: { section: typeof navigation.eval }) {
+function Dropdown({ section }: { section: NavSection }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -134,7 +146,7 @@ function Dropdown({ section }: { section: typeof navigation.eval }) {
   )
 }
 
-function DropdownItem({ item }: { item: { label: string; href: string; description: string; external?: boolean } }) {
+function DropdownItem({ item }: { item: NavItem }) {
   if (item.external) {
     return (
       <a
