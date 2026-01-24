@@ -29,7 +29,7 @@ const footerLinks = {
     title: 'Company',
     links: [
       { label: 'Consulting', href: '/consulting' },
-      { label: 'Collective', href: '/collective' },
+      { label: 'Community', href: '/community' },
       { label: 'About', href: '/about' },
       { label: 'Contact', href: '/about/contact' },
     ]

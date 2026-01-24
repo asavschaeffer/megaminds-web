@@ -89,10 +89,9 @@ export function Header() {
               Consulting
             </Link>
             <Link
-              href="/collective"
-              className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors py-2"
+              href="/community"
             >
-              Collective
+              Community
             </Link>
           </div>
 
@@ -228,7 +227,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
                 className="block py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
                 onClick={onClose}
               >
-                Collective
+                Community
               </Link>
             </div>
             <div className="py-6">

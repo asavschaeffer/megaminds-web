@@ -2,15 +2,15 @@ import Link from 'next/link'
 import { Users, Lightbulb, GitPullRequest, Trophy } from 'lucide-react'
 
 export const metadata = {
-  title: 'Collective | Megaminds',
+  title: 'Community | Megaminds',
   description: 'Join our community and contribute to the AI knowledge base.',
 }
 
-export default function CollectivePage() {
+export default function CommunityPage() {
   return (
     <div className="py-16 px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
-        <h1 className="text-3xl font-bold text-gray-900">The Collective</h1>
+        <h1 className="text-3xl font-bold text-gray-900">The Community</h1>
         <p className="mt-4 text-lg text-gray-600">
           Megaminds is built on community knowledge. The best prompts, the sharpest
           model insights, the most useful workflows—they come from real people doing real work.
