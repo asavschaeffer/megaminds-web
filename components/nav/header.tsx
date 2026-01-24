@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { ChevronDown, Menu, X, ExternalLink } from 'lucide-react'
+import { ChevronDown, Menu, X, ExternalLink, ChevronUp } from 'lucide-react'
 
 interface NavItem {
   label: string
@@ -130,12 +130,12 @@ function Dropdown({ section }: { section: NavSection }) {
         className="flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors py-2"
       >
         {section.label}
-        <ChevronDown className={`w-4 h-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+        <ChevronUp className={`w-4 h-4 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
 
       {open && (
-        <div className="absolute left-0 top-full pt-2">
-          <div className="w-72 rounded-lg bg-white shadow-lg ring-1 ring-gray-200 p-2">
+        <div className="absolute left-1/2 -translate-x-1/2 top-full">
+          <div className="mt-2 w-72 rounded-lg bg-white shadow-lg ring-1 ring-gray-200 p-2">
             {section.items.map((item) => (
               <DropdownItem key={item.href} item={item} />
             ))}
