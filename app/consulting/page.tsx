@@ -18,28 +18,32 @@ export default function ConsultingPage() {
         </p>
 
         <div className="mt-12 grid gap-6 md:grid-cols-2">
-          <ServiceCard
-            icon={<User className="w-6 h-6" />}
-            title="Personal"
-            description="One-on-one guidance on integrating AI into your professional workflow. Model selection, prompt development, and workflow optimization."
-            features={[
-              'Workflow analysis',
-              'Model matching',
-              'Custom prompt development',
-              'Ongoing support',
-            ]}
-          />
-          <ServiceCard
-            icon={<Building2 className="w-6 h-6" />}
-            title="Business"
-            description="Team training and organizational AI strategy. From executive education to hands-on workshops for entire departments."
-            features={[
-              'Team workshops',
-              'Executive briefings',
-              'Workflow audits',
-              'Implementation support',
-            ]}
-          />
+          <Link href="/consulting/intake?type=personal" className="block">
+            <ServiceCard
+              icon={<User className="w-6 h-6" />}
+              title="Personal"
+              description="One-on-one guidance on integrating AI into your professional workflow. Model selection, prompt development, and workflow optimization."
+              features={[
+                'Workflow analysis',
+                'Model matching',
+                'Custom prompt development',
+                'Ongoing support',
+              ]}
+            />
+          </Link>
+          <Link href="/consulting/intake?type=business" className="block">
+            <ServiceCard
+              icon={<Building2 className="w-6 h-6" />}
+              title="Business"
+              description="Team training and organizational AI strategy. From executive education to hands-on workshops for entire departments."
+              features={[
+                'Team workshops',
+                'Executive briefings',
+                'Workflow audits',
+                'Implementation support',
+              ]}
+            />
+          </Link>
         </div>
 
         {/* Approach */}
@@ -100,7 +104,7 @@ function ServiceCard({
   features: string[]
 }) {
   return (
-    <div className="p-6 border border-gray-200 rounded-lg">
+    <div className="p-6 border border-gray-200 rounded-lg h-full hover:border-gray-400 transition-colors">
       <div className="text-gray-700 mb-4">{icon}</div>
       <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
       <p className="mt-2 text-sm text-gray-600">{description}</p>

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { ArrowRight, ArrowLeft, Send, CheckCircle } from 'lucide-react'
 
 type FormData = {
@@ -53,8 +54,14 @@ const steps = [
 const aiTools = ['ChatGPT', 'Claude', 'Gemini', 'Copilot', 'Midjourney', 'Other', 'None']
 
 export default function IntakePage() {
+  const searchParams = useSearchParams()
+  const intakeType = searchParams.get('type')
+
   const [currentStep, setCurrentStep] = useState(0)
-  const [formData, setFormData] = useState<FormData>(initialFormData)
+  const [formData, setFormData] = useState<FormData>({
+    ...initialFormData,
+    type: intakeType === 'personal' || intakeType === 'business' ? intakeType : '',
+  })
   const [submitted, setSubmitted] = useState(false)
 
   const handleNext = () => {
