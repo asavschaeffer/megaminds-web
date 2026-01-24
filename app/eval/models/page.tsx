@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { getModelReports } from '@/lib/content'
 
 export const metadata = {
-  title: 'Model Reports | MegaMinds Eval',
+  title: 'Model Reports | Megaminds Eval',
   description: 'Deep dives on individual AI models.',
 }
 

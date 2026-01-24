@@ -1,14 +1,14 @@
 import { ExternalLink, Play } from 'lucide-react'
 
 export const metadata = {
-  title: 'Videos | MegaMinds Learn',
+  title: 'Videos | Megaminds Learn',
   description: 'Curated video content on AI.',
 }
 
 const videos = {
   ours: [
     {
-      title: 'Introduction to MegaMinds',
+      title: 'Introduction to Megaminds',
       description: 'Who we are, what we do, and why AI evaluation matters.',
       thumbnail: '/images/video-placeholder.jpg',
       duration: '5:00',
@@ -51,7 +51,7 @@ export default function VideosPage() {
 
         {/* Our Videos */}
         <section className="mt-12">
-          <h2 className="text-xl font-semibold text-gray-900">MegaMinds Content</h2>
+          <h2 className="text-xl font-semibold text-gray-900">Megaminds Content</h2>
           <p className="text-sm text-gray-500 mt-1">Coming soon</p>
           {/*
           <div className="mt-6 grid gap-6 md:grid-cols-2">

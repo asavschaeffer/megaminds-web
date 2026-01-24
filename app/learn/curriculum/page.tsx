@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { CheckCircle, Circle, Lock } from 'lucide-react'
 
 export const metadata = {
-  title: 'Curriculum | MegaMinds Learn',
+  title: 'Curriculum | Megaminds Learn',
   description: 'Structured learning path for understanding AI.',
 }
 

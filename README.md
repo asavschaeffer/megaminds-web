@@ -1,4 +1,4 @@
-# MegaMinds Web
+# Megaminds Web
 
 AI evaluation, tools, and consulting.
 

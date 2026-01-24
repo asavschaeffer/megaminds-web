@@ -61,7 +61,7 @@ export function Footer() {
         </div>
         <div className="mt-12 pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} MegaMinds. All rights reserved.
+            &copy; {new Date().getFullYear()} Megaminds. All rights reserved.
           </p>
           <div className="flex gap-6">
             <a

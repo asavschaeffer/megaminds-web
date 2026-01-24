@@ -1,7 +1,7 @@
 import { ExternalLink } from 'lucide-react'
 
 export const metadata = {
-  title: 'Model Arena | MegaMinds Eval',
+  title: 'Model Arena | Megaminds Eval',
   description: 'Watch AI models compete in agentic roleplay scenarios.',
 }
 

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Compass, Library, PlusCircle } from 'lucide-react'
 
 export const metadata = {
-  title: 'Tools | MegaMinds',
+  title: 'Tools | Megaminds',
   description: 'AI tools powered by our evaluation data.',
 }
 

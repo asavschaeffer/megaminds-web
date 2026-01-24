@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Search } from 'lucide-react'
 
 export const metadata = {
-  title: 'Prompt Library | MegaMinds',
+  title: 'Prompt Library | Megaminds',
   description: 'Curated AI prompts organized by category.',
 }
 

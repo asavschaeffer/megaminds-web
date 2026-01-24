@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'Articles | MegaMinds Learn',
+  title: 'Articles | Megaminds Learn',
   description: 'Deep dives on AI topics.',
 }
 

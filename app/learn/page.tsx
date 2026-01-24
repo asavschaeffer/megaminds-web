@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { GraduationCap, FileText, Video } from 'lucide-react'
 
 export const metadata = {
-  title: 'Learn | MegaMinds',
+  title: 'Learn | Megaminds',
   description: 'AI education: how LLMs work, model landscape, and practical guides.',
 }
 

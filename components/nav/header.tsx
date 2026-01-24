@@ -61,7 +61,7 @@ export function Header() {
           {/* Logo */}
           <div className="flex lg:flex-1">
             <Link href="/" className="-m-1.5 p-1.5">
-              <span className="text-xl font-bold text-gray-900">MegaMinds</span>
+              <span className="text-xl font-bold text-gray-900">Megaminds</span>
             </Link>
           </div>
 
@@ -184,7 +184,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
       <div className="fixed inset-y-0 right-0 z-50 w-full max-w-sm bg-white px-6 py-6 shadow-xl">
         <div className="flex items-center justify-between">
           <Link href="/" className="-m-1.5 p-1.5" onClick={onClose}>
-            <span className="text-xl font-bold text-gray-900">MegaMinds</span>
+            <span className="text-xl font-bold text-gray-900">Megaminds</span>
           </Link>
           <button
             type="button"

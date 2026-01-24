@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Benchmarks | MegaMinds Eval',
+  title: 'Benchmarks | Megaminds Eval',
   description: 'Our evaluation methodology and aggregate results.',
 }
 

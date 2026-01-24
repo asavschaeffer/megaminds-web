@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Users, Lightbulb, GitPullRequest, Trophy } from 'lucide-react'
 
 export const metadata = {
-  title: 'Collective | MegaMinds',
+  title: 'Collective | Megaminds',
   description: 'Join our community and contribute to the AI knowledge base.',
 }
 
@@ -12,7 +12,7 @@ export default function CollectivePage() {
       <div className="mx-auto max-w-4xl">
         <h1 className="text-3xl font-bold text-gray-900">The Collective</h1>
         <p className="mt-4 text-lg text-gray-600">
-          MegaMinds is built on community knowledge. The best prompts, the sharpest
+          Megaminds is built on community knowledge. The best prompts, the sharpest
           model insights, the most useful workflows—they come from real people doing real work.
         </p>
 

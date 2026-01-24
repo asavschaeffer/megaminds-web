@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Mail, Twitter, Youtube } from 'lucide-react'
 
 export const metadata = {
-  title: 'About | MegaMinds',
+  title: 'About | Megaminds',
   description: 'Who we are and what we do.',
 }
 
@@ -10,7 +10,7 @@ export default function AboutPage() {
   return (
     <div className="py-16 px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
-        <h1 className="text-3xl font-bold text-gray-900">About MegaMinds</h1>
+        <h1 className="text-3xl font-bold text-gray-900">About Megaminds</h1>
 
         <div className="mt-8 prose prose-gray max-w-none">
           <p className="text-lg text-gray-600">
@@ -20,7 +20,7 @@ export default function AboutPage() {
 
           <h2 className="text-xl font-semibold text-gray-900 mt-12">What We Do</h2>
           <p className="text-gray-600">
-            MegaMinds operates at the intersection of AI evaluation, education, and consulting.
+            Megaminds operates at the intersection of AI evaluation, education, and consulting.
             We believe that using AI effectively requires understanding how it actually works—not
             just which buttons to press, but the underlying mechanics, failure modes, and
             strengths of different systems.
@@ -87,7 +87,7 @@ export default function AboutPage() {
               className="flex items-center gap-3 text-gray-600 hover:text-gray-900 transition-colors"
             >
               <Youtube className="w-5 h-5" />
-              MegaMinds on YouTube
+              Megaminds on YouTube
             </a>
           </div>
         </div>

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { ArrowRight, Play, BarChart3, FileText } from 'lucide-react'
 
 export const metadata = {
-  title: 'Eval | MegaMinds',
+  title: 'Eval | Megaminds',
   description: 'Rigorous agentic benchmarks that test what matters: reasoning, consistency, tool use.',
 }
 
