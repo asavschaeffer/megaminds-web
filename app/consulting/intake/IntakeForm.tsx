@@ -115,21 +115,19 @@ export default function IntakeForm() {
         </p>
 
         {/* Progress */}
-        <div className="mt-8 flex items-center gap-2">
-          {steps.map((step, index) => (
-            <div key={step.id} className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                index <= currentStep ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'
-              }`}>
-                {index + 1}
-              </div>
-              {index < steps.length - 1 && (
-                <div className={`w-8 h-0.5 ${index < currentStep ? 'bg-gray-900' : 'bg-gray-200'}`} />
-              )}
-            </div>
-          ))}
+        <div className="mt-8">
+          <ol className="flex items-center w-full">
+            {steps.map((step, index) => (
+              <li key={step.id} className={`flex w-full items-center ${index < steps.length -1 ? 'after:content-[\'\'] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1' : ''} ${index <= currentStep ? 'after:border-blue-600' : ''}`}> 
+                <span className={`flex items-center justify-center w-10 h-10 rounded-full lg:h-12 lg:w-12 shrink-0 ${index <= currentStep ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}>
+                  {index + 1}
+                </span>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-2 text-sm text-gray-500">{steps[currentStep].title}</p>
         </div>
-        <p className="mt-2 text-sm text-gray-500">{steps[currentStep].title}</p>
+
 
         {/* Form Steps */}
         <div className="mt-8">
@@ -155,7 +153,7 @@ export default function IntakeForm() {
           <button
             onClick={handleBack}
             disabled={currentStep === 0}
-            className={`inline-flex items-center gap-1 text-sm ${
+            className={`inline-flex items-center gap-1 text-sm ${ 
               currentStep === 0 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
@@ -213,7 +211,7 @@ function StepBasics({ formData, setFormData }: { formData: FormData, setFormData
           <button
             type="button"
             onClick={() => setFormData({ ...formData, type: 'personal' })}
-            className={`p-4 border rounded-lg text-left transition-colors ${
+            className={`p-4 border rounded-lg text-left transition-colors ${ 
               formData.type === 'personal' ? 'border-gray-900 bg-gray-50' : 'border-gray-200 hover:border-gray-300'
             }`}
           >
@@ -223,7 +221,7 @@ function StepBasics({ formData, setFormData }: { formData: FormData, setFormData
           <button
             type="button"
             onClick={() => setFormData({ ...formData, type: 'business' })}
-            className={`p-4 border rounded-lg text-left transition-colors ${
+            className={`p-4 border rounded-lg text-left transition-colors ${ 
               formData.type === 'business' ? 'border-gray-900 bg-gray-50' : 'border-gray-200 hover:border-gray-300'
             }`}
           >
@@ -290,7 +288,7 @@ function StepExperience({ formData, setFormData, onToolToggle }: { formData: For
               key={tool}
               type="button"
               onClick={() => onToolToggle(tool)}
-              className={`px-3 py-1.5 text-sm rounded-md border transition-colors ${
+              className={`px-3 py-1.5 text-sm rounded-md border transition-colors ${ 
                 formData.currentTools.includes(tool)
                   ? 'bg-gray-900 text-white border-gray-900'
                   : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300'
@@ -309,7 +307,7 @@ function StepExperience({ formData, setFormData, onToolToggle }: { formData: For
               key={level}
               type="button"
               onClick={() => setFormData({ ...formData, experienceLevel: level })}
-              className={`w-full p-3 border rounded-lg text-left text-sm transition-colors ${
+              className={`w-full p-3 border rounded-lg text-left text-sm transition-colors ${ 
                 formData.experienceLevel === level ? 'border-gray-900 bg-gray-50' : 'border-gray-200 hover:border-gray-300'
               }`}
             >
