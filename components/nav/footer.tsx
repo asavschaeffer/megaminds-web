@@ -31,7 +31,7 @@ const footerLinks = {
       { label: 'Consulting', href: '/consulting' },
       { label: 'Community', href: '/community' },
       { label: 'About', href: '/about' },
-      { label: 'Contact', href: '/about/contact' },
+      { label: 'Contact', href: '/contact' },
     ]
   },
 }
@@ -63,7 +63,13 @@ export function Footer() {
           <p className="text-sm text-gray-500">
             &copy; {new Date().getFullYear()} Megaminds. All rights reserved.
           </p>
-          <div className="flex gap-6">
+          <div className="flex gap-x-6 gap-y-4 flex-wrap justify-center">
+            <Link href="/privacy" className="text-sm text-gray-500 hover:text-gray-700">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="text-sm text-gray-500 hover:text-gray-700">
+              Terms of Service
+            </Link>
             <a
               href="https://twitter.com/megamindsed"
               target="_blank"
