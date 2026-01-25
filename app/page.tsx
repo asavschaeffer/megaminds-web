@@ -91,7 +91,7 @@ function ValueCard({
 }) {
   return (
     <Link href={href} className="group">
-      <div className="p-6 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all">
+      <div className="h-full p-6 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all">
         <div className="text-gray-700 mb-3">{icon}</div>
         <h3 className="font-semibold text-gray-900 group-hover:text-gray-600 transition-colors">
           {title}
