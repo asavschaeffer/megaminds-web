@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowLeft, Copy, ThumbsUp } from 'lucide-react'
 import { notFound } from 'next/navigation'
+import { ModelIcon } from '@/components/ui/model-icon'
 
 // Sample data - will be replaced with MDX/database content
 const promptsByCategory: Record<string, {
@@ -118,7 +119,8 @@ function PromptCard({ prompt }: { prompt: typeof promptsByCategory.finance.promp
 
         <div className="mt-4 flex flex-wrap gap-2">
           {prompt.models.map((model) => (
-            <span key={model} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+            <span key={model} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded flex items-center gap-1.5">
+              <ModelIcon name={model} size={14} />
               {model}
             </span>
           ))}

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { getModelReports } from '@/lib/content'
+import ModelsPageContent from './ModelsPageContent'
 
 export const metadata = {
   title: 'Model Reports | Megaminds Eval',
@@ -56,28 +57,7 @@ export default function ModelsPage() {
           and when to use them.
         </p>
 
-        <div className="mt-12 grid gap-4">
-          {models.map((model) => (
-            <Link key={model.slug} href={`/eval/models/${model.slug}`} className="group">
-              <div className="p-6 border border-gray-200 rounded-lg hover:border-gray-300 hover:shadow-sm transition-all">
-                <h2 className="font-semibold text-gray-900 group-hover:text-gray-600 transition-colors">
-                  {model.name}
-                </h2>
-                <p className="text-sm text-gray-500 mt-1">{model.tagline}</p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {model.strengths.map((strength) => (
-                    <span
-                      key={strength}
-                      className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
-                    >
-                      {strength}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <ModelsPageContent models={models} />
       </div>
     </div>
   )

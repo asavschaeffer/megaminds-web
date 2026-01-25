@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { ArrowRight, ArrowLeft, RotateCcw } from 'lucide-react'
+import { ModelIcon } from '@/components/ui/model-icon'
 
 type Question = {
   id: string
@@ -218,7 +219,10 @@ export default function ModelPickerPage() {
 
           <div className="mt-8 p-6 bg-gray-900 text-white rounded-lg">
             <p className="text-sm text-gray-400">Best match for your task</p>
-            <h2 className="text-2xl font-bold mt-1">{recommendation.model}</h2>
+            <div className="flex items-center gap-3 mt-1">
+              <ModelIcon name={recommendation.model} size={32} />
+              <h2 className="text-2xl font-bold">{recommendation.model}</h2>
+            </div>
             <p className="mt-2 text-gray-300">{recommendation.reason}</p>
           </div>
 
@@ -227,8 +231,11 @@ export default function ModelPickerPage() {
             <div className="mt-3 space-y-3">
               {recommendation.alternatives.map((alt) => (
                 <div key={alt.model} className="p-4 border border-gray-200 rounded-lg">
-                  <p className="font-medium text-gray-900">{alt.model}</p>
-                  <p className="text-sm text-gray-600">{alt.reason}</p>
+                  <div className="flex items-center gap-2">
+                    <ModelIcon name={alt.model} size={20} />
+                    <p className="font-medium text-gray-900">{alt.model}</p>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-1">{alt.reason}</p>
                 </div>
               ))}
             </div>

@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
+import { ModelIcon } from '@/components/ui/model-icon'
 
 // This will eventually pull from MDX files
 const modelData: Record<string, {
@@ -97,7 +98,10 @@ export default function ModelPage({ params }: { params: { slug: string } }) {
           All Models
         </Link>
 
-        <h1 className="text-3xl font-bold text-gray-900">{model.name}</h1>
+        <div className="flex items-center gap-4">
+          <ModelIcon name={model.name} size={48} />
+          <h1 className="text-3xl font-bold text-gray-900">{model.name}</h1>
+        </div>
         <p className="mt-2 text-lg text-gray-600">{model.tagline}</p>
 
         <div className="mt-8 grid md:grid-cols-2 gap-6">

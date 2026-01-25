@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ArrowRight, Cpu, BookOpen, Wrench, Users } from 'lucide-react'
+import { ModelIcon } from '@/components/ui/model-icon'
 
 export default function Home() {
   return (
@@ -68,9 +69,22 @@ export default function Home() {
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold text-gray-900 mb-8">Latest Model Evaluations</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <ModelCard name="Claude Opus 4.5" tag="Best for reflection" href="/eval/models/claude" />
-            <ModelCard name="Gemini 3" tag="Best for multimodal" href="/eval/models/gemini" />
-            <ModelCard name="ChatGPT 5.2" tag="Best for reasoning" href="/eval/models/chatgpt" />
+            <ModelCard
+              name="Claude Opus 4.5"
+              description="Best for reflection"
+              href="/eval/models/claude"
+            />
+            <ModelCard
+              name="Gemini 3"
+              description="Best for multimodal"
+              href="/eval/models/gemini"
+            />
+            <ModelCard
+              name="DeepSeek R1/V3"
+              description="Best for transparent reasoning at low cost"
+              href="/eval/models/deepseek"
+              tags={['Visible reasoning trace', 'Cheapest', 'Open source']}
+            />
           </div>
         </div>
       </section>
@@ -104,18 +118,34 @@ function ValueCard({
 
 function ModelCard({
   name,
-  tag,
-  href
+  description,
+  href,
+  icon,
+  tags = []
 }: {
   name: string
-  tag: string
+  description: string
   href: string
+  icon?: React.ReactNode
+  tags?: string[]
 }) {
   return (
     <Link href={href} className="group">
-      <div className="p-5 border border-gray-200 rounded-lg hover:border-gray-300 hover:shadow-sm transition-all">
-        <h3 className="font-semibold text-gray-900">{name}</h3>
-        <p className="text-sm text-gray-500 mt-1">{tag}</p>
+      <div className="p-6 border border-gray-200 rounded-lg hover:border-gray-300 hover:shadow-sm transition-all h-full">
+        <div className="flex items-center gap-3 mb-3">
+          {icon || <ModelIcon name={name} size={48} />}
+          <h3 className="font-semibold text-gray-900 group-hover:text-gray-600 transition-colors">{name}</h3>
+        </div>
+        <p className="text-sm text-gray-500 mt-1">{description}</p>
+        {tags.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </Link>
   )

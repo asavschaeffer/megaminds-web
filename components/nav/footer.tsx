@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Twitter, Youtube } from 'lucide-react'
 
 const footerLinks = {
   eval: {
@@ -63,7 +64,7 @@ export function Footer() {
           <p className="text-sm text-gray-500">
             &copy; {new Date().getFullYear()} Megaminds. All rights reserved.
           </p>
-          <div className="flex gap-x-6 gap-y-4 flex-wrap justify-center">
+          <div className="flex gap-x-6 gap-y-4 flex-wrap justify-center items-center">
             <Link href="/privacy" className="text-sm text-gray-500 hover:text-gray-700">
               Privacy Policy
             </Link>
@@ -74,17 +75,19 @@ export function Footer() {
               href="https://twitter.com/megamindsed"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-gray-500 hover:text-gray-700"
+              className="text-gray-500 hover:text-gray-700"
+              aria-label="Twitter"
             >
-              Twitter
+              <Twitter className="w-5 h-5" />
             </a>
             <a
               href="https://youtube.com/@megamindsed"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-gray-500 hover:text-gray-700"
+              className="text-gray-500 hover:text-gray-700"
+              aria-label="YouTube"
             >
-              YouTube
+              <Youtube className="w-5 h-5" />
             </a>
           </div>
         </div>

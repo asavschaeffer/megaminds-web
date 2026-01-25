@@ -1,3 +1,5 @@
+import { ModelIcon } from '@/components/ui/model-icon'
+
 export const metadata = {
   title: 'Benchmarks | Megaminds Eval',
   description: 'Our evaluation methodology and aggregate results.',
@@ -90,7 +92,12 @@ function ResultRow({
 }) {
   return (
     <tr>
-      <td className="py-3 font-medium text-gray-900">{model}</td>
+      <td className="py-3 font-medium text-gray-900">
+        <div className="flex items-center gap-3">
+          <ModelIcon name={model} size={24} />
+          {model}
+        </div>
+      </td>
       <td className="py-3 text-center text-gray-600">{tom}%</td>
       <td className="py-3 text-center text-gray-600">{consistency}%</td>
       <td className="py-3 text-center text-gray-600">{toolUse}%</td>
