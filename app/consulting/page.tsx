@@ -104,18 +104,22 @@ function ServiceCard({
   features: string[]
 }) {
   return (
-    <div className="p-6 border border-gray-200 rounded-lg h-full hover:border-gray-400 transition-colors">
-      <div className="text-gray-700 mb-4">{icon}</div>
-      <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-      <p className="mt-2 text-sm text-gray-600">{description}</p>
-      <ul className="mt-4 space-y-2">
-        {features.map((feature) => (
-          <li key={feature} className="text-sm text-gray-600 flex items-center gap-2">
-            <span className="w-1 h-1 bg-gray-400 rounded-full" />
-            {feature}
-          </li>
-        ))}
-      </ul>
+    <div className="p-6 border border-gray-200 rounded-lg h-full hover:border-gray-400 transition-colors flex flex-col">
+      <div>
+        <div className="text-gray-700 mb-4">{icon}</div>
+        <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+        <p className="mt-2 text-sm text-gray-600">{description}</p>
+        <ul className="mt-4 space-y-2">
+          {features.map((feature) => (
+            <li key={feature} className="text-sm text-gray-600 flex items-center gap-2">
+              <span className="w-1 h-1 bg-gray-400 rounded-full" />
+              {feature}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="flex-grow" />
+      <p className="mt-4 text-sm font-medium text-gray-900">Get started →</p>
     </div>
   )
 }
