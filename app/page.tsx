@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight, Cpu, BookOpen, Wrench, Users } from 'lucide-react'
 import { ModelIcon } from '@/components/ui/model-icon'
+import { BrandCard } from '@/components/ui/brand-card'
 
 export default function Home() {
   return (
@@ -74,10 +75,15 @@ export default function Home() {
               description="Best for reflection"
               href="/eval/models/claude"
             />
-            <ModelCard
-              name="Gemini 3"
-              description="Best for multimodal"
-              href="/eval/models/gemini"
+            <BrandCard
+              href="/eval/models/copilot"
+              modelFamily="Model family"
+              modelVariant="Model variant"
+              versionNumber="Version #"
+              description="Paragraph element"
+              tags={['tag1', 'tag2', 'tag3']}
+              modelLogoLabel="Model logo"
+              parentBrandingLabel="Parent company branding"
             />
             <ModelCard
               name="DeepSeek R1/V3"

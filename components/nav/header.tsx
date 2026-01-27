@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { useState } from 'react'
 import { ChevronDown, Menu, X, ExternalLink, ChevronUp } from 'lucide-react'
 
@@ -62,12 +61,11 @@ export function Header() {
           {/* Logo */}
           <div className="flex lg:flex-1">
             <Link href="/" className="-m-1.5 p-1.5">
-              <Image
+              <img
                 src="/images/megaminds-logo-2007.gif"
                 alt="Megaminds Logo"
                 width={150}
                 height={40}
-                priority
               />
             </Link>
           </div>
@@ -191,7 +189,7 @@ function MobileMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
       <div className="fixed inset-y-0 right-0 z-50 w-full max-w-sm bg-white px-6 py-6 shadow-xl">
         <div className="flex items-center justify-between">
           <Link href="/" className="-m-1.5 p-1.5" onClick={onClose}>
-            <Image
+            <img
               src="/images/megaminds-logo-2007.gif"
               alt="Megaminds Logo"
               width={150}
