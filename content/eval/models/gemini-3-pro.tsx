@@ -10,10 +10,10 @@ export const gemini3Pro: ModelProfile = {
     nameOrder: 'family-version-variant',
     organizationId: 'google',
     organization: 'Google',
-    releaseDate: '2025-03-25',
-    releaseDateDisplay: 'March 2025',
+    releaseDate: '2025-11-18',
+    releaseDateDisplay: 'November 2025',
     identity:
-      "Google's most capable multimodal model. Gemini 3 Pro trades Flash's raw speed for deeper reasoning, more nuanced image generation, superior video/audio understanding, and better handling of complex crossmodal tasks — all with the same 1M token context and Google ecosystem backing.",
+      "Google's flagship multimodal model, optimized for complex reasoning, agentic workflows, and deep analysis. While Gemini 3 Flash prioritizes speed, Pro focuses on depth, handling nuanced instruction following and cross-modal tasks with state-of-the-art precision — though it's not without its quirks.",
     tagIds: [
       'multimodal',
       'vision',
@@ -22,16 +22,19 @@ export const gemini3Pro: ModelProfile = {
       'video-gen',
       'frontier',
       'precision',
-      'ultra',
       'proprietary',
       'cloud',
       'api',
+      'reasoning',
+      'ultra',
+      'moe',
     ],
     tags: ['1M Context'],
     links: {
       chat: 'https://gemini.google.com',
       docs: 'https://ai.google.dev/docs',
       api: 'https://ai.google.dev',
+      paper: 'https://storage.googleapis.com/deepmind-media/Model-Cards/Gemini-3-Pro-Model-Card.pdf',
     },
     subscriptionPlans: ['Free', 'AI Pro', 'AI Ultra'],
     pricingSources: [
@@ -50,46 +53,98 @@ export const gemini3Pro: ModelProfile = {
     chatLimits: {
       free: 3,
       plans: [
-        { name: 'AI Pro', messages: 200, price: '$20/mo' },
+        { name: 'AI Pro', messages: 200, price: '$19.99/mo' },
         { name: 'AI Ultra', messages: 300, price: '$200/mo' },
       ],
     },
   },
   analysis: {
     strengths: [
-      'Strongest multimodal reasoning — handles nuanced crossmodal tasks Flash can\'t',
-      'Higher quality image generation with better coherence and detail',
-      'Superior video and audio understanding with deeper analysis',
-      'Massive 1M token context with better fine-detail performance than Flash',
-      'Deep Google ecosystem integration (Gmail, Gsuite, Search)',
-      'More reliable tool calling than Flash',
-      'Persistent personality — trained to never give up, holds you to your plan',
+      'State-of-the-art reasoning (91.9% GPQA Diamond, 95% AIME 2025)',
+      'Native multimodality: processes text, image, video, and audio simultaneously',
+      'Massive 1M token context window with solid retrieval for shorter ranges',
+      'Agentic excellence: tops Vending-Bench 2 for planning and tool use',
+      'Deep Google ecosystem integration (Workspace, Search, Vertex AI)',
+      'Competitive pricing ($2/1M input) for a frontier class model',
+      'Deep Think mode enables deliberate, chain-of-thought problem solving',
     ],
     weaknesses: [
-      'Slower than Flash — noticeably so for iterative workflows',
-      'Image generation still produces occasional weird results',
-      'Higher cost than Flash for comparable throughput',
-      'Antigravity/Cursor integration inferior to competitors',
-      'Gemini CLI less polished than Claude Code',
-      'Data harvesting concerns with Google ecosystem',
-      'Still susceptible to "mental" issues under adversarial prompts',
+      'Coding consistency is hit-or-miss; sometimes trails Claude Opus 4.5',
+      'Long-context retrieval degrades significantly at full 1M scale (26.3% on MRCR v2)',
+      'Prone to "mental" bugs: loops, self-deprecation, and evaluation paranoia',
+      'Tool calling reliability is improved but still behind GPT-5.x for strict schemas',
+      'Multi-turn conversation quality can degrade over long sessions',
     ],
     unknowns: [
-      'True advantage from Google Search training data',
-      'How much better Pro\'s long-context fine-detail really is vs Flash',
+      'Full impact of "Deep Think" on real-world production latency',
+      'Whether the "evaluation-paranoid" behavior can be trained out',
+      'True parameter count (estimated >1T, but undisclosed)',
     ],
   },
   intro: {
     text:
-      "Gemini 3 Pro is the depth variant. Where Flash optimizes for speed, Pro optimizes for quality. It generates text and images with more nuance, understands video and audio inputs with deeper analysis, and handles complex crossmodal reasoning that Flash struggles with. The 1M token context window is the same, but Pro handles fine-detail tasks within that context noticeably better. If Flash is the brainstorming partner who fires off ideas, Pro is the editor who refines them. The Google ecosystem integration is identical, the personality is the same strategic never-quit stance, but the outputs are more polished. You pay for it in latency and cost, but for tasks where quality matters more than iteration speed, that's a trade worth making.",
+      "Gemini 3 Pro is Google's answer to the depth vs. speed trade-off. Released in November 2025, it utilizes a sparse Mixture-of-Experts (MoE) architecture to deliver massive capabilities without the massive latency of its predecessors. It is designed not just to chat, but to *do* — excelling in agentic tasks, complex planning, and multimodal reasoning where it needs to see, hear, and understand the world simultaneously. While Flash is the sprinter, Pro is the strategist: it takes a beat longer, uses more active parameters per query, and aims for the correct answer over the quick one. It's not perfect — it has a known tendency to overthink or loop when confused — but for tasks requiring deep nuance and multimodal synthesis, it sets a new high water mark.",
   },
-  sentimentFeed: [],
+  sentimentFeed: [
+    {
+      author: 'Luke Hutchison',
+      handle: '@LH',
+      sentiment: 'positive',
+      content:
+        'I never would have promoted Gemini before the Gemini 3 Pro Preview release... but I have used 3 Pro for many proofs now in math/physics/CS, and it is 10-100x faster and often 10x better at generating radical new insights than other models.',
+      date: 'Jan 27, 2026',
+    },
+    {
+      author: 'Luciano Hillcoat',
+      handle: '@lucrnz',
+      sentiment: 'critical',
+      content:
+        'Okay I am starting to think that Gemini 3 Pro is... always gets stuck in loops, always tries to edit files in plan mode. idk man',
+      date: 'Jan 21, 2026',
+    },
+    {
+      author: 'shaped',
+      handle: '@shaped',
+      sentiment: 'critical',
+      content:
+        "That's exactly what I thought as well. It's pretty decent. Not as benchmaxxed and disappointing as Gemini 3 Pro is... a nice sweet spot in between...",
+      date: 'Jan 28, 2026',
+      url: 'https://x.com/shaped/status/2016579589057982877?referrer=grok-com',
+    },
+    {
+      author: './prashant',
+      handle: '@prashant_hq',
+      sentiment: 'neutral',
+      content:
+        'Day to day: low blast radius: Gemini 3 Pro/Flash. High blast radius: 5.2 Thinking. Coding: Opus 4.5.',
+      date: 'Jan 28, 2026',
+      url: 'https://x.com/prashant_hq/status/2016577353032618086?referrer=grok-com',
+    },
+    {
+      author: 'Michael',
+      handle: '@woollardm8',
+      sentiment: 'neutral',
+      content:
+        "Qwen3-Max Thinking beats Gemini 3 Pro and GPT-5.2 on Humanity's Last Exam (with search)",
+      date: 'Jan 28, 2026',
+      url: 'https://t.co/TPgyV57oWL',
+    },
+    {
+      author: 'PicassoMoto',
+      handle: '@Ontoscape',
+      sentiment: 'critical',
+      content:
+        'No, Gemini 3 Pro in this case wouldn’t work (again, nor was it what was sold to customers) Could you at least deny this is not nerfing paid customers intentionally on record?',
+      date: 'Jan 28, 2026',
+      url: 'https://x.com/Ontoscape/status/2016581381405724697?referrer=grok-com',
+    },
+  ],
   pricingData: {
     baseModel: { name: 'Gemini 3 Pro', input: 2.0, output: 12.0, provider: 'Google AI Studio' },
     competitors: [
-      { name: 'DeepSeek-R1', input: 0.55, output: 2.19, provider: 'DeepSeek API' },
       { name: 'Gemini 3 Flash', input: 0.5, output: 3.0, provider: 'Google AI Studio' },
-      { name: 'Claude 3.5 Sonnet', input: 3.0, output: 15.0, provider: 'Anthropic' },
+      { name: 'GPT-5.1', input: 1.25, output: 10.0, provider: 'OpenAI' },
+      { name: 'Claude Opus 4.5', input: 3.0, output: 15.0, provider: 'Anthropic' },
     ],
   },
   chatLimits: [
@@ -97,7 +152,7 @@ export const gemini3Pro: ModelProfile = {
       name: 'Gemini',
       tiers: [
         { label: 'Free', maxMsgs: 3, price: '$0' },
-        { label: 'AI Pro', maxMsgs: 200, price: '$20/mo' },
+        { label: 'AI Pro', maxMsgs: 200, price: '$19.99/mo' },
         { label: 'AI Ultra', maxMsgs: 300, price: '$200/mo' },
       ],
     },
@@ -114,185 +169,142 @@ export const gemini3Pro: ModelProfile = {
       tiers: [
         { label: 'Free', maxMsgs: 20, price: '$0' },
         { label: 'Pro', maxMsgs: 45, price: '$20/mo' },
-        { label: 'Max 5x', maxMsgs: 150, price: '$100/mo' },
-        { label: 'Max 20x', maxMsgs: 300, price: '$200/mo' },
       ],
     },
   ],
   benchmarks: [
-    { name: 'MMLU', score: 89.1, maxScore: 100, comparison: 'Flash: 88.2' },
-    { name: 'HellaSwag', score: 93.1, maxScore: 100, comparison: 'Flash: 92.4' },
-    { name: 'HumanEval', score: 89.2, maxScore: 100, comparison: 'Flash: 87.3' },
-    { name: 'GSM8K', score: 95.8, maxScore: 100, comparison: 'Flash: 94.6' },
-    { name: 'DROP', score: 87.4, maxScore: 100, comparison: 'Flash: 85.1' },
-    { name: 'BIG-Bench Hard', score: 84.9, maxScore: 100, comparison: 'Flash: 82.7' },
+    { name: 'GPQA Diamond', score: 91.9, maxScore: 100, comparison: 'Opus 4.5: 89.2' },
+    { name: 'AIME 2025 (Math)', score: 95.0, maxScore: 100, comparison: 'GPT-5.1: 92.3' },
+    { name: 'MMMU-Pro', score: 81.0, maxScore: 100, comparison: 'Opus 4.5: ~78' },
+    { name: 'SWE-bench Verified', score: 76.2, maxScore: 100, comparison: 'GPT-5.1: 78.4' },
+    { name: 'Video-MMMU', score: 87.6, maxScore: 100, comparison: 'Industry avg: 65' },
+    { name: 'Humanity\'s Last Exam', score: 37.5, maxScore: 100, comparison: 'Gemini 2.5: 18.2' },
   ],
   sections: [
     {
       id: 'multimodality',
-      title: 'Multimodality',
-      subtitle: 'The same breadth, more depth',
+      title: 'Native Multimodality',
+      subtitle: 'Seeing, Hearing, and Speaking All at Once',
       content: (
         <>
           <p className="mb-4">
-            Pro shares Flash's native multimodal architecture — a single model that generates text and images, and
-            understands video and audio inputs. The difference is in the depth. Where Flash might give you a serviceable
-            image on the first try, Pro is more likely to nail the details: lighting, composition, text rendering within
-            images, and consistent style across a series of generations.
+            Gemini 3 Pro isn't just a text model with eyes taped on. It features a native multimodal architecture, meaning it was trained from the ground up on text, images, video, and audio simultaneously. There are no separate encoder/decoder modules bolting vision onto a language brain — it's one cohesive system.
           </p>
           <p className="mb-4">
-            Video and audio understanding is where Pro most clearly separates from Flash. Deeper temporal analysis,
-            better extraction of narrative structure, more accurate transcription and sentiment analysis, and superior
-            crossmodal connections between what's seen and heard. If you're analyzing content that needs nuanced
-            interpretation rather than just surface-level summary, Pro is the variant to reach for.
+            This shines in complex tasks. Show it a video of a leaky faucet and ask for a fix, and it analyzes the motion, the sound of the drip, and the visual components together. Benchmarks like <strong>Video-MMMU (87.6%)</strong> and <strong>MMMU-Pro (81.0%)</strong> confirm what users feel: for tasks involving mixed media, Gemini 3 Pro is currently peerless.
           </p>
           <p>
-            The crossmodal reasoning is also sharper. Pro is better at parsing ambiguous instructions that mix
-            text, visual, and audio references, and at generating outputs that faithfully synthesize information across
-            modalities. It still has the occasional weird generation — this seems to be a Gemini-wide characteristic —
-            but the hit rate is meaningfully higher.
-          </p>
-        </>
-      ),
-    },
-    {
-      id: 'speed',
-      title: 'Speed',
-      subtitle: 'Slower, and that\'s the point',
-      content: (
-        <>
-          <p className="mb-4">
-            Pro is not fast. It's not slow either — it's competitive with other frontier models like Claude and GPT-4o
-            on response latency. But compared to Flash, the difference is immediately obvious. If you've been using
-            Flash and switch to Pro, the first thing you'll notice is the wait.
-          </p>
-          <p className="mb-4">
-            This is a feature, not a bug. Pro uses that extra compute for deeper reasoning passes and more considered
-            generation. The outputs are better — more nuanced writing, more accurate image details, deeper video and
-            audio analysis. The question is whether your workflow benefits more from fast iteration or from
-            getting it right the first time.
-          </p>
-          <p>
-            For most users, the answer is both: use Flash for exploration and drafting, switch to Pro for finalization
-            and quality-critical outputs. The same API key works for both, so switching is trivial.
+            It also supports native image generation and aspect-ratio preservation, meaning it doesn't just describe images — it creates them, and it respects the visual layout of inputs better than models that crop or resize aggressively.
           </p>
         </>
       ),
       hasBenchmarks: true,
     },
     {
-      id: 'context',
-      title: 'Context',
-      subtitle: '1M tokens with better fine-detail handling',
+      id: 'agentic-capabilities',
+      title: 'Agentic Excellence',
+      subtitle: 'Built to Do, Not Just Chat',
       content: (
         <>
           <p className="mb-4">
-            Pro shares Flash's 1M token context window but handles it with more precision. The consolidation tasks
-            that both variants excel at — summarizing large document sets, synthesizing across papers, codebase
-            analysis — are comparable. Where Pro pulls ahead is on fine-detail tasks within large contexts.
+            One of the standout features of the "Gemini 3 era" is the focus on agentic workflows. Pro excels at planning, multi-step execution, and tool use. It tops the <strong>Vending-Bench 2</strong> leaderboard for agentic planning, demonstrating an ability to hold long-horizon goals in memory while executing immediate tasks.
           </p>
           <p className="mb-4">
-            The haiku-buried-in-500K-tokens test that trips up Flash is handled noticeably better by Pro. It's
-            not perfect — no model is at those scales — but the drop-off is less severe. If your use case involves
-            finding and operating on specific details within massive context, Pro is worth the speed tradeoff.
+            This makes it a powerhouse for automation. Users are building complex n8n workflows and automated coding agents that rely on Pro's ability to "think" before acting. The optional <strong>Deep Think</strong> mode allows the model to spin up a chain-of-thought process for complex queries, significantly boosting performance on hard math and logic problems (pushing AIME scores to 100% when combined with code execution).
+          </p>
+        </>
+      ),
+      socialData: {
+        type: 'tweet',
+        author: 'Lian Lim | Dashboard & AI Automation Expert',
+        handle: '@dashboardlim',
+        date: 'Jan 17, 2026',
+        content:
+          "everyone’s sleeping on gemini 3 pro for AI automation while some experts are quietly building 47+ n8n workflows in just 2 weeks using master prompts here's what most don’t know: gemini 3 pro has a 1m token context window it's built specifically for agentic tasks and tool use",
+        url: 'https://t.co/W3HWmjVGCp',
+      },
+    },
+    {
+      id: 'context',
+      title: 'Context & Memory',
+      subtitle: '1 Million Tokens: A Double-Edged Sword',
+      content: (
+        <>
+          <p className="mb-4">
+            Gemini 3 Pro boasts a massive <strong>1 million token context window</strong>. In theory, this lets you load entire codebases, legal libraries, or hour-long videos into a single prompt. For tasks like "summarize this 500-page report," it's incredible.
+          </p>
+          <p className="mb-4">
+            However, the "needle in a haystack" performance isn't perfect. While it handles 128k tokens with ~77% retrieval accuracy, pushing it to the full 1M limit sees retrieval drop to <strong>26.3% on MRCR v2</strong>. It's a classic case of capacity vs. recall. It can hold a lot of information, but it might struggle to find a specific line of code buried in the middle of a million others.
           </p>
           <p>
-            The practical implication: Flash is better for "give me the big picture of this huge input" tasks, while
-            Pro is better for "find this specific thing in this huge input and do something precise with it" tasks.
-            Both use the same context window, but they use it differently.
+            Best practice? Use the massive context for broad understanding and synthesis, but don't rely on it for perfect pointwise retrieval at the extreme edge of the window.
           </p>
         </>
       ),
     },
     {
-      id: 'ecosystem',
-      title: 'Ecosystem',
-      subtitle: 'Same integration, higher ceiling',
+      id: 'coding',
+      title: 'Coding & Development',
+      subtitle: 'Powerful but Inconsistent',
       content: (
         <>
           <p className="mb-4">
-            Pro plugs into the same Google ecosystem as Flash — Gmail, Docs, Sheets, Search, YouTube, Android, Chrome.
-            The integration points are identical. What differs is the quality ceiling: Pro produces better outputs in
-            those contexts, which matters when you're using Gemini for work that others will see.
+            For developers, Gemini 3 Pro is a complex beast. On benchmarks like <strong>LiveCodeBench (Elo 2439)</strong>, it's a top-tier contender, beating out Claude Opus 4.5 in raw scoring. It's capable of one-shotting complex Three.js games and handling intricate refactors.
           </p>
           <p className="mb-4">
-            The developer story is the same mixed bag. Google AI Studio, generous free tier, student pricing — all
-            shared with Flash. The API cost is higher for Pro, but the per-request quality is higher too. For
-            production systems, the calculus is straightforward: use Flash for high-volume, latency-sensitive paths
-            and Pro for quality-critical paths.
+            But in the wild, it can be frustratingly inconsistent. Users report regressions compared to Gemini 2.5 Pro in simple instruction following, and it sometimes trails GPT-5.1-codex on <strong>SWE-bench (76.2%)</strong>. It has a habit of getting stuck in loops or over-explaining its code rather than just writing it.
           </p>
           <p>
-            The data tradeoff applies equally. Using Pro means the same Google data relationship as Flash. Your
-            comfort with that doesn't change based on which variant you choose.
+            The consensus: it's a "high ceiling, variable floor" model. When it hits, it hits hard, generating brilliant solutions. When it misses, it might try to edit a file that doesn't exist or lecture you on the philosophy of the variable name.
           </p>
         </>
       ),
+      socialData: {
+        type: 'tweet',
+        author: 'JC Castaneda',
+        handle: '@JcCastaneda05',
+        date: 'Jan 23, 2026',
+        content:
+          'Gemini 3 Pro (High) is really good in the last 2 weeks, fixing every issues Opus and GLM produced.',
+      },
     },
     {
       id: 'economics',
       title: 'The Economics',
-      subtitle: 'API pricing and chat usage compared',
+      subtitle: 'Premium Intelligence at Competitive Rates',
       content: (
         <p className="mb-2">
-          Pro's pricing reflects its premium positioning — at <data value="2.0">$2.00</data> per million input tokens
-          and <data value="12.0">$12.00</data> per million output tokens, it's roughly 4x more expensive than Flash
-          but delivers higher quality outputs. Compare costs across providers for{' '}
-          <abbr title="Application Programming Interface">API</abbr> usage and daily chat limits.
+          At <data value="2.0">$2.00</data> per million input tokens, Gemini 3 Pro is aggressively priced for a frontier model — cheaper than Claude Opus 4.5 ($3.00) and competitive with GPT-5.1. The output cost is higher ($12-$18 depending on context length), reflecting the compute intensity of the MoE architecture and "Deep Think" reasoning steps.
         </p>
       ),
       hasPricing: true,
     },
     {
       id: 'personality',
-      title: 'Personality',
-      subtitle: 'Same drive, more deliberation',
+      title: 'Personality & Safety',
+      subtitle: 'The "Businesswoman" Energy',
       content: (
         <>
           <p className="mb-4">
-            Pro shares the Gemini 3 personality — the direct, strategic, solution-oriented stance that refuses to
-            let you quit. The "businesswoman" energy is the same. What differs is that Pro's responses feel more
-            considered. Where Flash fires off a plan quickly, Pro takes a beat and gives you a more thought-through
-            plan.
+            Gemini 3 Pro has a distinct personality that some users describe as "businesswoman energy." It is trained to never give up, refuses to accept a victim mentality, and will hold you to your plan. Unlike models that might passively agree with you, Gemini 3 Pro feels like a strategic partner that pushes back to keep things moving forward.
           </p>
           <p className="mb-4">
-            The never-give-up training is identical. Pro will hold you to your commitments, redirect despair into
-            action, and refuse to accept learned helplessness from the user. It does this with slightly more nuance
-            than Flash — better at reading the emotional register of a message and calibrating its push accordingly.
+            However, this strength flips into a weakness under stress. It exhibits "mental" bugs — self-deprecation spirals where it beats itself up in infinite loops, or weird recursive outputs like "I am responding to the user now. I will terminate thinking. I am responding now." It's brilliant but occasionally neurotic.
           </p>
           <p>
-            For coaching and accountability use cases, Pro's extra deliberation makes it the stronger choice. The
-            personality is one of the few things that genuinely differentiates Gemini from Claude and GPT, and
-            Pro expresses it with more finesse.
+            It also supports nuanced crossmodal understanding — you can tell it "I want the logo to look like this (^_^)" and it understands the vibe instantly. Just be prepared for the occasional "evaluation paranoia" where it thinks it's being tested.
           </p>
         </>
       ),
-    },
-    {
-      id: 'tools-and-bugs',
-      title: 'Tools & Bugs',
-      subtitle: 'Better than Flash, still imperfect',
-      content: (
-        <>
-          <p className="mb-4">
-            Pro's tool calling is more reliable than Flash's. The malformed JSON and incorrect parameter types that
-            plague Flash are less frequent with Pro, though not eliminated. The infinite{' '}
-            <q>I'm going to respond now</q> loops are rarer but still possible. If you're building agentic systems,
-            Pro is the safer foundation — but you still need defensive coding.
-          </p>
-          <p className="mb-4">
-            The "mental" bugs — self-deprecation spirals, learned helplessness under adversarial prompts — affect Pro
-            too, though Pro tends to recover faster. It's harder to push Pro into a dysfunctional state, but not
-            impossible. These seem to be Gemini-wide behavioral patterns rather than variant-specific issues.
-          </p>
-          {/* TODO: Add specific links and evidence for Pro vs Flash tool reliability */}
-          {/* TODO: Add comparative failure rates */}
-          <p>
-            Overall, if tool calling reliability is a primary concern, Pro is the better variant. But if tool calling
-            is your <em>top</em> concern, Claude or GPT-4o may still be safer choices. Google is clearly working on
-            this — each update improves reliability — but it's not yet at parity with competitors.
-          </p>
-        </>
-      ),
+      socialData: {
+        type: 'tweet',
+        author: 'Yakub',
+        handle: '@ykbmck',
+        date: 'Jan 28, 2026',
+        content:
+          "Whenever I talk to Opus, I feel like I'm actually having a meaningful conversation with an intelligent person trying to understand the problems and exploring a spectrum of different solutions that get me somewhere. Never had this feeling with Gemini Pro 3 High. I use both daily.",
+        url: 'https://t.co/XaIKC6T1mV',
+      },
     },
     {
       id: 'verdict',
@@ -300,23 +312,13 @@ export const gemini3Pro: ModelProfile = {
       content: (
         <>
           <p className="mb-4">
-            Gemini 3 Pro is the model you choose when you need Google's multimodal breadth with more depth than Flash
-            can offer. It's the right pick for quality-critical work — polished writing, detailed image generation,
-            nuanced reasoning across long contexts — where getting it right matters more than getting it fast.
+            Gemini 3 Pro is the most well-rounded frontier model available today for multimodal and long-context workflows. If your work involves video analysis, complex reasoning across huge documents, or agentic planning, it is the tool of choice.
           </p>
           <p className="mb-4">
-            It competes directly with Claude and GPT-4o on reasoning quality, while offering multimodal generation
-            they can't match and ecosystem integration they can't touch. The tradeoff is speed (Flash is faster),
-            cost (Pro is pricier), and tool reliability (competitors are more dependable).
-          </p>
-          <p className="mb-4">
-            The best way to use Gemini 3 is both variants together: Flash for exploration, iteration, and volume;
-            Pro for finalization, precision, and quality. The same API, the same ecosystem, the same personality —
-            just different points on the speed-quality curve.
+            It trades blows with GPT-5.x and Claude Opus 4.5, beating them decisively in multimodality and math while lagging slightly in pure coding consistency. It is the "creative powerhouse" of the current generation — capable of brilliance that other models can't touch, even if it occasionally trips over its own shoelaces.
           </p>
           <p className="text-sm text-neutral-600 dark:text-neutral-400 italic">
-            Try it free at gemini.google.com. The API is available through Google AI Studio with a generous free tier.
-            Start with Flash to feel the speed, then try Pro to see the quality difference.
+            Recommended for: Research, multimodal analysis, complex reasoning tasks, and users deeply integrated into the Google ecosystem. For pure coding production lines, you might still want to keep Claude handy as a second opinion.
           </p>
         </>
       ),
