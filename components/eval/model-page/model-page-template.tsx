@@ -16,6 +16,7 @@ import { SentimentMarquee } from './widgets/sentiment-marquee'
 import { SocialEmbed } from './widgets/social-embed'
 import { StrengthsWeaknesses } from './widgets/strengths-weaknesses'
 import { useActiveSection } from './widgets/use-active-section'
+import { AbbrSidenoteProvider } from '@/components/shared/sidenote'
 
 export interface ModelPageTemplateProps {
   profile: ModelProfile
@@ -152,13 +153,15 @@ export const ModelPageTemplate = ({ profile, footer, className = '' }: ModelPage
 
         <FloatingTOC sections={orderedSections} activeId={activeSection} show={showToc} />
 
-        <main
-          id="main-content"
-          className="max-w-4xl mx-auto px-6 py-10 md:px-12 md:py-14 space-y-4 bg-white dark:bg-neutral-900 md:rounded-2xl md:shadow-sm md:border border-neutral-200 dark:border-neutral-800 mb-12"
-          tabIndex={-1}
-        >
-          {orderedSections.map((section, idx) => renderSection(section, idx))}
-        </main>
+        <AbbrSidenoteProvider>
+          <main
+            id="main-content"
+            className="max-w-4xl mx-auto px-6 py-10 md:px-12 md:py-14 space-y-4 bg-white dark:bg-neutral-900 md:rounded-2xl md:shadow-sm md:border border-neutral-200 dark:border-neutral-800 mb-12"
+            tabIndex={-1}
+          >
+            {orderedSections.map((section, idx) => renderSection(section, idx))}
+          </main>
+        </AbbrSidenoteProvider>
 
         <div className="bg-white dark:bg-neutral-900 pt-4">{meta.links && <CTACards links={meta.links} />}</div>
 

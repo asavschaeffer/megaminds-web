@@ -1,4 +1,5 @@
 import type { ModelProfile } from '@/lib/models/types'
+import { AbbrSidenote } from '@/components/shared/sidenote'
 
 export const gemini3Flash: ModelProfile = {
   slug: 'gemini-3-flash',
@@ -134,20 +135,20 @@ export const gemini3Flash: ModelProfile = {
       content: (
         <>
           <p className="mb-4">
-            Flash's defining feature is native multimodality at speed. This isn't "we bolted an image model onto a text
-            model" — it's a single architecture that thinks across modalities. You can describe an image, ask it to
-            generate one, edit it with natural language, and then ask it to explain what changed. The crossmodal
+            Flash's defining feature is native <AbbrSidenote title="Multimodality means processing multiple input types (text, images, video, audio) simultaneously" contentMaxWidth={896}>multimodality</AbbrSidenote> at speed. This isn't "we bolted an image model onto a text
+            model" — it's a single architecture that thinks across <AbbrSidenote title="Modalities are different types of input/output (text, image, video, audio)" contentMaxWidth={896}>modalities</AbbrSidenote>. You can describe an image, ask it to
+            generate one, edit it with natural language, and then ask it to explain what changed. The <AbbrSidenote title="Crossmodal understanding connects information across different input types (e.g., matching text descriptions to visual content)" contentMaxWidth={896}>crossmodal</AbbrSidenote>
             understanding is real: you can sketch a logo concept, paste it in, and say{' '}
             <q>no I want the logo to look like this (^_^)</q> and it will parse both your text and your visual intent.
           </p>
           <p className="mb-4">
             Flash excels at video understanding — analyzing clips, summarizing narratives, extracting key moments, and
-            connecting visual elements with audio transcripts. Image generation is more hit-or-miss — it can produce
+            connecting visual elements with <AbbrSidenote title="Audio transcripts convert spoken words into text" contentMaxWidth={896}>audio transcripts</AbbrSidenote>. <AbbrSidenote title="Image generation creates new images from text descriptions" contentMaxWidth={896}>Image generation</AbbrSidenote> is more hit-or-miss — it can produce
             stunning results but also weird, uncanny outputs that feel like they came from a different model entirely.
-            For complex multimodal tasks where nuance matters more than speed, Pro is the better choice.
+            For complex <AbbrSidenote title="Multimodal tasks combine multiple input types (text, images, video, audio)" contentMaxWidth={896}>multimodal</AbbrSidenote> tasks where nuance matters more than speed, Pro is the better choice.
           </p>
           <p>
-            Where Flash gets practical: you can build workflows that move between modalities without switching tools
+            Where Flash gets practical: you can build workflows that move between <AbbrSidenote title="Modalities are different types of input/output (text, image, video, audio)" contentMaxWidth={896}>modalities</AbbrSidenote> without switching tools
             and without waiting. Analyze a video, generate an image revision, narrate the changes, summarize audio
             transcripts — all faster than any competitor. It's not perfect at any single modality, but the combination of
             seamlessness and speed is something no other model matches.
@@ -188,24 +189,24 @@ export const gemini3Flash: ModelProfile = {
       content: (
         <>
           <p className="mb-4">
-            A million tokens is not a marketing number you can ignore. It's roughly 750,000 words — multiple books,
-            an entire codebase, a semester of lecture transcripts. Flash can ingest all of that in a single prompt
-            and produce coherent output that references material from anywhere in the window.
+            A <AbbrSidenote title="1 million tokens ≈ 750,000 words, enough for multiple books or entire codebases" contentMaxWidth={896}>million tokens</AbbrSidenote> is not a marketing number you can ignore. It's roughly 750,000 words — multiple books,
+            an entire codebase, a semester of lecture transcripts. Flash can ingest all of that in a single <AbbrSidenote title="A prompt is the input text/instructions given to an AI model" contentMaxWidth={896}>prompt</AbbrSidenote>
+            and produce coherent output that references material from anywhere in the <AbbrSidenote title="Context window is the maximum amount of text a model can process in one request" contentMaxWidth={896}>window</AbbrSidenote>.
           </p>
           <p className="mb-4">
-            The key insight is what this context window is good at and what it's not. Consolidation tasks — summarizing,
+            The key insight is what this <AbbrSidenote title="Context window is the maximum amount of text a model can process in one request" contentMaxWidth={896}>context window</AbbrSidenote> is good at and what it's not. Consolidation tasks — summarizing,
             synthesizing, finding themes across large bodies of text — work remarkably well. Dump 50 research papers
             and ask for a literature review. Paste an entire codebase and ask for an architecture overview. These are
-            where the 1M context shines.
+            where the <AbbrSidenote title="1 million tokens ≈ 750,000 words" contentMaxWidth={896}>1M context</AbbrSidenote> shines.
           </p>
           <p className="mb-4">
-            Fine-detail tasks are another story. Ask Flash to refine a haiku buried in 500K tokens of context and
+            Fine-detail tasks are another story. Ask Flash to refine a haiku buried in <AbbrSidenote title="500K tokens ≈ 375,000 words" contentMaxWidth={896}>500K tokens</AbbrSidenote> of context and
             the precision drops noticeably. The model is better at seeing the forest than counting individual leaves.
             For tasks requiring surgical precision on specific passages within massive context, you're better off
-            extracting the relevant section first and working with it in a focused prompt.
+            extracting the relevant section first and working with it in a focused <AbbrSidenote title="A prompt is the input text/instructions given to an AI model" contentMaxWidth={896}>prompt</AbbrSidenote>.
           </p>
           <p>
-            This isn't a limitation unique to Gemini — it's a characteristic of how attention mechanisms handle
+            This isn't a limitation unique to Gemini — it's a characteristic of how <AbbrSidenote title="Attention mechanisms determine which parts of the input the model focuses on when generating output" contentMaxWidth={896}>attention mechanisms</AbbrSidenote> handle
             extremely long sequences. But it's worth understanding so you use the context window as a strength rather
             than fighting against its grain.
           </p>
@@ -226,13 +227,13 @@ export const gemini3Flash: ModelProfile = {
           </p>
           <p className="mb-4">
             The Google Search training advantage is real but hard to quantify. Gemini's grounding in search results
-            gives it a factual currency that other models achieve through RAG pipelines. Whether this translates to
+            gives it a factual currency that other models achieve through <AbbrSidenote title="Retrieval-Augmented Generation" definition="Models fetch relevant documents before answering to improve accuracy" contentMaxWidth={896}>RAG</AbbrSidenote> pipelines. Whether this translates to
             meaningfully better answers or just differently-flavored ones is still an open question.
           </p>
           <p className="mb-4">
-            Developer tooling is a mixed bag. Gemini's API through Google AI Studio is solid and generously priced —
-            the free tier is remarkably capable, and student pricing makes it accessible. But for IDE integration,
-            Cursor with other models still feels more polished. Gemini CLI exists but lacks the refinement of Claude
+            Developer tooling is a mixed bag. Gemini's <AbbrSidenote term="API" contentMaxWidth={896}>API</AbbrSidenote> through Google AI Studio is solid and generously priced —
+            the free tier is remarkably capable, and student pricing makes it accessible. But for <AbbrSidenote term="IDE" contentMaxWidth={896}>IDE</AbbrSidenote> integration,
+            Cursor with other models still feels more polished. Gemini <AbbrSidenote term="CLI" contentMaxWidth={896}>CLI</AbbrSidenote> exists but lacks the refinement of Claude
             Code. Google is clearly investing here, but the developer experience gap is noticeable if you're coming
             from competitors.
           </p>
@@ -253,7 +254,7 @@ export const gemini3Flash: ModelProfile = {
           Flash's pricing advantage is significant — at <data value="0.5">$0.50</data> per million input tokens and{' '}
           <data value="3.0">$3.00</data> per million output tokens, it's roughly 4x cheaper than Pro and competitive
           with other frontier models. Compare costs across providers for{' '}
-          <abbr title="Application Programming Interface">API</abbr> usage and daily chat limits.
+          <AbbrSidenote term="API" contentMaxWidth={896}>API</AbbrSidenote> usage and daily chat limits.
         </p>
       ),
       hasPricing: true,
@@ -292,9 +293,9 @@ export const gemini3Flash: ModelProfile = {
       content: (
         <>
           <p className="mb-4">
-            Flash's tool calling has real issues that you'll hit in production. The model sometimes fails to
-            properly format tool calls, producing malformed JSON or calling tools with incorrect parameter types. In
-            agentic loops, it can enter infinite cycles where it repeatedly says{' '}
+            Flash's <AbbrSidenote title="Tool calling lets models invoke external functions (APIs, calculators, code execution) during generation" contentMaxWidth={896}>tool calling</AbbrSidenote> has real issues that you'll hit in production. The model sometimes fails to
+            properly format tool calls, producing malformed <AbbrSidenote term="JSON" contentMaxWidth={896}>JSON</AbbrSidenote> or calling tools with incorrect parameter types. In
+            <AbbrSidenote title="Agentic loops are autonomous workflows where AI agents repeatedly use tools to complete tasks" contentMaxWidth={896}>agentic loops</AbbrSidenote>, it can enter infinite cycles where it repeatedly says{' '}
             <q>I'm going to respond now</q> without actually producing a tool call or final answer. These aren't
             edge cases — they happen frequently enough that you need defensive coding around them.
           </p>

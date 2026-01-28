@@ -1,6 +1,7 @@
 import type { ModelLinkTypeId } from '@/lib/models/link-types'
 import type { ModelProfile } from '@/lib/models/types'
 import { MODEL_LINK_TYPES } from '@/lib/models/link-types'
+import { AbbrSidenote } from '@/components/shared/sidenote'
 
 const templateLinks = (Object.keys(MODEL_LINK_TYPES) as ModelLinkTypeId[]).reduce(
   (acc, id) => {
@@ -143,7 +144,11 @@ export const templateModel: ModelProfile = {
     {
       id: 'economics',
       title: 'The Economics',
-      subtitle: 'API pricing and chat usage compared',
+      subtitle: (
+        <>
+          <AbbrSidenote term="API" force>API</AbbrSidenote> pricing and chat usage compared
+        </>
+      ),
       content:
         'Explain pricing advantages or tradeoffs. Include context on who benefits at scale.',
       hasPricing: true,

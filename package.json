@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "node scripts/run-lint.js",
+    "lint:abbr": "node scripts/check-abbr-usage.js"
   },
   "dependencies": {
     "@lobehub/fluent-emoji": "^4.1.0",

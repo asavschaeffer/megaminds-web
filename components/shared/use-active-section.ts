@@ -1,0 +1,39 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+
+export interface UseActiveSectionOptions {
+  rootMargin?: string
+  threshold?: number | number[]
+  initialActiveId?: string | null
+}
+
+export const useActiveSection = (sectionIds: string[], options: UseActiveSectionOptions = {}) => {
+  const { rootMargin = '-20% 0px -60% 0px', threshold = 0, initialActiveId = null } = options
+  const [activeId, setActiveId] = useState<string | null>(initialActiveId)
+
+  useEffect(() => {
+    if (sectionIds.length === 0) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id)
+          }
+        }
+      },
+      { rootMargin, threshold }
+    )
+
+    for (const id of sectionIds) {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    }
+
+    return () => observer.disconnect()
+  }, [rootMargin, sectionIds, threshold])
+
+  return activeId
+}
+
+export default useActiveSection

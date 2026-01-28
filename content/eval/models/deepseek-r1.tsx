@@ -1,4 +1,5 @@
 import type { ModelProfile } from '@/lib/models/types'
+import { AbbrSidenote } from '@/components/shared/sidenote'
 
 export const deepseekR1: ModelProfile = {
   slug: 'deepseek-r1',
@@ -190,9 +191,9 @@ export const deepseekR1: ModelProfile = {
         <>
           <p className="mb-4">
             Most{' '}
-            <abbr title="Large Language Models" className="cursor-help underline decoration-dotted underline-offset-2">
+            <AbbrSidenote term="LLM" contentMaxWidth={896}>
               LLMs
-            </abbr>{' '}
+            </AbbrSidenote>{' '}
             give you an answer. DeepSeek-R1 shows you the work. If you've ever used ChatGPT and gotten a confident but
             wrong answer, you'll appreciate this: R1 exposes its reasoning process in real time. You can see it
             second-guessing itself, working through edge cases, correcting mistakes, and even having "aha moments" where
@@ -257,7 +258,7 @@ export const deepseekR1: ModelProfile = {
           <p className="mb-4">
             The full <data value="671000000000">671B</data> parameter model is available on HuggingFace under an MIT
             license. Yes, you can run it locally if you have the hardware (good luck). More realistically, DeepSeek
-            released six distilled versions ranging from 1.5B to 70B parameters, trained on R1's reasoning outputs. The
+            released six <AbbrSidenote title="Distillation trains smaller models to mimic larger models' behavior, preserving capabilities at lower cost" contentMaxWidth={896}>distilled</AbbrSidenote> versions ranging from 1.5B to 70B parameters, trained on R1's reasoning outputs. The
             32B distilled model reportedly outperforms OpenAI o1-mini on some benchmarks, while the 8B version can run
             on consumer hardware. These distilled models preserve much of R1's reasoning capability at a fraction of the
             compute cost, making advanced reasoning accessible to anyone with a decent GPU or even a modern MacBook.
@@ -272,7 +273,7 @@ export const deepseekR1: ModelProfile = {
       content: (
         <p className="mb-2">
           R1's most disruptive feature isn't technical — it's the price tag. Compare costs across providers for{' '}
-          <abbr title="Application Programming Interface">API</abbr> usage and daily chat limits.
+          <AbbrSidenote term="API" contentMaxWidth={896}>API</AbbrSidenote> usage and daily chat limits.
         </p>
       ),
       hasPricing: true,
@@ -298,10 +299,10 @@ export const deepseekR1: ModelProfile = {
       content: (
         <>
           <p className="mb-4">
-            DeepSeek trained R1 using <strong>pure reinforcement learning without supervised fine-tuning</strong> — a
+            DeepSeek trained R1 using <strong>pure <AbbrSidenote term="RL" contentMaxWidth={896}>RL</AbbrSidenote> without <AbbrSidenote term="SFT" contentMaxWidth={896}>SFT</AbbrSidenote></strong> — a
             first for reasoning models at this scale. This is significant because it demonstrates that reasoning can
             emerge purely through reward signals, not just by mimicking human-written examples. They used{' '}
-            <abbr title="Group Relative Policy Optimization">GRPO</abbr> (Group Relative Policy Optimization) with
+            <AbbrSidenote term="GRPO" contentMaxWidth={896}>GRPO</AbbrSidenote> (Group Relative Policy Optimization) with
             verifiable rewards:
           </p>
           <ul className="list-disc pl-6 mb-6 space-y-2">
@@ -321,9 +322,9 @@ export const deepseekR1: ModelProfile = {
           <p className="mb-6">
             The base model is a{' '}
             <dfn>
-              <abbr title="Mixture of Experts" className="cursor-help underline decoration-dotted underline-offset-2 hover:decoration-solid transition-all">
+              <AbbrSidenote term="MoE" contentMaxWidth={896}>
                 MoE
-              </abbr>
+              </AbbrSidenote>
             </dfn>{' '}
             (Mixture of Experts) architecture with <data value="671000000000">671B</data> total parameters, but only
             ~<data value="37000000000">37B</data> active per token. This sparse activation is how they keep inference costs
@@ -430,7 +431,7 @@ export const deepseekR1: ModelProfile = {
               the reasoning chain
             </li>
             <li>
-              <strong>Local deployment</strong> — quantized versions (as small as 1.5B) run in browsers via WebGPU or on
+              <strong>Local deployment</strong> — <AbbrSidenote title="Quantization" definition="Quantization reduces model precision (e.g., 32-bit to 4-bit) to shrink file size and speed inference" contentMaxWidth={896}>quantized</AbbrSidenote> versions (as small as 1.5B) run in browsers via <AbbrSidenote title="WebGPU" definition="WebGPU enables GPU acceleration directly in web browsers without plugins" contentMaxWidth={896}>WebGPU</AbbrSidenote> or on
               consumer hardware, making advanced reasoning accessible without cloud costs
             </li>
           </ul>
@@ -455,13 +456,13 @@ export const deepseekR1: ModelProfile = {
             <>
               <p className="mb-4">
                 Because the weights are open, you can fine-tune R1 on your own data. The most effective approach is to
-                continue the <abbr title="Reinforcement Learning">RL</abbr> training with domain-specific reward models.
+                continue the <AbbrSidenote term="RL" contentMaxWidth={896}>RL</AbbrSidenote> training with domain-specific reward models.
                 For example, if you're building a medical reasoning system, you'd:
               </p>
               <ol className="list-decimal pl-6 mb-4 space-y-2">
                 <li>Collect domain-specific reasoning traces (e.g., medical case studies)</li>
                 <li>Train a reward model to score medical reasoning quality</li>
-                <li>Use <abbr title="Proximal Policy Optimization">PPO</abbr> or <abbr title="Group Relative Policy Optimization">GRPO</abbr> to fine-tune R1's reasoning on your domain</li>
+                <li>Use <AbbrSidenote term="PPO" contentMaxWidth={896}>PPO</AbbrSidenote> or <AbbrSidenote term="GRPO" contentMaxWidth={896}>GRPO</AbbrSidenote> to fine-tune R1's reasoning on your domain</li>
               </ol>
               <p>
                 This is expensive (requires GPUs and expertise), but the results can be dramatic for specialized tasks.
@@ -480,12 +481,12 @@ export const deepseekR1: ModelProfile = {
               </p>
               <ul className="list-disc pl-6 space-y-2">
                 <li>
-                  <strong>Use distilled models</strong>: DeepSeek already released distilled versions (1.5B, 7B, 8B,
+                  <strong>Use <AbbrSidenote title="Distillation trains smaller models to mimic larger models' behavior, preserving capabilities at lower cost" contentMaxWidth={896}>distilled</AbbrSidenote> models</strong>: DeepSeek already released distilled versions (1.5B, 7B, 8B,
                   14B, 32B, 70B) that preserve much of R1's reasoning at a fraction of the compute. The 32B distilled
                   model reportedly outperforms o1-mini on some benchmarks.
                 </li>
                 <li>
-                  <strong>Quantization</strong>: Q4_K_M quantizations work well for local deployment. The 8B model runs
+                  <strong><AbbrSidenote title="Quantization reduces model precision (e.g., 32-bit to 4-bit) to shrink file size and speed inference" contentMaxWidth={896}>Quantization</AbbrSidenote></strong>: <AbbrSidenote title="Q4_K_M is a 4-bit quantization format that balances quality and compression" contentMaxWidth={896}>Q4_K_M</AbbrSidenote> quantizations work well for local deployment. The 8B model runs
                   at ~20 tokens/sec on a 16GB GPU, while the 7B version works on CPU-only setups.
                 </li>
                 <li>
@@ -493,7 +494,7 @@ export const deepseekR1: ModelProfile = {
                   reaches high confidence or starts repeating itself
                 </li>
                 <li>
-                  <strong>WebGPU deployment</strong>: The 1.5B distilled model can run entirely in your browser using
+                  <strong><AbbrSidenote title="WebGPU enables GPU acceleration directly in web browsers without plugins" contentMaxWidth={896}>WebGPU</AbbrSidenote> deployment</strong>: The 1.5B distilled model can run entirely in your browser using
                   WebGPU, with no server needed
                 </li>
               </ul>
@@ -510,7 +511,7 @@ export const deepseekR1: ModelProfile = {
           <p className="mb-4">
             DeepSeek-R1 isn't just a good model — it's a market-shaping event. By offering frontier reasoning at sub-$1
             pricing (trained for $5-6M vs competitors' billions), it forced every competitor to rethink their
-            economics. The pure RL approach without supervised fine-tuning proves that reasoning can emerge through
+            economics. The pure <AbbrSidenote term="RL" contentMaxWidth={896}>RL</AbbrSidenote> approach without <AbbrSidenote term="SFT" contentMaxWidth={896}>supervised fine-tuning</AbbrSidenote> proves that reasoning can emerge through
             reward signals alone — a paradigm shift that will influence how future models are trained.
           </p>
           <p className="mb-4">
@@ -526,7 +527,7 @@ export const deepseekR1: ModelProfile = {
           </p>
           <p className="text-sm text-neutral-600 dark:text-neutral-400 italic">
             Want to try it? Chat is free at chat.deepseek.com, and the open weights are on HuggingFace. You can also run
-            quantized versions locally via Ollama or in your browser with WebGPU. Start with the chat interface to see
+            <AbbrSidenote title="Quantization reduces model precision (e.g., 32-bit to 4-bit) to shrink file size and speed inference" contentMaxWidth={896}>quantized</AbbrSidenote> versions locally via Ollama or in your browser with <AbbrSidenote title="WebGPU enables GPU acceleration directly in web browsers without plugins" contentMaxWidth={896}>WebGPU</AbbrSidenote>. Start with the chat interface to see
             the reasoning in action.
           </p>
         </>

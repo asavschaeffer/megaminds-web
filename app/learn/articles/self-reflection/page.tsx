@@ -1,243 +1,15 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 import type { ReactNode } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-
-/* ─── Sidenote (centered in right margin) ─── */
-
-let sidenoteCounter = 0
-const sidenoteRegistry = new Map<number, {
-  note: HTMLElement
-  desiredTop: number
-  height: number
-  width: number
-  right: number
-}>()
-let layoutScheduled = false
-
-function resetSidenotes() {
-  sidenoteCounter = 0
-  sidenoteRegistry.clear()
-  layoutScheduled = false
-}
+import { FloatingToc } from '@/components/shared/floating-toc'
+import { useActiveSection } from '@/components/shared/use-active-section'
+import { AbbrSidenoteProvider, GlossarySidenote, resetSidenotes } from '@/components/shared/sidenote'
 
 const CONTENT_MAX_WIDTH = 768 // max-w-3xl
-const MIN_SIDENOTE_WIDTH = 160
-const MAX_SIDENOTE_WIDTH = 240
 const MARGIN_PADDING = 16 // padding from content edge and viewport edge
-const SIDENOTE_GAP = 12
-
-function scheduleSidenoteLayout() {
-  if (layoutScheduled) return
-  layoutScheduled = true
-  requestAnimationFrame(() => {
-    layoutScheduled = false
-    const entries = Array.from(sidenoteRegistry.values())
-      .filter((entry) => entry.note.isConnected)
-      .sort((a, b) => a.desiredTop - b.desiredTop)
-
-    let lastBottom = -Infinity
-    for (const entry of entries) {
-      const top = Math.max(entry.desiredTop, lastBottom + SIDENOTE_GAP)
-      entry.note.style.top = `${top}px`
-      entry.note.style.right = `${entry.right}px`
-      entry.note.style.width = `${entry.width}px`
-      lastBottom = top + entry.height
-    }
-  })
-}
-
-function Sidenote({ children, label }: { children: ReactNode; label?: string }) {
-  const containerRef = useRef<HTMLSpanElement>(null)
-  const noteRef = useRef<HTMLElement>(null)
-  const noteIdRef = useRef<number | null>(null)
-  const [marginSpace, setMarginSpace] = useState(0)
-  const [isMounted, setIsMounted] = useState(false)
-  const [mobilePopoverStyle, setMobilePopoverStyle] = useState<{
-    top: number
-    left: number
-    width: number
-  } | null>(null)
-
-  // Calculate available margin space
-  useEffect(() => {
-    const calculate = () => {
-      const viewportWidth = window.innerWidth
-      const margin = (viewportWidth - CONTENT_MAX_WIDTH) / 2
-      setMarginSpace(margin)
-    }
-    calculate()
-    window.addEventListener('resize', calculate)
-    return () => window.removeEventListener('resize', calculate)
-  }, [])
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  // Position sidenote centered in right margin
-  useEffect(() => {
-    if (!containerRef.current || !noteRef.current) return
-
-    const usableMargin = marginSpace - MARGIN_PADDING * 2
-    if (usableMargin < MIN_SIDENOTE_WIDTH) {
-      const noteId = noteIdRef.current
-      if (noteId !== null) {
-        sidenoteRegistry.delete(noteId)
-        scheduleSidenoteLayout()
-      }
-      return
-    }
-
-    if (noteIdRef.current === null) {
-      sidenoteCounter += 1
-      noteIdRef.current = sidenoteCounter
-    }
-
-    const updatePosition = () => {
-      const container = containerRef.current
-      const note = noteRef.current
-      if (!container || !note) return
-
-      const rect = container.getBoundingClientRect()
-      const noteWidth = Math.min(MAX_SIDENOTE_WIDTH, usableMargin)
-
-      // Center the sidenote in the right margin
-      const rightOffset = (marginSpace - noteWidth) / 2
-
-      note.style.position = 'fixed'
-      note.style.right = `${rightOffset}px`
-      note.style.width = `${noteWidth}px`
-
-      const height = note.getBoundingClientRect().height
-      const noteId = noteIdRef.current
-      if (noteId === null) return
-
-      sidenoteRegistry.set(noteId, {
-        note,
-        desiredTop: rect.top,
-        height,
-        width: noteWidth,
-        right: rightOffset,
-      })
-      scheduleSidenoteLayout()
-    }
-
-    updatePosition()
-    window.addEventListener('scroll', updatePosition, true)
-    window.addEventListener('resize', updatePosition)
-
-    return () => {
-      window.removeEventListener('scroll', updatePosition, true)
-      window.removeEventListener('resize', updatePosition)
-      const noteId = noteIdRef.current
-      if (noteId !== null) {
-        sidenoteRegistry.delete(noteId)
-        scheduleSidenoteLayout()
-      }
-    }
-  }, [marginSpace])
-
-  const showSidenote = marginSpace - MARGIN_PADDING * 2 >= MIN_SIDENOTE_WIDTH
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
-  useEffect(() => {
-    if (showSidenote && isModalOpen) setIsModalOpen(false)
-  }, [showSidenote, isModalOpen])
-
-  useEffect(() => {
-    if (!isModalOpen || showSidenote) {
-      setMobilePopoverStyle(null)
-      return
-    }
-
-    const updatePosition = () => {
-      const container = containerRef.current
-      if (!container) return
-
-      const rect = container.getBoundingClientRect()
-      const viewportWidth = window.innerWidth
-      const padding = 16
-      const maxWidth = 288
-      const width = Math.min(maxWidth, Math.max(0, viewportWidth - padding * 2))
-      const left = Math.min(
-        Math.max(rect.left, padding),
-        viewportWidth - width - padding
-      )
-      const top = rect.bottom + 8
-
-      setMobilePopoverStyle({ top, left, width })
-    }
-
-    updatePosition()
-    window.addEventListener('scroll', updatePosition, true)
-    window.addEventListener('resize', updatePosition)
-
-    return () => {
-      window.removeEventListener('scroll', updatePosition, true)
-      window.removeEventListener('resize', updatePosition)
-    }
-  }, [isModalOpen, showSidenote])
-
-  return (
-    <>
-      <span
-        ref={containerRef}
-        className="relative inline"
-        onClick={() => !showSidenote && setIsModalOpen(true)}
-      >
-        <span
-          className={`text-gray-700 border-b border-dotted border-gray-400 ${!showSidenote ? 'cursor-pointer hover:text-gray-600' : ''}`}
-          title={showSidenote ? undefined : 'Click for definition'}
-        >
-          {label}
-        </span>
-      </span>
-
-      {/* Desktop: fixed sidenote centered in right margin */}
-      {showSidenote && (
-        <aside
-          ref={noteRef}
-          className="fixed z-40 bg-white border border-gray-200 rounded-lg p-3 shadow-sm"
-          aria-label={`Note: ${label}`}
-        >
-          <p className="text-[0.8125rem] leading-relaxed text-gray-600">{children}</p>
-        </aside>
-      )}
-
-      {/* Mobile: popover under the word */}
-      {isMounted && isModalOpen && !showSidenote && mobilePopoverStyle && createPortal(
-        <>
-          <div className="fixed inset-0 z-40" onClick={() => setIsModalOpen(false)} aria-hidden="true" />
-          <aside
-            className="fixed z-50 w-72 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-xl border border-gray-200 p-4"
-            style={{ top: mobilePopoverStyle.top, left: mobilePopoverStyle.left, width: mobilePopoverStyle.width }}
-            aria-label={`Note: ${label}`}
-            role="dialog"
-            aria-modal="true"
-          >
-            <div className="flex items-start justify-end mb-1">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors -mt-2 -mr-2"
-                aria-label="Close"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <p className="text-sm leading-relaxed text-gray-600">{children}</p>
-          </aside>
-        </>,
-        document.body
-      )}
-    </>
-  )
-}
 
 function EditorNote({ children }: { children: ReactNode }) {
   return (
@@ -246,11 +18,6 @@ function EditorNote({ children }: { children: ReactNode }) {
     </div>
   )
 }
-
-/* ─── TOC Constants ─── */
-
-const MIN_TOC_WIDTH = 140
-const MAX_TOC_WIDTH = 180
 
 /* ─── Sticky TOC ─── */
 
@@ -262,125 +29,37 @@ const tocSections = [
   { id: 'section-constraints', label: 'Constraints as Mirrors' },
   { id: 'section-conclusion', label: 'Final Thoughts' },
 ]
-
-function useTocState() {
-  const [scrolledPastHeader, setScrolledPastHeader] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolledPastHeader(window.scrollY > 300)
-    }
-    handleScroll()
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  return { scrolledPastHeader }
-}
-
-function TOC({ activeId }: { activeId: string | null }) {
-  const navRef = useRef<HTMLElement>(null)
-  const [marginSpace, setMarginSpace] = useState(0)
-  const { scrolledPastHeader } = useTocState()
-
-  useEffect(() => {
-    const calculate = () => {
-      const viewportWidth = window.innerWidth
-      const margin = (viewportWidth - CONTENT_MAX_WIDTH) / 2
-      setMarginSpace(margin)
-    }
-    calculate()
-    window.addEventListener('resize', calculate)
-    return () => window.removeEventListener('resize', calculate)
-  }, [])
-
-  useEffect(() => {
-    if (!navRef.current) return
-
-    const usableMargin = marginSpace - MARGIN_PADDING * 2
-    if (usableMargin < MIN_TOC_WIDTH) return
-
-    const updatePosition = () => {
-      const nav = navRef.current
-      if (!nav) return
-
-      const tocWidth = Math.min(MAX_TOC_WIDTH, usableMargin)
-      const leftOffset = marginSpace - MARGIN_PADDING - tocWidth
-
-      nav.style.left = `${leftOffset}px`
-      nav.style.width = `${tocWidth}px`
-    }
-
-    updatePosition()
-    window.addEventListener('resize', updatePosition)
-    return () => window.removeEventListener('resize', updatePosition)
-  }, [marginSpace])
-
-  const showToc = marginSpace - MARGIN_PADDING * 2 >= MIN_TOC_WIDTH
-  const isVisible = showToc && scrolledPastHeader
-
-  return (
-    <nav
-      ref={navRef}
-      aria-label="Table of contents"
-      className={`
-        fixed top-24 max-h-[calc(100vh-8rem)] overflow-y-auto z-50
-        transition-opacity duration-300
-        ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}
-      `}
-    >
-      <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Contents</p>
-      <ol className="space-y-1 list-none text-[0.8125rem] leading-snug">
-        {tocSections.map((s) => (
-          <li key={s.id}>
-            <a
-              href={`#${s.id}`}
-              className={`block py-1 transition-colors ${activeId === s.id
-                ? 'text-brand-600 font-medium'
-                : 'text-gray-400 hover:text-gray-700'
-                }`}
-            >
-              {s.label}
-            </a>
-          </li>
-        ))}
-      </ol>
-    </nav>
-  )
-}
-
-function useActiveSection(ids: string[]) {
-  const [active, setActive] = useState<string | null>(null)
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActive(entry.target.id)
-          }
-        }
-      },
-      { rootMargin: '-80px 0px -60% 0px', threshold: 0 }
-    )
-    for (const id of ids) {
-      const el = document.getElementById(id)
-      if (el) observer.observe(el)
-    }
-    return () => observer.disconnect()
-  }, [ids])
-  return active
-}
+const MIN_TOC_WIDTH = 140
+const MAX_TOC_WIDTH = 180
 
 /* ─── Page ─── */
 
 export default function SelfReflectionPage() {
   resetSidenotes()
   const sectionIds = tocSections.map((s) => s.id)
-  const activeId = useActiveSection(sectionIds)
+  const activeId = useActiveSection(sectionIds, { rootMargin: '-80px 0px -60% 0px' })
+  const tocItems = tocSections.map((section) => ({ id: section.id, label: section.label }))
 
   return (
-    <>
-      <TOC activeId={activeId} />
+    <AbbrSidenoteProvider>
+      <FloatingToc
+        items={tocItems}
+        activeId={activeId}
+        variant="margin-left"
+        showAfterScrollY={300}
+        contentMaxWidth={CONTENT_MAX_WIDTH}
+        minWidth={MIN_TOC_WIDTH}
+        maxWidth={MAX_TOC_WIDTH}
+        marginPadding={MARGIN_PADDING}
+        heading="Contents"
+        containerClassName="top-24 max-h-[calc(100vh-8rem)] overflow-y-auto"
+        transitionClassName="transition-opacity duration-300"
+        headingClassName="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3"
+        listClassName="space-y-1 list-none text-[0.8125rem] leading-snug"
+        linkClassName="block py-1 transition-colors"
+        activeLinkClassName="text-brand-600 font-medium"
+        inactiveLinkClassName="text-gray-400 hover:text-gray-700"
+      />
 
       <article className="relative bg-gray-50 min-h-screen" aria-labelledby="article-title">
         {/* Hero header */}
@@ -441,11 +120,7 @@ export default function SelfReflectionPage() {
               <p>
                 My job was to take these observations—some flattering, some stinging—and fit them into
                 a rigid{' '}
-                <Sidenote label="ontology">
-                  <strong>Ontology.</strong> A set of concepts and categories in a subject area or domain
-                  that shows their properties and the relations between them. In software, this usually
-                  manifests as a type system or database schema.
-                </Sidenote>{' '}
+                <GlossarySidenote term="ontology" />{' '}
                 of tags and fields. That process revealed a lot about how we categorize intelligence,
                 and where those categories fall short.
               </p>
@@ -760,6 +435,6 @@ export default function SelfReflectionPage() {
           </div>
         </div>
       </article>
-    </>
+    </AbbrSidenoteProvider>
   )
 }

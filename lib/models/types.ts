@@ -118,7 +118,7 @@ export interface TechSpec {
 export interface ContentSection {
   id: SectionId
   title?: string
-  subtitle?: string
+  subtitle?: ReactNode
   variant?: SectionVariant
   content: string | ReactNode | null
   specs?: TechSpec[]
@@ -261,7 +261,7 @@ export interface ExpandableSectionProps {
 
 export interface ContentSectionProps {
   title?: string
-  subtitle?: string
+  subtitle?: ReactNode
   children: ReactNode
   id?: string
   specs?: TechSpec[]

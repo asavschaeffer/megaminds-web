@@ -118,6 +118,12 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+  .sidenote-trigger {
+    @apply cursor-help underline decoration-dotted underline-offset-2 transition-all;
+  }
+  .sidenote-trigger:hover {
+    @apply decoration-solid;
+  }
   .claude-version-bold {
     font-weight: 700;
     -webkit-font-smoothing: antialiased;

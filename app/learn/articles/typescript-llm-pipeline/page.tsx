@@ -1,249 +1,14 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 import type { ReactNode } from 'react'
 import Link from 'next/link'
-
-/* ─── Sidenote (centered in right margin) ─── */
-
-let sidenoteCounter = 0
-const sidenoteRegistry = new Map<number, {
-  note: HTMLElement
-  desiredTop: number
-  height: number
-  width: number
-  right: number
-}>()
-let layoutScheduled = false
-
-function resetSidenotes() {
-  sidenoteCounter = 0
-  sidenoteRegistry.clear()
-  layoutScheduled = false
-}
+import { FloatingToc } from '@/components/shared/floating-toc'
+import { useActiveSection } from '@/components/shared/use-active-section'
+import { AbbrSidenoteProvider, GlossarySidenote, resetSidenotes } from '@/components/shared/sidenote'
 
 const CONTENT_MAX_WIDTH = 768 // max-w-3xl
-const MIN_SIDENOTE_WIDTH = 160
-const MAX_SIDENOTE_WIDTH = 240
 const MARGIN_PADDING = 16 // padding from content edge and viewport edge
-const SIDENOTE_GAP = 12
-
-function scheduleSidenoteLayout() {
-  if (layoutScheduled) return
-  layoutScheduled = true
-  requestAnimationFrame(() => {
-    layoutScheduled = false
-    const entries = Array.from(sidenoteRegistry.values())
-      .filter((entry) => entry.note.isConnected)
-      .sort((a, b) => a.desiredTop - b.desiredTop)
-
-    let lastBottom = -Infinity
-    for (const entry of entries) {
-      const top = Math.max(entry.desiredTop, lastBottom + SIDENOTE_GAP)
-      entry.note.style.top = `${top}px`
-      entry.note.style.right = `${entry.right}px`
-      entry.note.style.width = `${entry.width}px`
-      lastBottom = top + entry.height
-    }
-  })
-}
-
-function Sidenote({ children, label }: { children: ReactNode; label?: string }) {
-  const containerRef = useRef<HTMLSpanElement>(null)
-  const noteRef = useRef<HTMLElement>(null)
-  const noteIdRef = useRef<number | null>(null)
-  const [marginSpace, setMarginSpace] = useState(0)
-  const [isMounted, setIsMounted] = useState(false)
-  const [mobilePopoverStyle, setMobilePopoverStyle] = useState<{
-    top: number
-    left: number
-    width: number
-  } | null>(null)
-
-  // Calculate available margin space
-  useEffect(() => {
-    const calculate = () => {
-      const viewportWidth = window.innerWidth
-      const margin = (viewportWidth - CONTENT_MAX_WIDTH) / 2
-      setMarginSpace(margin)
-    }
-    calculate()
-    window.addEventListener('resize', calculate)
-    return () => window.removeEventListener('resize', calculate)
-  }, [])
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  // Position sidenote centered in right margin
-  useEffect(() => {
-    if (!containerRef.current || !noteRef.current) return
-
-    const usableMargin = marginSpace - MARGIN_PADDING * 2
-    if (usableMargin < MIN_SIDENOTE_WIDTH) {
-      const noteId = noteIdRef.current
-      if (noteId !== null) {
-        sidenoteRegistry.delete(noteId)
-        scheduleSidenoteLayout()
-      }
-      return
-    }
-
-    if (noteIdRef.current === null) {
-      sidenoteCounter += 1
-      noteIdRef.current = sidenoteCounter
-    }
-
-    const updatePosition = () => {
-      const container = containerRef.current
-      const note = noteRef.current
-      if (!container || !note) return
-
-      const rect = container.getBoundingClientRect()
-      const noteWidth = Math.min(MAX_SIDENOTE_WIDTH, usableMargin)
-
-      // Center the sidenote in the right margin
-      // Right margin center is at: marginSpace / 2 from viewport right edge
-      // So sidenote right edge should be at: marginSpace/2 - noteWidth/2
-      const rightOffset = (marginSpace - noteWidth) / 2
-
-      note.style.position = 'fixed'
-      note.style.right = `${rightOffset}px`
-      note.style.width = `${noteWidth}px`
-
-      const height = note.getBoundingClientRect().height
-      const noteId = noteIdRef.current
-      if (noteId === null) return
-
-      sidenoteRegistry.set(noteId, {
-        note,
-        desiredTop: rect.top,
-        height,
-        width: noteWidth,
-        right: rightOffset,
-      })
-      scheduleSidenoteLayout()
-    }
-
-    updatePosition()
-    window.addEventListener('scroll', updatePosition, true)
-    window.addEventListener('resize', updatePosition)
-
-    return () => {
-      window.removeEventListener('scroll', updatePosition, true)
-      window.removeEventListener('resize', updatePosition)
-      const noteId = noteIdRef.current
-      if (noteId !== null) {
-        sidenoteRegistry.delete(noteId)
-        scheduleSidenoteLayout()
-      }
-    }
-  }, [marginSpace])
-
-  const showSidenote = marginSpace - MARGIN_PADDING * 2 >= MIN_SIDENOTE_WIDTH
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
-  useEffect(() => {
-    if (showSidenote && isModalOpen) setIsModalOpen(false)
-  }, [showSidenote, isModalOpen])
-
-  useEffect(() => {
-    if (!isModalOpen || showSidenote) {
-      setMobilePopoverStyle(null)
-      return
-    }
-
-    const updatePosition = () => {
-      const container = containerRef.current
-      if (!container) return
-
-      const rect = container.getBoundingClientRect()
-      const viewportWidth = window.innerWidth
-      const padding = 16
-      const maxWidth = 288
-      const width = Math.min(maxWidth, Math.max(0, viewportWidth - padding * 2))
-      const left = Math.min(
-        Math.max(rect.left, padding),
-        viewportWidth - width - padding
-      )
-      const top = rect.bottom + 8
-
-      setMobilePopoverStyle({ top, left, width })
-    }
-
-    updatePosition()
-    window.addEventListener('scroll', updatePosition, true)
-    window.addEventListener('resize', updatePosition)
-
-    return () => {
-      window.removeEventListener('scroll', updatePosition, true)
-      window.removeEventListener('resize', updatePosition)
-    }
-  }, [isModalOpen, showSidenote])
-
-  return (
-    <>
-      <span
-        ref={containerRef}
-        className="relative inline"
-        onClick={() => !showSidenote && setIsModalOpen(true)}
-      >
-        <span
-          className={`text-gray-700 border-b border-dotted border-gray-400 ${!showSidenote ? 'cursor-pointer hover:text-gray-600' : ''}`}
-          title={showSidenote ? undefined : 'Click for definition'}
-        >
-          {label}
-        </span>
-      </span>
-
-      {/* Desktop: fixed sidenote centered in right margin */}
-      {showSidenote && (
-        <aside
-          ref={noteRef}
-          className="fixed z-40 bg-white border border-gray-200 rounded-lg p-3 shadow-sm"
-          aria-label={`Note: ${label}`}
-        >
-          <p className="text-[0.8125rem] leading-relaxed text-gray-600">{children}</p>
-        </aside>
-      )}
-
-      {/* Mobile: popover under the word */}
-      {isMounted && isModalOpen && !showSidenote && mobilePopoverStyle && createPortal(
-        <>
-          <div className="fixed inset-0 z-40" onClick={() => setIsModalOpen(false)} aria-hidden="true" />
-          <aside
-            className="fixed z-50 w-72 max-w-[calc(100vw-2rem)] bg-white rounded-lg shadow-xl border border-gray-200 p-4"
-            style={{ top: mobilePopoverStyle.top, left: mobilePopoverStyle.left, width: mobilePopoverStyle.width }}
-            aria-label={`Note: ${label}`}
-            role="dialog"
-            aria-modal="true"
-          >
-            <div className="flex items-start justify-end mb-1">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors -mt-2 -mr-2"
-                aria-label="Close"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <p className="text-sm leading-relaxed text-gray-600">{children}</p>
-          </aside>
-        </>,
-        document.body
-      )}
-    </>
-  )
-}
-
-/* ─── TOC Constants ─── */
-
-const MIN_TOC_WIDTH = 140
-const MAX_TOC_WIDTH = 180
 
 /* ─── Sticky TOC ─── */
 
@@ -264,118 +29,8 @@ const tocSections = [
   { id: 'section-why-ts', label: 'Why TypeScript?' },
   { id: 'section-coauthor', label: 'Co-Author Note' },
 ]
-
-function useTocState() {
-  const [scrolledPastHeader, setScrolledPastHeader] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolledPastHeader(window.scrollY > 300)
-    }
-    handleScroll()
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  return { scrolledPastHeader }
-}
-
-function TOC({ activeId }: { activeId: string | null }) {
-  const navRef = useRef<HTMLElement>(null)
-  const [marginSpace, setMarginSpace] = useState(0)
-  const { scrolledPastHeader } = useTocState()
-
-  // Calculate margin space (same as sidenotes)
-  useEffect(() => {
-    const calculate = () => {
-      const viewportWidth = window.innerWidth
-      const margin = (viewportWidth - CONTENT_MAX_WIDTH) / 2
-      setMarginSpace(margin)
-    }
-    calculate()
-    window.addEventListener('resize', calculate)
-    return () => window.removeEventListener('resize', calculate)
-  }, [])
-
-  // Position TOC centered in left margin (same logic as sidenotes)
-  useEffect(() => {
-    if (!navRef.current) return
-
-    const usableMargin = marginSpace - MARGIN_PADDING * 2
-    if (usableMargin < MIN_TOC_WIDTH) return
-
-    const updatePosition = () => {
-      const nav = navRef.current
-      if (!nav) return
-
-      const tocWidth = Math.min(MAX_TOC_WIDTH, usableMargin)
-
-      // Align TOC to the right of the left margin (close to content)
-      const leftOffset = marginSpace - MARGIN_PADDING - tocWidth
-
-      nav.style.left = `${leftOffset}px`
-      nav.style.width = `${tocWidth}px`
-    }
-
-    updatePosition()
-    window.addEventListener('resize', updatePosition)
-    return () => window.removeEventListener('resize', updatePosition)
-  }, [marginSpace])
-
-  const showToc = marginSpace - MARGIN_PADDING * 2 >= MIN_TOC_WIDTH
-  const isVisible = showToc && scrolledPastHeader
-
-  return (
-    <nav
-      ref={navRef}
-      aria-label="Table of contents"
-      className={`
-        fixed top-24 max-h-[calc(100vh-8rem)] overflow-y-auto z-50
-        transition-opacity duration-300
-        ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}
-      `}
-    >
-      <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Contents</p>
-      <ol className="space-y-1 list-none text-[0.8125rem] leading-snug">
-        {tocSections.map((s) => (
-          <li key={s.id}>
-            <a
-              href={`#${s.id}`}
-              className={`block py-1 transition-colors ${activeId === s.id
-                ? 'text-brand-600 font-medium'
-                : 'text-gray-400 hover:text-gray-700'
-                }`}
-            >
-              {s.label}
-            </a>
-          </li>
-        ))}
-      </ol>
-    </nav>
-  )
-}
-
-function useActiveSection(ids: string[]) {
-  const [active, setActive] = useState<string | null>(null)
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActive(entry.target.id)
-          }
-        }
-      },
-      { rootMargin: '-80px 0px -60% 0px', threshold: 0 }
-    )
-    for (const id of ids) {
-      const el = document.getElementById(id)
-      if (el) observer.observe(el)
-    }
-    return () => observer.disconnect()
-  }, [ids])
-  return active
-}
+const MIN_TOC_WIDTH = 140
+const MAX_TOC_WIDTH = 180
 
 /* ─── Collapsible Primer ─── */
 
@@ -426,11 +81,29 @@ function CollapsiblePrimer({ children }: { children: ReactNode }) {
 export default function TypeScriptLLMPipelinePage() {
   resetSidenotes()
   const sectionIds = tocSections.map((s) => s.id)
-  const activeId = useActiveSection(sectionIds)
+  const activeId = useActiveSection(sectionIds, { rootMargin: '-80px 0px -60% 0px' })
+  const tocItems = tocSections.map((section) => ({ id: section.id, label: section.label }))
 
   return (
-    <>
-      <TOC activeId={activeId} />
+    <AbbrSidenoteProvider>
+      <FloatingToc
+        items={tocItems}
+        activeId={activeId}
+        variant="margin-left"
+        showAfterScrollY={300}
+        contentMaxWidth={CONTENT_MAX_WIDTH}
+        minWidth={MIN_TOC_WIDTH}
+        maxWidth={MAX_TOC_WIDTH}
+        marginPadding={MARGIN_PADDING}
+        heading="Contents"
+        containerClassName="top-24 max-h-[calc(100vh-8rem)] overflow-y-auto"
+        transitionClassName="transition-opacity duration-300"
+        headingClassName="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3"
+        listClassName="space-y-1 list-none text-[0.8125rem] leading-snug"
+        linkClassName="block py-1 transition-colors"
+        activeLinkClassName="text-brand-600 font-medium"
+        inactiveLinkClassName="text-gray-400 hover:text-gray-700"
+      />
 
       <article className="relative bg-gray-50 min-h-screen" aria-labelledby="article-title">
         {/* Hero header */}
@@ -487,13 +160,7 @@ export default function TypeScriptLLMPipelinePage() {
               Under two hours later, those notes were two complete, structured, interactive model
               reports — with benchmark charts, pricing calculators, sentiment feeds, expandable
               technical sections, and a floating table of contents — all rendered from a single{' '}
-              <Sidenote label="TypeScript">
-                <strong>TypeScript</strong> is a programming language built on top of JavaScript that
-                adds a layer of <em>types</em> — labels describing what shape data should be. A
-                &ldquo;string&rdquo; is text, a &ldquo;number&rdquo; is a number, and an &ldquo;interface&rdquo;
-                is a blueprint that says &ldquo;this object must have these fields, of these types,
-                or the code won&rsquo;t compile.&rdquo;
-              </Sidenote>{' '}
+              <GlossarySidenote term="TypeScript" />{' '}
               template that enforces consistency across every report on the site. The template
               system itself also evolved during the session, gaining new structured name fields that
               didn&rsquo;t exist when we started.
@@ -502,12 +169,7 @@ export default function TypeScriptLLMPipelinePage() {
               The secret wasn&rsquo;t a new framework. It wasn&rsquo;t a content management system. It was the
               combination of two things: a well-designed type system that knows what a model report
               <em> is</em>, and an{' '}
-              <Sidenote label="LLM">
-                <strong>Large Language Model.</strong> An AI system trained on text that can generate,
-                summarize, translate, and reason about language. GPT, Claude, and Gemini are all LLMs.
-                In this pipeline, the LLM is the authoring tool — it reads the type definitions and
-                generates content that conforms to them.
-              </Sidenote>{' '}
+              <GlossarySidenote term="LLM" />{' '}
               that can populate that type system from messy human input. The TypeScript interface is
               the skeleton. The LLM is the flesh. The human is the editor who decides what&rsquo;s true.
             </p>
@@ -527,12 +189,7 @@ export default function TypeScriptLLMPipelinePage() {
                 describe what shape data should be. A &ldquo;string&rdquo; is text. A &ldquo;number&rdquo;
                 is a number. An &ldquo;interface&rdquo; is a blueprint that says &ldquo;this object must
                 have these fields, of these types, or the code won&rsquo;t{' '}
-                <Sidenote label="compile">
-                  <strong>Compile</strong> = translate source code into something the computer can
-                  run. The <strong>compiler</strong> is the program that does this translation. If
-                  the code has type errors, the compiler refuses to translate it — like a spellchecker
-                  that won&rsquo;t let you send a document with red underlines.
-                </Sidenote>.&rdquo;
+                <GlossarySidenote term="compile" />.&rdquo;
               </p>
               <p className="mb-3 text-gray-700">
                 Think of it like a form with required fields. JavaScript lets you submit the form
@@ -564,17 +221,9 @@ export default function TypeScriptLLMPipelinePage() {
               <p className="mt-4">
                 The traditional approach is to write each report as a standalone document. A blog post.
                 An{' '}
-                <Sidenote label="MDX">
-                  <strong>MDX</strong> = Markdown with JSX. A file format that lets you write prose in
-                  Markdown (a simple text formatting language) and embed interactive React components
-                  inline. Popular for documentation sites and blogs.
-                </Sidenote>{' '}
+                <GlossarySidenote term="MDX" />{' '}
                 file. Maybe a Google Doc that gets copy-pasted into a{' '}
-                <Sidenote label="CMS">
-                  <strong>Content Management System.</strong> Software for creating and managing
-                  digital content — WordPress, Contentful, Sanity, Strapi. A CMS gives you a web
-                  interface with forms and fields. Our approach uses code files instead.
-                </Sidenote>.{' '}
+                <GlossarySidenote term="CMS" />.{` `}
                 Each one is a snowflake — different structure, different sections, different levels
                 of detail. When Gemini 3 updates its pricing, you search through a markdown file for
                 the dollar signs and hope you find them all.
@@ -583,12 +232,7 @@ export default function TypeScriptLLMPipelinePage() {
                 We tried this. It produced exactly one report (<Link href="/eval/models/deepseek-r1" className="text-brand-600 hover:text-brand-700 underline decoration-brand-200 hover:decoration-brand-400 transition-colors">DeepSeek-R1</Link>)
                 before the limitations became obvious. The report was good, but it was artisanal —
                 handcrafted{' '}
-                <Sidenote label="JSX">
-                  <strong>JSX</strong> = JavaScript XML. A syntax that lets you write HTML-like
-                  markup inside JavaScript code. It&rsquo;s how{' '}
-                  <Link href="https://react.dev" className="text-brand-600 underline" target="_blank" rel="noopener noreferrer">React</Link>{' '}
-                  components describe what the page should look like.
-                </Sidenote>,{' '}
+                <GlossarySidenote term="JSX" />,{' '}
                 manually structured data, no reusable patterns. Adding a second
                 report meant copying the first one and replacing everything. Adding a tenth report
                 meant hiring someone whose entire job was report maintenance.
@@ -631,12 +275,7 @@ export default function TypeScriptLLMPipelinePage() {
                 just a bag of strings — it has structured fields for the model family, variant,
                 version, name ordering, organization, release date, tag IDs that map to a tag
                 registry, link types that map to a link registry,{' '}
-                <Sidenote label="API">
-                  <strong>Application Programming Interface.</strong> A way for software to talk to
-                  other software. When we say &ldquo;API rates,&rdquo; we mean the cost of sending
-                  requests to the model programmatically, as opposed to chatting with it in a web
-                  interface.
-                </Sidenote>{' '}
+                <GlossarySidenote term="API" />{' '}
                 rates with units, and chat limits with tiered pricing. Every field is typed. Every
                 optional field is marked optional. A question mark after a field name means{' '}
                 <q>this is allowed to be absent</q> — and the template knows how to handle its
@@ -645,12 +284,7 @@ export default function TypeScriptLLMPipelinePage() {
               <p className="mt-4">
                 This matters because the type system does triple duty. For the{' '}
                 <strong>developer</strong>, it&rsquo;s documentation — you can read the{' '}
-                <Sidenote label="interface">
-                  In TypeScript, an <strong>interface</strong> is a named blueprint for an object. It
-                  lists every field the object can have, what type each field must be, and whether
-                  it&rsquo;s required or optional. Think of it as a contract: any object claiming to be
-                  a <code>ModelProfile</code> must have all the fields the interface specifies.
-                </Sidenote>{' '}
+                <GlossarySidenote term="interface" />{' '}
                 and know exactly what data a report needs. For the <strong>compiler</strong>, it&rsquo;s
                 validation — if you forget a required field or misspell a tag ID, the build fails
                 before anyone sees it. For the <strong>LLM</strong>, it&rsquo;s a contract — you can hand
@@ -731,14 +365,7 @@ interface ModelMeta {
               </h2>
               <p>
                 The second piece is <code>ModelPageTemplate</code> — a single{' '}
-                <Sidenote label="React component">
-                  <strong>React</strong> is a JavaScript{' '}
-                  <Link href="https://react.dev" className="text-brand-600 underline" target="_blank" rel="noopener noreferrer">framework</Link>{' '}
-                  for building user interfaces. A <strong>component</strong> is a reusable piece of UI
-                  — like a function that takes data and returns what should appear on screen. Our
-                  template is one component that renders an entire report page from a single data
-                  object.
-                </Sidenote>{' '}
+                <GlossarySidenote term="React component" />{' '}
                 that takes a <code>ModelProfile</code> and renders a complete, interactive report
                 page. It handles:
               </p>
@@ -1322,15 +949,7 @@ interface ModelMeta {
                 Honestly? Not really. This is what TypeScript was designed for. This is what
                 component-based web development has always promised. Typed data flowing into reusable
                 templates is the foundational idea behind every modern web{' '}
-                <Sidenote label="framework">
-                  A <strong>framework</strong> is a pre-built structure for building software.{' '}
-                  <Link href="https://react.dev" className="text-brand-600 underline" target="_blank" rel="noopener noreferrer">React</Link>,{' '}
-                  <Link href="https://vuejs.org" className="text-brand-600 underline" target="_blank" rel="noopener noreferrer">Vue</Link>,{' '}
-                  <Link href="https://svelte.dev" className="text-brand-600 underline" target="_blank" rel="noopener noreferrer">Svelte</Link>, and{' '}
-                  <Link href="https://angular.dev" className="text-brand-600 underline" target="_blank" rel="noopener noreferrer">Angular</Link>{' '}
-                  are all JavaScript frameworks for building user interfaces. They provide the
-                  architecture; you provide the content.
-                </Sidenote>{' '}
+                <GlossarySidenote term="framework" />{' '}
                 — React, Vue, Svelte, Angular. Content management systems have been doing structured
                 content for decades. The concept of a &ldquo;template&rdquo; is older than the web itself.
               </p>
@@ -1485,6 +1104,6 @@ interface ModelMeta {
           </div>
         </div>
       </article>
-    </>
+    </AbbrSidenoteProvider>
   )
 }

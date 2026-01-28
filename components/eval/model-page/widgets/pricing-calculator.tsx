@@ -4,6 +4,7 @@ import { Calculator, MessageCircle } from 'lucide-react'
 import type { KeyboardEvent } from 'react'
 import { useMemo, useRef, useState, useId } from 'react'
 import type { PricingCalculatorProps } from '@/lib/models/types'
+import { AbbrSidenote } from '@/components/shared/sidenote'
 
 export const PricingCalculator = ({ apiData, chatData, pricingSources }: PricingCalculatorProps) => {
   const [activeTab, setActiveTab] = useState<'api' | 'chat'>('api')
@@ -105,7 +106,7 @@ export const PricingCalculator = ({ apiData, chatData, pricingSources }: Pricing
           >
             <span className="flex items-center justify-center gap-2">
               <Calculator className="w-4 h-4" aria-hidden="true" />
-              <abbr title="Application Programming Interface">API</abbr> Costs
+              <AbbrSidenote term="API">API</AbbrSidenote> Costs
             </span>
           </button>
           <button
