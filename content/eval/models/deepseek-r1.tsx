@@ -31,6 +31,19 @@ export const deepseekR1: ModelProfile = {
       weights: 'https://huggingface.co/deepseek-ai/DeepSeek-R1',
       github: 'https://github.com/deepseek-ai/DeepSeek-R1',
     },
+    pricingSources: [
+      {
+        label: 'DeepSeek API docs',
+        href: 'https://api-docs.deepseek.com',
+        provider: 'DeepSeek',
+      },
+    ],
+    apiRates: {
+      input: 0.55,
+      output: 2.19,
+      unit: 'per million tokens',
+      provider: 'DeepSeek API',
+    },
   },
   analysis: {
     strengths: [
@@ -56,11 +69,11 @@ export const deepseekR1: ModelProfile = {
       "DeepSeek-R1 landed on January 20, 2025 like a pricing nuke. While OpenAI's o1 dominated reasoning tasks at $15/million tokens, DeepSeek offered comparable performance for $0.55. That's not a typo. What makes this more remarkable: DeepSeek is a hedge fund skunkworks project that trained R1 for roughly $5-6 million — a fraction of what competitors spend. The model uses pure reinforcement learning (no supervised fine-tuning) to generate visible chain-of-thought reasoning, meaning you can actually watch it think. For developers building agents, math tutors, or code assistants, R1 became the obvious choice overnight. It's not perfect — the reasoning can get chatty, and it lacks vision — but it fundamentally reset expectations for what \"expensive\" means in AI.",
   },
   pricingData: {
-    baseModel: { name: 'DeepSeek-R1', input: 0.55, output: 2.19 },
+    baseModel: { name: 'DeepSeek-R1', input: 0.55, output: 2.19, provider: 'DeepSeek API' },
     competitors: [
-      { name: 'OpenAI o1', input: 15.0, output: 60.0 },
-      { name: 'GPT-4o', input: 2.5, output: 10.0 },
-      { name: 'Claude 3.5 Sonnet', input: 3.0, output: 15.0 },
+      { name: 'OpenAI o1', input: 15.0, output: 60.0, provider: 'OpenAI' },
+      { name: 'GPT-4o', input: 2.5, output: 10.0, provider: 'OpenAI' },
+      { name: 'Claude 3.5 Sonnet', input: 3.0, output: 15.0, provider: 'Anthropic' },
     ],
   },
   chatLimits: [
@@ -433,6 +446,7 @@ export const deepseekR1: ModelProfile = {
       title: 'For ML Engineers',
       subtitle: 'Implementation details and gotchas',
       variant: 'advanced',
+      content: null,
       expandables: [
         {
           title: 'Fine-tuning R1',

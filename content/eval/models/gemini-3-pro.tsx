@@ -34,10 +34,18 @@ export const gemini3Pro: ModelProfile = {
       api: 'https://ai.google.dev',
     },
     subscriptionPlans: ['Free', 'AI Pro', 'AI Ultra'],
+    pricingSources: [
+      {
+        label: 'Google AI pricing',
+        href: 'https://ai.google.dev/pricing',
+        provider: 'Google',
+      },
+    ],
     apiRates: {
       input: 2.0,
       output: 12.0,
       unit: 'per million tokens',
+      provider: 'Google AI Studio',
     },
     chatLimits: {
       free: 3,
@@ -77,11 +85,11 @@ export const gemini3Pro: ModelProfile = {
   },
   sentimentFeed: [],
   pricingData: {
-    baseModel: { name: 'Gemini 3 Pro', input: 2.0, output: 12.0 },
+    baseModel: { name: 'Gemini 3 Pro', input: 2.0, output: 12.0, provider: 'Google AI Studio' },
     competitors: [
-      { name: 'DeepSeek-R1', input: 0.55, output: 2.19 },
-      { name: 'Gemini 3 Flash', input: 0.5, output: 3.0 },
-      { name: 'Claude 3.5 Sonnet', input: 3.0, output: 15.0 },
+      { name: 'DeepSeek-R1', input: 0.55, output: 2.19, provider: 'DeepSeek API' },
+      { name: 'Gemini 3 Flash', input: 0.5, output: 3.0, provider: 'Google AI Studio' },
+      { name: 'Claude 3.5 Sonnet', input: 3.0, output: 15.0, provider: 'Anthropic' },
     ],
   },
   chatLimits: [

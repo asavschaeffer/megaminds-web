@@ -42,6 +42,8 @@ export interface ApiPricing {
   output: number
   cachedInput?: number
   currency?: string
+  unit?: string
+  provider?: string
 }
 
 export interface ChatTier {
@@ -60,11 +62,13 @@ export interface PricingData {
     name: string
     input: number
     output: number
+    provider?: string
   }
   competitors: {
     name: string
     input: number
     output: number
+    provider?: string
   }[]
 }
 
@@ -162,11 +166,12 @@ export interface ModelMeta {
   tags?: string[]
   links: ModelLinks
   subscriptionPlans?: string[]
-  apiRates?: {
-    input: number
-    output: number
-    unit?: string
-  }
+  apiRates?: ApiPricing
+  pricingSources?: Array<{
+    label: string
+    href: string
+    provider?: string
+  }>
   chatLimits?: {
     free?: number
     plans?: Array<{
@@ -208,11 +213,7 @@ export interface ModelHeaderProps {
   tags?: string[]
   links?: ModelLinks
   subscriptionPlans?: string[]
-  apiRates?: {
-    input: number
-    output: number
-    unit?: string
-  }
+  apiRates?: ApiPricing
   chatLimits?: {
     free?: number
     plans?: Array<{
@@ -236,6 +237,11 @@ export interface BenchmarkChartProps {
 export interface PricingCalculatorProps {
   apiData: PricingData
   chatData: ChatProvider[]
+  pricingSources?: Array<{
+    label: string
+    href: string
+    provider?: string
+  }>
 }
 
 export interface SentimentMarqueeProps {

@@ -75,7 +75,7 @@ export const ModelPageTemplate = ({ profile, footer, className = '' }: ModelPage
           {resolveSectionContent(section)}
           {section.hasBenchmarks && benchmarks && benchmarks.length > 0 && <BenchmarkChart benchmarks={benchmarks} />}
           {section.hasPricing && pricingData && chatLimits && (
-            <PricingCalculator apiData={pricingData} chatData={chatLimits} />
+            <PricingCalculator apiData={pricingData} chatData={chatLimits} pricingSources={meta.pricingSources} />
           )}
           {section.expandable && (
             <ExpandableSection title={section.expandable.title} preview={section.expandable.preview}>

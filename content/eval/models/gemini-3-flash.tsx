@@ -34,10 +34,18 @@ export const gemini3Flash: ModelProfile = {
       api: 'https://ai.google.dev',
     },
     subscriptionPlans: ['Free', 'AI Pro', 'AI Ultra'],
+    pricingSources: [
+      {
+        label: 'Google AI pricing',
+        href: 'https://ai.google.dev/pricing',
+        provider: 'Google',
+      },
+    ],
     apiRates: {
       input: 0.5,
       output: 3.0,
       unit: 'per million tokens',
+      provider: 'Google AI Studio',
     },
     chatLimits: {
       free: 100,
@@ -76,11 +84,11 @@ export const gemini3Flash: ModelProfile = {
   },
   sentimentFeed: [],
   pricingData: {
-    baseModel: { name: 'Gemini 3 Flash', input: 0.5, output: 3.0 },
+    baseModel: { name: 'Gemini 3 Flash', input: 0.5, output: 3.0, provider: 'Google AI Studio' },
     competitors: [
-      { name: 'DeepSeek-R1', input: 0.55, output: 2.19 },
-      { name: 'Gemini 3 Pro', input: 2.0, output: 12.0 },
-      { name: 'Claude 3.5 Sonnet', input: 3.0, output: 15.0 },
+      { name: 'DeepSeek-R1', input: 0.55, output: 2.19, provider: 'DeepSeek API' },
+      { name: 'Gemini 3 Pro', input: 2.0, output: 12.0, provider: 'Google AI Studio' },
+      { name: 'Claude 3.5 Sonnet', input: 3.0, output: 15.0, provider: 'Anthropic' },
     ],
   },
   chatLimits: [
@@ -265,7 +273,7 @@ export const gemini3Flash: ModelProfile = {
           <p className="mb-4">
             This is by design. Gemini is trained to never give up. It won't accept a victim mentality from the user.
             If you say <q>I can't do this,</q> it will say something like <q>Let's break this down into steps you
-            can do.</q> It holds you to your stated plan. If you said you'd finish something by Friday, Gemini
+              can do.</q> It holds you to your stated plan. If you said you'd finish something by Friday, Gemini
             remembers and will ask about it.
           </p>
           <p>
