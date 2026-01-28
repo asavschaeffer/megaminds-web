@@ -1,3 +1,56 @@
+/* Google Sans via Fontsource CDN */
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('https://cdn.jsdelivr.net/fontsource/fonts/google-sans@latest/latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url('https://cdn.jsdelivr.net/fontsource/fonts/google-sans@latest/latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url('https://cdn.jsdelivr.net/fontsource/fonts/google-sans@latest/latin-600-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Google Sans';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url('https://cdn.jsdelivr.net/fontsource/fonts/google-sans@latest/latin-700-normal.woff2') format('woff2');
+}
+
+/* Reckless Neue via CDN for Anthropic/Claude branding */
+@font-face {
+  font-family: 'Reckless Neue';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('https://db.onlinewebfonts.com/t/8d7470a3ffc57e31f3d9ce407d991c08.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Reckless Neue';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url('https://db.onlinewebfonts.com/t/34bf77357fafcf04d4061d4e19a32c85.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Reckless Neue';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 800;
+  src: url('https://db.onlinewebfonts.com/t/34bf77357fafcf04d4061d4e19a32c85.woff2') format('woff2');
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -34,5 +87,10 @@
   }
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+  .claude-version-bold {
+    font-weight: 700;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }

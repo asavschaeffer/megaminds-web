@@ -7,6 +7,14 @@ export const metadata = {
 
 const articles = [
   {
+    slug: 'typescript-llm-pipeline',
+    title: 'From Scratch Notes to Ship-Ready Reports: A TypeScript + LLM Content Pipeline',
+    description: 'How we turned messy notepad observations into structured, type-safe model reports using TypeScript templates and Claude Opus 4.5.',
+    date: '2026-01-27',
+    readTime: '20 min',
+    tags: ['typescript', 'llm', 'workflow', 'content-engineering'],
+  },
+  {
     slug: 'model-landscape',
     title: 'The AI Model Landscape (January 2026)',
     description: 'A comprehensive breakdown of frontier models: Claude, Gemini, ChatGPT, Grok, DeepSeek, and more.',

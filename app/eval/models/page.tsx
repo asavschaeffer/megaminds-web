@@ -4,6 +4,8 @@ import { BrandCard } from '@/components/ui/brand-card'
 import { getIconManifest, type ManifestIcon } from '@/lib/icon-manifest'
 import type { ModelTagId } from '@/lib/models/tags'
 import { getAllTagIds } from '@/lib/models/tags'
+import { getModelBySlug } from '@/lib/models/registry'
+import { tagIdsToLabels } from '@/lib/models/tags'
 
 const iconEntries = getIconManifest().icons ?? []
 const iconBySlug = new Map(iconEntries.map((entry) => [entry.slug, entry]))
@@ -342,34 +344,30 @@ const frontierCards: FrontierCard[] = [
     watermarkClassName: wideWatermarkClassName,
     ...buildFrontierAssets('kimi', 'moonshot'),
   },
-  {
-    key: 'gemini-pro',
-    href: '/eval/models/gemini-3-pro',
-    modelFamily: 'Gemini',
-    modelVariant: '3',
-    versionNumber: 'Pro',
-    description:
-      'Most capable multimodal model with deeper reasoning, superior image generation, and better video/audio understanding; slower and pricier than Flash.',
-    tags: ['multimodal', 'image-gen', 'video-gen', 'audio', 'precision', 'ultra'],
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildFrontierAssets('gemini'),
-  },
-  {
-    key: 'gemini-flash',
-    href: '/eval/models/gemini-3-flash',
-    modelFamily: 'Gemini',
-    modelVariant: '3',
-    versionNumber: 'Flash',
-    description:
-      'Fastest multimodal model with text/image generation and video/audio understanding; blazing speed but less precise than Pro on complex tasks.',
-    tags: ['multimodal', 'image-gen', 'video-gen', 'audio', 'speed', 'ultra'],
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildFrontierAssets('gemini'),
-  },
+  ...(() => {
+    const geminiPro = getModelBySlug('gemini-3-pro')
+    const geminiFlash = getModelBySlug('gemini-3-flash')
+    return [
+      {
+        key: 'gemini-pro',
+        model: geminiPro,
+        tags: (geminiPro?.meta.tagIds ?? []) as ModelTagId[],
+        modelLogoLabel: 'Model logo',
+        parentBrandingLabel: 'Parent company branding',
+        watermarkClassName: wideWatermarkClassName,
+        ...buildFrontierAssets('gemini'),
+      },
+      {
+        key: 'gemini-flash',
+        model: geminiFlash,
+        tags: (geminiFlash?.meta.tagIds ?? []) as ModelTagId[],
+        modelLogoLabel: 'Model logo',
+        parentBrandingLabel: 'Parent company branding',
+        watermarkClassName: wideWatermarkClassName,
+        ...buildFrontierAssets('gemini'),
+      },
+    ]
+  })(),
   {
     key: 'grok',
     href: '/eval/models/grok',
