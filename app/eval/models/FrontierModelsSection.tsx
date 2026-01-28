@@ -3,16 +3,18 @@
 import { useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { BrandCard } from '@/components/ui/brand-card'
+import type { ModelTagId } from '@/lib/models/tags'
+import { getTag, isValidTagId } from '@/lib/models/tags'
 
 type BrandCardProps = Parameters<typeof BrandCard>[0]
 type FrontierCard = BrandCardProps & {
   key: string
-  tags: string[]
+  tags: ModelTagId[]
 }
 
 type FrontierModelsSectionProps = {
   cards: FrontierCard[]
-  tags: string[]
+  tags: ModelTagId[]
 }
 
 const fadeDurationMs = 200
@@ -23,11 +25,12 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const activeTag = searchParams.get('tag') ?? ''
+  const requestedTag = searchParams.get('tag') ?? ''
+  const activeTag = isValidTagId(requestedTag) ? requestedTag : ''
 
   const filteredCards = useMemo(() => {
     if (!activeTag) return cards
-    return cards.filter((card) => card.tags.includes(activeTag))
+    return cards.filter((card) => card.tags.includes(activeTag as ModelTagId))
   }, [activeTag, cards])
 
   const [displayedCards, setDisplayedCards] = useState(filteredCards)
@@ -59,7 +62,7 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
   const featuredTagsMobile = tags.slice(0, featuredTagCountMobile)
   const featuredTagsDesktop = tags.slice(0, featuredTagCountDesktop)
   const filteredTagOptions = tagQuery
-    ? tags.filter((tag) => tag.toLowerCase().includes(tagQuery.trim().toLowerCase()))
+    ? tags.filter((tag) => getTag(tag).label.toLowerCase().includes(tagQuery.trim().toLowerCase()))
     : tags
   const desktopTags = isDesktopExpanded ? tags : featuredTagsDesktop
 
@@ -90,7 +93,7 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
                   : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                 }`}
             >
-              {tag}
+              {getTag(tag).label}
             </button>
           ))}
           {tags.length > featuredTagCountMobile ? (
@@ -120,11 +123,11 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
               type="button"
               onClick={() => updateTag(tag)}
               className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag === tag
-                  ? 'border-slate-900 bg-slate-900 text-white'
-                  : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                ? 'border-slate-900 bg-slate-900 text-white'
+                : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                 }`}
             >
-              {tag}
+              {getTag(tag).label}
             </button>
           ))}
           {tags.length > featuredTagCountDesktop ? (
@@ -143,7 +146,9 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
         <h2 className="text-xl font-semibold text-gray-900">Frontier models</h2>
         <div className={`mt-6 flex flex-col gap-6 transition-opacity duration-200 ${isFading ? 'opacity-0' : 'opacity-100'}`}>
           {displayedCards.length ? (
-            displayedCards.map(({ key, ...cardProps }) => <BrandCard key={key} {...cardProps} />)
+            displayedCards.map(({ key, tags: cardTags, ...cardProps }) => (
+              <BrandCard key={key} tags={cardTags.map((tag) => getTag(tag).label)} {...cardProps} />
+            ))
           ) : (
             <div className="rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center text-sm text-slate-500">
               No models match this tag yet.
@@ -211,7 +216,7 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
                       : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                     }`}
                 >
-                  {tag}
+                  {getTag(tag).label}
                 </button>
               ))}
             </div>

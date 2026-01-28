@@ -1,8 +1,30 @@
 import type { ModelProfile, ModelSlug } from './types'
 import type { ModelTagId } from './tags'
+import { validateTagConflicts, validateTagCoverage } from './tags'
 import { deepseekR1 } from '@/content/eval/models/deepseek-r1'
 
 const MODELS: ModelProfile[] = [deepseekR1]
+
+const tagCoverageErrors = MODELS.flatMap((model) => {
+  const tagIds = model.meta.tagIds ?? []
+  const { valid, missing } = validateTagCoverage(tagIds)
+  if (valid) return []
+  return [
+    `Model "${model.slug}" is missing at least one tag from: ${missing.join(', ')}`,
+  ]
+})
+
+const tagConflictErrors = MODELS.flatMap((model) => {
+  const tagIds = model.meta.tagIds ?? []
+  const { valid, conflicts } = validateTagConflicts(tagIds)
+  if (valid) return []
+  return [`Model "${model.slug}" has invalid tag combo: ${conflicts.join('; ')}`]
+})
+
+const tagErrors = [...tagCoverageErrors, ...tagConflictErrors]
+if (tagErrors.length > 0) {
+  throw new Error(tagErrors.join('\n'))
+}
 
 const MODEL_BY_SLUG = new Map<ModelSlug, ModelProfile>(MODELS.map((model) => [model.slug, model]))
 

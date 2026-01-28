@@ -182,6 +182,7 @@ export interface ModelHeaderProps {
   releaseDate?: string
   releaseDateDisplay?: string
   identity?: string
+  tagIds?: ModelTagId[]
   tags?: string[]
   links?: ModelLinks
 }
@@ -205,7 +206,7 @@ export interface SentimentMarqueeProps {
   items: SentimentItem[]
 }
 
-export interface SocialEmbedProps extends SocialEmbedData {}
+export interface SocialEmbedProps extends SocialEmbedData { }
 
 export interface ExpandableSectionProps {
   title: string

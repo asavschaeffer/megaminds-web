@@ -12,6 +12,7 @@ import {
   Newspaper,
   Video,
   Sparkles,
+  DollarSign,
 } from 'lucide-react'
 
 export interface ModelLinkType {
@@ -115,7 +116,7 @@ export const MODEL_LINK_TYPES: Record<ModelLinkTypeId, ModelLinkType> = {
     id: 'pricing',
     label: 'Pricing',
     description: 'Plans & costs',
-    icon: Sparkles,
+    icon: DollarSign,
     category: 'build',
   },
   changelog: {

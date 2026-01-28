@@ -2,81 +2,15 @@ import ModelsPageContent from './ModelsPageContent'
 import FrontierModelsSection from '@/app/eval/models/FrontierModelsSection'
 import { BrandCard } from '@/components/ui/brand-card'
 import { getIconManifest, type ManifestIcon } from '@/lib/icon-manifest'
+import type { ModelTagId } from '@/lib/models/tags'
+import { getAllTagIds } from '@/lib/models/tags'
 
 const iconEntries = getIconManifest().icons ?? []
 const iconBySlug = new Map(iconEntries.map((entry) => [entry.slug, entry]))
 const assetVariants = ['mono', 'color', 'text', 'combine', 'combine-color', 'avatar'] as const
 type IconVariant = (typeof assetVariants)[number] | 'brand-color'
 
-const TAGS = {
-  frontier: 'Frontier',
-  generalist: 'Generalist',
-  multimodal: 'Multimodal',
-  imageGen: 'Image Gen',
-  videoGen: 'Video Gen',
-  voiceMode: 'Voice Mode',
-  speed: 'Speed',
-  largeContext: 'Large Context',
-  toolUse: 'Tool Use',
-  computerUse: 'Computer Use',
-  writing: 'Writing',
-  coding: 'Coding',
-  math: 'Math',
-  reasoning: 'Reasoning',
-  precision: 'Precision',
-  search: 'Search',
-  ecosystem: 'Ecosystem',
-  openSource: 'Open Source',
-  costEfficient: 'Cost Efficient',
-  design: 'Design',
-  frontend: 'Frontend',
-  slides: 'Slides',
-  roleplay: 'Roleplay',
-  worldbuilding: 'Worldbuilding',
-  instructionFollowing: 'Instruction Following',
-  ideation: 'Ideation',
-  productivity: 'Productivity',
-  multilingual: 'Multilingual',
-  creativity: 'Creativity',
-  moe: 'MoE',
-  efficiency: 'Efficiency',
-  enterprise: 'Enterprise',
-} as const
-
-const FRONTIER_TAGS = [
-  TAGS.frontier,
-  TAGS.generalist,
-  TAGS.multimodal,
-  TAGS.imageGen,
-  TAGS.videoGen,
-  TAGS.voiceMode,
-  TAGS.speed,
-  TAGS.largeContext,
-  TAGS.toolUse,
-  TAGS.computerUse,
-  TAGS.writing,
-  TAGS.coding,
-  TAGS.math,
-  TAGS.reasoning,
-  TAGS.precision,
-  TAGS.search,
-  TAGS.ecosystem,
-  TAGS.openSource,
-  TAGS.costEfficient,
-  TAGS.design,
-  TAGS.frontend,
-  TAGS.slides,
-  TAGS.roleplay,
-  TAGS.worldbuilding,
-  TAGS.instructionFollowing,
-  TAGS.ideation,
-  TAGS.productivity,
-  TAGS.multilingual,
-  TAGS.creativity,
-  TAGS.moe,
-  TAGS.efficiency,
-  TAGS.enterprise,
-]
+const FRONTIER_TAGS = getAllTagIds()
 
 const assetLabels: Record<(typeof assetVariants)[number], string> = {
   mono: 'Logo (mono)',
@@ -176,7 +110,7 @@ const models = [
 type BrandCardProps = Parameters<typeof BrandCard>[0]
 type FrontierCard = BrandCardProps & {
   key: string
-  tags: string[]
+  tags: ModelTagId[]
 }
 
 const frontierCards: FrontierCard[] = [
@@ -188,7 +122,7 @@ const frontierCards: FrontierCard[] = [
     versionNumber: '',
     description:
       'Multimodal with top-tier coding and math; Codex tones down the worst 5.2 personality quirks, but cost and sycophancy remain concerns.',
-    tags: [TAGS.multimodal, TAGS.coding, TAGS.math, TAGS.reasoning, TAGS.ideation],
+    tags: ['multimodal', 'coding', 'math', 'reasoning', 'ideation'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: openAiWatermarkClassName,
@@ -203,7 +137,7 @@ const frontierCards: FrontierCard[] = [
     versionNumber: '4.5',
     description:
       'Text-first with best-in-class tool use, computer control, and writing; slower, pricey, and long-context precision can degrade.',
-    tags: [TAGS.toolUse, TAGS.computerUse, TAGS.writing, TAGS.precision, TAGS.reasoning],
+    tags: ['tool-use', 'instruction', 'writing', 'precision', 'reasoning'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: anthropicWatermarkClassName,
@@ -217,7 +151,7 @@ const frontierCards: FrontierCard[] = [
     versionNumber: '4.5',
     description:
       'Text-first with best-in-class tool use, computer control, and writing; slower, pricey, and long-context precision can degrade.',
-    tags: [TAGS.toolUse, TAGS.computerUse, TAGS.writing, TAGS.precision, TAGS.reasoning],
+    tags: ['tool-use', 'instruction', 'writing', 'precision', 'reasoning'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: anthropicWatermarkClassName,
@@ -231,7 +165,7 @@ const frontierCards: FrontierCard[] = [
     versionNumber: '4.5',
     description:
       'Text-first with best-in-class tool use, computer control, and writing; slower, pricey, and long-context precision can degrade.',
-    tags: [TAGS.toolUse, TAGS.computerUse, TAGS.writing, TAGS.precision, TAGS.reasoning],
+    tags: ['tool-use', 'instruction', 'writing', 'precision', 'reasoning'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: anthropicWatermarkClassName,
@@ -243,7 +177,7 @@ const frontierCards: FrontierCard[] = [
     modelFamily: 'Llama',
     modelVariant: '4',
     description: 'Paragraph element',
-    tags: [TAGS.openSource, TAGS.generalist, TAGS.reasoning, TAGS.coding, TAGS.frontier],
+    tags: ['open-source', 'generalist', 'reasoning', 'coding', 'frontier'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -257,7 +191,7 @@ const frontierCards: FrontierCard[] = [
     modelVariant: '3',
     versionNumber: '',
     description: 'Paragraph element',
-    tags: [TAGS.openSource, TAGS.speed, TAGS.coding, TAGS.generalist, TAGS.costEfficient],
+    tags: ['open-source', 'speed', 'coding', 'generalist', 'cost-efficient'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -272,7 +206,7 @@ const frontierCards: FrontierCard[] = [
     versionNumber: '',
     description:
       'Low-cost, open model with strong reasoning traces and a smart team; not always SOTA despite rumors.',
-    tags: [TAGS.costEfficient, TAGS.openSource, TAGS.reasoning, TAGS.moe, TAGS.frontier],
+    tags: ['cost-efficient', 'open-source', 'reasoning', 'moe', 'frontier'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -286,7 +220,7 @@ const frontierCards: FrontierCard[] = [
     versionNumber: '',
     description:
       'The cheapest reasoning frontier model with transparent chain-of-thought. DeepSeek-R1 brings o1-level performance at a fraction of the cost, with full visibility into its thinking process.',
-    tags: [TAGS.reasoning, TAGS.openSource, TAGS.costEfficient, TAGS.frontier, TAGS.coding, TAGS.math],
+    tags: ['reasoning', 'open-source', 'cost-efficient', 'frontier', 'coding', 'math'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -300,7 +234,7 @@ const frontierCards: FrontierCard[] = [
     versionNumber: '',
     variantLayout: 'stacked' as const,
     description: 'Paragraph element',
-    tags: [TAGS.multilingual, TAGS.writing, TAGS.reasoning, TAGS.generalist],
+    tags: ['translation', 'writing', 'reasoning', 'generalist'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -316,7 +250,7 @@ const frontierCards: FrontierCard[] = [
     versionNumber: 'Perplexity',
     variantLayout: 'stacked' as const,
     description: 'Paragraph element',
-    tags: [TAGS.search, TAGS.reasoning, TAGS.speed, TAGS.toolUse],
+    tags: ['search', 'reasoning', 'speed', 'tool-use'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -331,7 +265,7 @@ const frontierCards: FrontierCard[] = [
     versionNumber: '',
     variantLayout: 'stacked' as const,
     description: 'Paragraph element',
-    tags: [TAGS.enterprise, TAGS.reasoning, TAGS.coding, TAGS.generalist],
+    tags: ['enterprise', 'reasoning', 'coding', 'generalist'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -348,7 +282,7 @@ const frontierCards: FrontierCard[] = [
     modelVariant: '3',
     versionNumber: '',
     description: 'Paragraph element',
-    tags: [TAGS.openSource, TAGS.multimodal, TAGS.coding, TAGS.reasoning, TAGS.multilingual],
+    tags: ['open-source', 'multimodal', 'coding', 'reasoning', 'translation'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: alibabaWatermarkClassName,
@@ -361,7 +295,7 @@ const frontierCards: FrontierCard[] = [
     modelVariant: '',
     versionNumber: '',
     description: 'Paragraph element',
-    tags: [TAGS.productivity, TAGS.toolUse, TAGS.generalist, TAGS.reasoning],
+    tags: ['tool-use', 'generalist', 'reasoning', 'instruction'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -375,7 +309,7 @@ const frontierCards: FrontierCard[] = [
     modelVariant: '3',
     versionNumber: '',
     description: 'Paragraph element',
-    tags: [TAGS.openSource, TAGS.efficiency, TAGS.generalist, TAGS.reasoning],
+    tags: ['open-source', 'efficiency', 'generalist', 'reasoning'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -388,13 +322,7 @@ const frontierCards: FrontierCard[] = [
     modelVariant: '3',
     versionNumber: '',
     description: 'Open-source model tuned for roleplay and long-term context; not a frontier SOTA model.',
-    tags: [
-      TAGS.largeContext,
-      TAGS.roleplay,
-      TAGS.openSource,
-      TAGS.worldbuilding,
-      TAGS.instructionFollowing,
-    ],
+    tags: ['long', 'roleplay', 'open-source', 'worldbuilding', 'instruction'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -408,7 +336,7 @@ const frontierCards: FrontierCard[] = [
     modelVariant: 'K2',
     versionNumber: '',
     description: 'Design-forward model great for slides, frontend, and programming with solid tools; 256k context.',
-    tags: [TAGS.design, TAGS.frontend, TAGS.slides, TAGS.coding, TAGS.toolUse],
+    tags: ['design', 'creativity', 'ideation', 'coding', 'tool-use'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -422,7 +350,7 @@ const frontierCards: FrontierCard[] = [
     versionNumber: 'Pro',
     description:
       'Blazing-fast multimodal model with huge context and strong Google ecosystem integration; fine detail can blur and tools can be flaky.',
-    tags: [TAGS.multimodal, TAGS.imageGen, TAGS.videoGen, TAGS.speed, TAGS.largeContext, TAGS.ecosystem],
+    tags: ['multimodal', 'image-gen', 'video-gen', 'speed', 'long'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -436,7 +364,7 @@ const frontierCards: FrontierCard[] = [
     versionNumber: 'Flash',
     description:
       'Incredibly fast multimodal model with massive context and Google integration; less precise on fine detail and tools can stumble.',
-    tags: [TAGS.multimodal, TAGS.imageGen, TAGS.speed, TAGS.largeContext, TAGS.ecosystem],
+    tags: ['multimodal', 'image-gen', 'speed', 'long'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -449,7 +377,7 @@ const frontierCards: FrontierCard[] = [
     modelVariant: '',
     versionNumber: '4',
     description: 'Uncensored, multimodal model with strong search and large context; safety issues and uneven free access.',
-    tags: [TAGS.multimodal, TAGS.imageGen, TAGS.videoGen, TAGS.voiceMode, TAGS.search, TAGS.largeContext],
+    tags: ['multimodal', 'image-gen', 'video-gen', 'audio', 'search', 'long'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: xaiWatermarkClassName,
@@ -463,7 +391,7 @@ const frontierCards: FrontierCard[] = [
     versionNumber: 'ChatGPT',
     variantLayout: 'stacked' as const,
     description: 'Paragraph element',
-    tags: [TAGS.coding, TAGS.productivity, TAGS.toolUse, TAGS.ecosystem],
+    tags: ['coding', 'tool-use', 'instruction'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -476,7 +404,7 @@ const frontierCards: FrontierCard[] = [
     modelVariant: '',
     versionNumber: '5.2',
     description: 'Paragraph element',
-    tags: [TAGS.multimodal, TAGS.ecosystem, TAGS.search, TAGS.reasoning],
+    tags: ['multimodal', 'search', 'reasoning'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -490,7 +418,7 @@ const frontierCards: FrontierCard[] = [
     modelVariant: '',
     versionNumber: '4.7',
     description: 'Paragraph element',
-    tags: [TAGS.generalist, TAGS.reasoning, TAGS.multilingual, TAGS.openSource],
+    tags: ['generalist', 'reasoning', 'translation', 'open-source'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -504,7 +432,7 @@ const frontierCards: FrontierCard[] = [
     versionNumber: 'Preview',
     variantLayout: 'stacked' as const,
     description: 'Paragraph element',
-    tags: [TAGS.multimodal, TAGS.videoGen, TAGS.speed, TAGS.creativity],
+    tags: ['multimodal', 'video-gen', 'speed', 'creativity'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,

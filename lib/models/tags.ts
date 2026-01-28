@@ -2,10 +2,10 @@ export type TagCategory =
   | 'capability'
   | 'modality'
   | 'architecture'
-  | 'license'
-  | 'size'
+  | 'licensing'
+  | 'size-performance'
   | 'context'
-  | 'provider'
+  | 'deployment'
 
 export interface ModelTag {
   id: string
@@ -16,25 +16,31 @@ export interface ModelTag {
 }
 
 export type ModelTagId =
+  | 'generalist'
   | 'reasoning'
   | 'coding'
   | 'math'
-  | 'creative-writing'
+  | 'writing'
   | 'analysis'
   | 'translation'
   | 'summarization'
-  | 'agents'
+  | 'instruction'
+  | 'tool-use'
   | 'function-calling'
-  | 'chain-of-thought'
   | 'search'
   | 'rag'
+  | 'creativity'
+  | 'ideation'
+  | 'roleplay'
+  | 'worldbuilding'
+  | 'frontier'
+  | 'design'
   | 'text'
   | 'vision'
   | 'audio'
   | 'image-gen'
-  | 'video'
+  | 'video-gen'
   | 'multimodal'
-  | 'transformer'
   | 'moe'
   | 'dense'
   | 'hybrid'
@@ -42,22 +48,43 @@ export type ModelTagId =
   | 'open-source'
   | 'open-weights'
   | 'proprietary'
-  | 'research-only'
+  | 'research'
   | 'commercial'
+  | 'enterprise'
+  | 'tiny'
   | 'small'
   | 'medium'
   | 'large'
-  | 'frontier'
-  | 'short-context'
+  | 'precision'
+  | 'speed'
+  | 'efficiency'
+  | 'cost-efficient'
+  | 'short'
   | 'medium-context'
-  | 'long-context'
-  | 'ultra-context'
-  | 'api-available'
-  | 'local-deployment'
-  | 'edge-deployment'
-  | 'cloud-only'
+  | 'long'
+  | 'ultra'
+  | 'cloud'
+  | 'local'
+  | 'edge'
+  | 'api'
+
+export const TAG_CATEGORY_ORDER: TagCategory[] = [
+  'capability',
+  'modality',
+  'architecture',
+  'licensing',
+  'size-performance',
+  'context',
+  'deployment',
+]
 
 export const MODEL_TAGS: Record<ModelTagId, ModelTag> = {
+  generalist: {
+    id: 'generalist',
+    label: 'Generalist',
+    category: 'capability',
+    description: 'Broad capability across tasks and domains',
+  },
   reasoning: {
     id: 'reasoning',
     label: 'Reasoning',
@@ -76,11 +103,11 @@ export const MODEL_TAGS: Record<ModelTagId, ModelTag> = {
     category: 'capability',
     description: 'Mathematical problem-solving and proofs',
   },
-  'creative-writing': {
-    id: 'creative-writing',
-    label: 'Creative Writing',
+  writing: {
+    id: 'writing',
+    label: 'Writing',
     category: 'capability',
-    description: 'Fiction, poetry, and creative content generation',
+    description: 'Strong writing and narrative generation',
   },
   analysis: {
     id: 'analysis',
@@ -100,23 +127,23 @@ export const MODEL_TAGS: Record<ModelTagId, ModelTag> = {
     category: 'capability',
     description: 'Text summarization and compression',
   },
-  agents: {
-    id: 'agents',
-    label: 'Agents',
+  instruction: {
+    id: 'instruction',
+    label: 'Instruction',
     category: 'capability',
-    description: 'Suitable for autonomous agent workflows',
+    description: 'Follows complex instructions reliably',
+  },
+  'tool-use': {
+    id: 'tool-use',
+    label: 'Tool Use',
+    category: 'capability',
+    description: 'Strong tool use and orchestration',
   },
   'function-calling': {
     id: 'function-calling',
     label: 'Function Calling',
     category: 'capability',
     description: 'Native tool/function calling support',
-  },
-  'chain-of-thought': {
-    id: 'chain-of-thought',
-    label: 'Chain-of-Thought',
-    category: 'capability',
-    description: 'Explicit reasoning traces',
   },
   search: {
     id: 'search',
@@ -129,6 +156,42 @@ export const MODEL_TAGS: Record<ModelTagId, ModelTag> = {
     label: 'RAG',
     category: 'capability',
     description: 'Retrieval-augmented generation support',
+  },
+  creativity: {
+    id: 'creativity',
+    label: 'Creativity',
+    category: 'capability',
+    description: 'Originality and creative ideation',
+  },
+  ideation: {
+    id: 'ideation',
+    label: 'Ideation',
+    category: 'capability',
+    description: 'Great at brainstorming and concept generation',
+  },
+  roleplay: {
+    id: 'roleplay',
+    label: 'Roleplay',
+    category: 'capability',
+    description: 'Strong at in-character roleplay',
+  },
+  worldbuilding: {
+    id: 'worldbuilding',
+    label: 'Worldbuilding',
+    category: 'capability',
+    description: 'Long-form narrative and lore creation',
+  },
+  design: {
+    id: 'design',
+    label: 'Design',
+    category: 'capability',
+    description: 'Design thinking and visual communication',
+  },
+  frontier: {
+    id: 'frontier',
+    label: 'Frontier',
+    category: 'capability',
+    description: 'Frontier-level capability across tasks',
   },
   text: {
     id: 'text',
@@ -150,13 +213,13 @@ export const MODEL_TAGS: Record<ModelTagId, ModelTag> = {
   },
   'image-gen': {
     id: 'image-gen',
-    label: 'Image Generation',
+    label: 'Image Gen',
     category: 'modality',
     description: 'Image generation capabilities',
   },
-  video: {
-    id: 'video',
-    label: 'Video',
+  'video-gen': {
+    id: 'video-gen',
+    label: 'Video Gen',
     category: 'modality',
     description: 'Video understanding or generation',
   },
@@ -165,12 +228,6 @@ export const MODEL_TAGS: Record<ModelTagId, ModelTag> = {
     label: 'Multimodal',
     category: 'modality',
     description: 'Multiple input/output modalities',
-  },
-  transformer: {
-    id: 'transformer',
-    label: 'Transformer',
-    category: 'architecture',
-    description: 'Standard transformer architecture',
   },
   moe: {
     id: 'moe',
@@ -199,104 +256,134 @@ export const MODEL_TAGS: Record<ModelTagId, ModelTag> = {
   'open-source': {
     id: 'open-source',
     label: 'Open Source',
-    category: 'license',
+    category: 'licensing',
     description: 'Fully open source with code and weights',
   },
   'open-weights': {
     id: 'open-weights',
     label: 'Open Weights',
-    category: 'license',
+    category: 'licensing',
     description: 'Weights available for download',
   },
   proprietary: {
     id: 'proprietary',
     label: 'Proprietary',
-    category: 'license',
+    category: 'licensing',
     description: 'Closed source, API-only access',
   },
-  'research-only': {
-    id: 'research-only',
-    label: 'Research Only',
-    category: 'license',
+  research: {
+    id: 'research',
+    label: 'Research',
+    category: 'licensing',
     description: 'Limited to research use',
   },
   commercial: {
     id: 'commercial',
     label: 'Commercial',
-    category: 'license',
+    category: 'licensing',
     description: 'Commercial use permitted',
+  },
+  enterprise: {
+    id: 'enterprise',
+    label: 'Enterprise',
+    category: 'licensing',
+    description: 'Enterprise-grade usage and support',
+  },
+  tiny: {
+    id: 'tiny',
+    label: 'Tiny (<3B)',
+    category: 'size-performance',
+    description: 'Under 3B parameters',
   },
   small: {
     id: 'small',
-    label: 'Small (<10B)',
-    category: 'size',
-    description: 'Under 10 billion parameters',
+    label: 'Small (3-10B)',
+    category: 'size-performance',
+    description: '3B-10B parameters',
   },
   medium: {
     id: 'medium',
     label: 'Medium (10-70B)',
-    category: 'size',
-    description: '10-70 billion parameters',
+    category: 'size-performance',
+    description: '10B-70B parameters',
   },
   large: {
     id: 'large',
     label: 'Large (70-200B)',
-    category: 'size',
-    description: '70-200 billion parameters',
+    category: 'size-performance',
+    description: '70B-200B parameters',
   },
-  frontier: {
-    id: 'frontier',
-    label: 'Frontier',
-    category: 'size',
-    description: 'Frontier-scale model (200B+ or large MoE)',
+  precision: {
+    id: 'precision',
+    label: 'Precision',
+    category: 'size-performance',
+    description: 'High accuracy and low hallucination rate',
   },
-  'short-context': {
-    id: 'short-context',
-    label: 'Short Context',
+  speed: {
+    id: 'speed',
+    label: 'Speed',
+    category: 'size-performance',
+    description: 'Fast responses and high throughput',
+  },
+  efficiency: {
+    id: 'efficiency',
+    label: 'Efficiency',
+    category: 'size-performance',
+    description: 'Efficient in cost or compute usage',
+  },
+  'cost-efficient': {
+    id: 'cost-efficient',
+    label: 'Cost Efficient',
+    category: 'size-performance',
+    description: 'Low-cost for comparable performance',
+  },
+  short: {
+    id: 'short',
+    label: 'Short (<16K)',
     category: 'context',
     description: 'Under 16K context window',
   },
   'medium-context': {
     id: 'medium-context',
-    label: 'Medium Context',
+    label: 'Medium (16K-64K)',
     category: 'context',
     description: '16K-64K context window',
   },
-  'long-context': {
-    id: 'long-context',
-    label: 'Long Context',
+  long: {
+    id: 'long',
+    label: 'Long (64K-200K)',
     category: 'context',
     description: '64K-200K context window',
   },
-  'ultra-context': {
-    id: 'ultra-context',
-    label: 'Ultra Context',
+  ultra: {
+    id: 'ultra',
+    label: 'Ultra (200K+)',
     category: 'context',
     description: 'Over 200K context window',
   },
-  'api-available': {
-    id: 'api-available',
-    label: 'API Available',
-    category: 'provider',
+  cloud: {
+    id: 'cloud',
+    label: 'Cloud',
+    category: 'deployment',
+    description: 'Cloud deployment',
+  },
+  local: {
+    id: 'local',
+    label: 'Local',
+    category: 'deployment',
+    description: 'Local deployment',
+  },
+  edge: {
+    id: 'edge',
+    label: 'Edge',
+    category: 'deployment',
+    description: 'Edge/mobile deployment',
+  },
+  api: {
+    id: 'api',
+    label: 'API',
+    category: 'deployment',
     description: 'Available via API',
-  },
-  'local-deployment': {
-    id: 'local-deployment',
-    label: 'Local Deployment',
-    category: 'provider',
-    description: 'Can run locally',
-  },
-  'edge-deployment': {
-    id: 'edge-deployment',
-    label: 'Edge Deployment',
-    category: 'provider',
-    description: 'Suitable for edge/mobile deployment',
-  },
-  'cloud-only': {
-    id: 'cloud-only',
-    label: 'Cloud Only',
-    category: 'provider',
-    description: 'Only available via cloud API',
   },
 }
 
@@ -318,4 +405,38 @@ export function tagIdsToLabels(ids: ModelTagId[]): string[] {
 
 export function isValidTagId(id: string): id is ModelTagId {
   return id in MODEL_TAGS
+}
+
+const OPTIONAL_TAG_CATEGORIES: Set<TagCategory> = new Set(['architecture'])
+
+export function validateTagCoverage(tagIds: ModelTagId[]): { valid: boolean; missing: TagCategory[] } {
+  const covered = new Set<TagCategory>()
+  for (const id of tagIds) {
+    const tag = MODEL_TAGS[id]
+    if (tag) covered.add(tag.category)
+  }
+  const missing = TAG_CATEGORY_ORDER.filter(
+    (category) => !covered.has(category) && !OPTIONAL_TAG_CATEGORIES.has(category)
+  )
+  return { valid: missing.length === 0, missing }
+}
+
+export function validateTagConflicts(tagIds: ModelTagId[]): { valid: boolean; conflicts: string[] } {
+  const conflicts: string[] = []
+  const hasOpenSource = tagIds.includes('open-source')
+  const hasOpenWeights = tagIds.includes('open-weights')
+  if (hasOpenSource && hasOpenWeights) {
+    conflicts.push('open-source and open-weights cannot both be set')
+  }
+  const sizeTags: ModelTagId[] = ['tiny', 'small', 'medium', 'large']
+  const contextTags: ModelTagId[] = ['short', 'medium-context', 'long', 'ultra']
+  const selectedSize = sizeTags.filter((tag) => tagIds.includes(tag))
+  const selectedContext = contextTags.filter((tag) => tagIds.includes(tag))
+  if (selectedSize.length > 1) {
+    conflicts.push(`only one size tag allowed (found: ${selectedSize.join(', ')})`)
+  }
+  if (selectedContext.length > 1) {
+    conflicts.push(`only one context tag allowed (found: ${selectedContext.join(', ')})`)
+  }
+  return { valid: conflicts.length === 0, conflicts }
 }
