@@ -5,6 +5,7 @@ export type TagCategory =
   | 'licensing'
   | 'size-performance'
   | 'context'
+  | 'output'
   | 'deployment'
 
 export interface ModelTag {
@@ -63,6 +64,13 @@ export type ModelTagId =
   | 'medium-context'
   | 'long'
   | 'ultra'
+  | 'output-2k'
+  | 'output-4k'
+  | 'output-8k'
+  | 'output-16k'
+  | 'output-32k'
+  | 'output-64k'
+  | 'output-128k'
   | 'cloud'
   | 'local'
   | 'edge'
@@ -75,6 +83,7 @@ export const TAG_CATEGORY_ORDER: TagCategory[] = [
   'licensing',
   'size-performance',
   'context',
+  'output',
   'deployment',
 ]
 
@@ -361,6 +370,48 @@ export const MODEL_TAGS: Record<ModelTagId, ModelTag> = {
     category: 'context',
     description: 'Over 200K context window',
   },
+  'output-2k': {
+    id: 'output-2k',
+    label: 'Output 2K',
+    category: 'output',
+    description: 'Up to 2K output tokens',
+  },
+  'output-4k': {
+    id: 'output-4k',
+    label: 'Output 4K',
+    category: 'output',
+    description: 'Up to 4K output tokens',
+  },
+  'output-8k': {
+    id: 'output-8k',
+    label: 'Output 8K',
+    category: 'output',
+    description: 'Up to 8K output tokens',
+  },
+  'output-16k': {
+    id: 'output-16k',
+    label: 'Output 16K',
+    category: 'output',
+    description: 'Up to 16K output tokens',
+  },
+  'output-32k': {
+    id: 'output-32k',
+    label: 'Output 32K',
+    category: 'output',
+    description: 'Up to 32K output tokens',
+  },
+  'output-64k': {
+    id: 'output-64k',
+    label: 'Output 64K',
+    category: 'output',
+    description: 'Up to 64K output tokens',
+  },
+  'output-128k': {
+    id: 'output-128k',
+    label: 'Output 128K',
+    category: 'output',
+    description: 'Up to 128K output tokens',
+  },
   cloud: {
     id: 'cloud',
     label: 'Cloud',
@@ -388,7 +439,11 @@ export const MODEL_TAGS: Record<ModelTagId, ModelTag> = {
 }
 
 export function getTag(id: ModelTagId): ModelTag {
-  return MODEL_TAGS[id]
+  const tag = MODEL_TAGS[id]
+  if (!tag) {
+    throw new Error(`Invalid tag ID: ${id}`)
+  }
+  return tag
 }
 
 export function getTagsByCategory(category: TagCategory): ModelTag[] {
@@ -407,7 +462,34 @@ export function isValidTagId(id: string): id is ModelTagId {
   return id in MODEL_TAGS
 }
 
-const OPTIONAL_TAG_CATEGORIES: Set<TagCategory> = new Set(['architecture'])
+export function validateTagIds(tagIds: unknown): { valid: boolean; errors: string[] } {
+  if (!Array.isArray(tagIds)) {
+    return { valid: false, errors: ['tagIds must be an array'] }
+  }
+
+  const errors: string[] = []
+  const seen = new Set<string>()
+
+  tagIds.forEach((id, index) => {
+    if (typeof id !== 'string') {
+      errors.push(`tagIds[${index}] must be a string`)
+      return
+    }
+    if (!isValidTagId(id)) {
+      errors.push(`tagIds[${index}] "${id}" is not a valid tag ID`)
+      return
+    }
+    if (seen.has(id)) {
+      errors.push(`Duplicate tag ID: "${id}"`)
+      return
+    }
+    seen.add(id)
+  })
+
+  return { valid: errors.length === 0, errors }
+}
+
+const OPTIONAL_TAG_CATEGORIES: Set<TagCategory> = new Set(['architecture', 'output'])
 
 export function validateTagCoverage(tagIds: ModelTagId[]): { valid: boolean; missing: TagCategory[] } {
   const covered = new Set<TagCategory>()
@@ -430,13 +512,26 @@ export function validateTagConflicts(tagIds: ModelTagId[]): { valid: boolean; co
   }
   const sizeTags: ModelTagId[] = ['tiny', 'small', 'medium', 'large']
   const contextTags: ModelTagId[] = ['short', 'medium-context', 'long', 'ultra']
+  const outputTags: ModelTagId[] = [
+    'output-2k',
+    'output-4k',
+    'output-8k',
+    'output-16k',
+    'output-32k',
+    'output-64k',
+    'output-128k',
+  ]
   const selectedSize = sizeTags.filter((tag) => tagIds.includes(tag))
   const selectedContext = contextTags.filter((tag) => tagIds.includes(tag))
+  const selectedOutput = outputTags.filter((tag) => tagIds.includes(tag))
   if (selectedSize.length > 1) {
     conflicts.push(`only one size tag allowed (found: ${selectedSize.join(', ')})`)
   }
   if (selectedContext.length > 1) {
     conflicts.push(`only one context tag allowed (found: ${selectedContext.join(', ')})`)
+  }
+  if (selectedOutput.length > 1) {
+    conflicts.push(`only one output tag allowed (found: ${selectedOutput.join(', ')})`)
   }
   return { valid: conflicts.length === 0, conflicts }
 }

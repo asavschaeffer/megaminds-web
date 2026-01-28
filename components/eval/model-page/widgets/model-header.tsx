@@ -3,7 +3,7 @@ import type { ModelHeaderProps } from '@/lib/models/types'
 import type { ModelLinkTypeId } from '@/lib/models/link-types'
 import { getLinkType, isValidLinkTypeId } from '@/lib/models/link-types'
 import { composeModelName } from '@/lib/models/names'
-import { getTag } from '@/lib/models/tags'
+import { getTag, isValidTagId } from '@/lib/models/tags'
 import { HeaderLinkButton } from './header-link-button'
 import { Tag } from './tag'
 
@@ -37,7 +37,8 @@ export const ModelHeader = ({
   const secondaryLinks = typedLinks.filter((link) => !link.primary && link.category === 'build')
   const tertiaryLinks = typedLinks.filter((link) => !link.primary && link.category !== 'build')
   const iconMatchName = organization || name
-  const hasTags = tagIds.length > 0 || tags.length > 0
+  const safeTagIds = tagIds.filter(isValidTagId)
+  const hasTags = safeTagIds.length > 0 || tags.length > 0
 
   return (
     <header className="space-y-6">
@@ -61,7 +62,7 @@ export const ModelHeader = ({
 
       {hasTags && (
         <ul className="flex flex-wrap gap-2 list-none" role="list" aria-label="Model characteristics">
-          {tagIds.map((tagId) => (
+          {safeTagIds.map((tagId) => (
             <li key={tagId}>
               <a
                 href={`/eval/models?tag=${encodeURIComponent(tagId)}`}

@@ -1,6 +1,6 @@
 import type { ModelProfile, ModelSlug } from './types'
 import type { ModelTagId } from './tags'
-import { validateTagConflicts, validateTagCoverage } from './tags'
+import { validateTagConflicts, validateTagCoverage, validateTagIds } from './tags'
 import { deepseekR1 } from '@/content/eval/models/deepseek-r1'
 import { gemini3Flash } from '@/content/eval/models/gemini-3-flash'
 import { gemini3Pro } from '@/content/eval/models/gemini-3-pro'
@@ -16,6 +16,13 @@ const tagCoverageErrors = MODELS.flatMap((model) => {
   ]
 })
 
+const tagIdErrors = MODELS.flatMap((model) => {
+  const tagIds = model.meta.tagIds ?? []
+  const { valid, errors } = validateTagIds(tagIds)
+  if (valid) return []
+  return [`Model "${model.slug}" has invalid tagIds: ${errors.join('; ')}`]
+})
+
 const tagConflictErrors = MODELS.flatMap((model) => {
   const tagIds = model.meta.tagIds ?? []
   const { valid, conflicts } = validateTagConflicts(tagIds)
@@ -23,7 +30,7 @@ const tagConflictErrors = MODELS.flatMap((model) => {
   return [`Model "${model.slug}" has invalid tag combo: ${conflicts.join('; ')}`]
 })
 
-const tagErrors = [...tagCoverageErrors, ...tagConflictErrors]
+const tagErrors = [...tagIdErrors, ...tagCoverageErrors, ...tagConflictErrors]
 if (tagErrors.length > 0) {
   throw new Error(tagErrors.join('\n'))
 }

@@ -26,7 +26,8 @@ export default function ModelsSection({ cards, tags }: ModelsSectionProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const requestedTag = searchParams.get('tag') ?? ''
-  const activeTag = isValidTagId(requestedTag) ? requestedTag : ''
+  const validTags = useMemo(() => tags.filter(isValidTagId), [tags])
+  const activeTag = isValidTagId(requestedTag) && validTags.includes(requestedTag) ? requestedTag : ''
 
   const filteredCards = useMemo(() => {
     if (!activeTag) return cards
@@ -59,12 +60,12 @@ export default function ModelsSection({ cards, tags }: ModelsSectionProps) {
     router.replace(`${pathname}${query ? `?${query}` : ''}`, { scroll: false })
   }
 
-  const featuredTagsMobile = tags.slice(0, featuredTagCountMobile)
-  const featuredTagsDesktop = tags.slice(0, featuredTagCountDesktop)
+  const featuredTagsMobile = validTags.slice(0, featuredTagCountMobile)
+  const featuredTagsDesktop = validTags.slice(0, featuredTagCountDesktop)
   const filteredTagOptions = tagQuery
-    ? tags.filter((tag) => getTag(tag).label.toLowerCase().includes(tagQuery.trim().toLowerCase()))
-    : tags
-  const desktopTags = isDesktopExpanded ? tags : featuredTagsDesktop
+    ? validTags.filter((tag) => getTag(tag).label.toLowerCase().includes(tagQuery.trim().toLowerCase()))
+    : validTags
+  const desktopTags = isDesktopExpanded ? validTags : featuredTagsDesktop
 
   return (
     <>
@@ -76,72 +77,72 @@ export default function ModelsSection({ cards, tags }: ModelsSectionProps) {
         </div>
         <nav aria-label="Filter models by tag">
           <div className="mt-4 flex flex-wrap gap-2 sm:hidden">
-          <button
-            type="button"
-            onClick={() => updateTag('')}
-            className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag
-              ? 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-              : 'border-slate-900 bg-slate-900 text-white'
-              }`}
-          >
-            All
-          </button>
-          {featuredTagsMobile.map((tag) => (
             <button
-              key={tag}
               type="button"
-              onClick={() => updateTag(tag)}
-              className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag === tag
-                ? 'border-slate-900 bg-slate-900 text-white'
-                : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+              onClick={() => updateTag('')}
+              className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag
+                ? 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                : 'border-slate-900 bg-slate-900 text-white'
                 }`}
             >
-              {getTag(tag).label}
+              All
             </button>
-          ))}
-          {tags.length > featuredTagCountMobile ? (
-            <button
-              type="button"
-              onClick={() => setIsTagPickerOpen(true)}
-              className="rounded-full border border-dashed border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 transition hover:border-slate-300"
-            >
-              More
-            </button>
-          ) : null}
+            {featuredTagsMobile.map((tag) => (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => updateTag(tag)}
+                className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag === tag
+                  ? 'border-slate-900 bg-slate-900 text-white'
+                  : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                  }`}
+              >
+                {getTag(tag).label}
+              </button>
+            ))}
+            {validTags.length > featuredTagCountMobile ? (
+              <button
+                type="button"
+                onClick={() => setIsTagPickerOpen(true)}
+                className="rounded-full border border-dashed border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 transition hover:border-slate-300"
+              >
+                More
+              </button>
+            ) : null}
           </div>
           <div className="mt-4 hidden flex-wrap gap-2 sm:flex">
-          <button
-            type="button"
-            onClick={() => updateTag('')}
-            className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag
-              ? 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-              : 'border-slate-900 bg-slate-900 text-white'
-              }`}
-          >
-            All
-          </button>
-          {desktopTags.map((tag) => (
             <button
-              key={tag}
               type="button"
-              onClick={() => updateTag(tag)}
-              className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag === tag
-                ? 'border-slate-900 bg-slate-900 text-white'
-                : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+              onClick={() => updateTag('')}
+              className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag
+                ? 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                : 'border-slate-900 bg-slate-900 text-white'
                 }`}
             >
-              {getTag(tag).label}
+              All
             </button>
-          ))}
-          {tags.length > featuredTagCountDesktop ? (
-            <button
-              type="button"
-              onClick={() => setIsDesktopExpanded((current) => !current)}
-              className="rounded-full border border-dashed border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 transition hover:border-slate-300"
-            >
-              {isDesktopExpanded ? 'Less' : 'More'}
-            </button>
-          ) : null}
+            {desktopTags.map((tag) => (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => updateTag(tag)}
+                className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag === tag
+                  ? 'border-slate-900 bg-slate-900 text-white'
+                  : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                  }`}
+              >
+                {getTag(tag).label}
+              </button>
+            ))}
+            {validTags.length > featuredTagCountDesktop ? (
+              <button
+                type="button"
+                onClick={() => setIsDesktopExpanded((current) => !current)}
+                className="rounded-full border border-dashed border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 transition hover:border-slate-300"
+              >
+                {isDesktopExpanded ? 'Less' : 'More'}
+              </button>
+            ) : null}
           </div>
         </nav>
       </section>
@@ -150,11 +151,17 @@ export default function ModelsSection({ cards, tags }: ModelsSectionProps) {
         <h2 id="models-list-title" className="text-xl font-semibold text-gray-900">Models</h2>
         {displayedCards.length ? (
           <ul className={`mt-6 flex flex-col gap-6 transition-opacity duration-200 ${isFading ? 'opacity-0' : 'opacity-100'}`}>
-            {displayedCards.map(({ key, tags: cardTags, ...cardProps }) => (
-              <li key={key}>
-                <BrandCard tags={(cardTags ?? []).map((tag) => getTag(tag).label)} {...cardProps} />
-              </li>
-            ))}
+            {displayedCards.map(({ key, tags: cardTags, ...cardProps }) => {
+              const standardTags = (cardTags ?? []).filter(isValidTagId).map((tag) => getTag(tag).label)
+              const customTags = cardProps.model?.meta?.tags ?? []
+              const allTags = [...standardTags, ...customTags]
+
+              return (
+                <li key={key}>
+                  <BrandCard tags={allTags} {...cardProps} />
+                </li>
+              )
+            })}
           </ul>
         ) : (
           <div className="mt-6 rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center text-sm text-slate-500">

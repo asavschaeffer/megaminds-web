@@ -1,7 +1,6 @@
 import type { ModelLinkTypeId } from '@/lib/models/link-types'
 import type { ModelProfile } from '@/lib/models/types'
 import { MODEL_LINK_TYPES } from '@/lib/models/link-types'
-import { getAllTagIds } from '@/lib/models/tags'
 
 const templateLinks = (Object.keys(MODEL_LINK_TYPES) as ModelLinkTypeId[]).reduce(
   (acc, id) => {
@@ -21,7 +20,25 @@ export const templateModel: ModelProfile = {
     releaseDateDisplay: 'January 2025',
     identity:
       'One-sentence identity that captures why this model matters and who it is for.',
-    tagIds: getAllTagIds(),
+    tagIds: [
+      // Capability (choose 2-5)
+      'reasoning',
+      'coding',
+      // Modality (choose 1-3)
+      'text',
+      // Architecture (optional)
+      // Licensing (choose 1-2)
+      'proprietary',
+      // Size/Performance (choose 1-2)
+      'medium',
+      // Context (choose 1)
+      'medium-context',
+      // Deployment (choose 1-2)
+      'cloud',
+      'api',
+      // Output (optional)
+      'output-8k',
+    ],
     tags: ['X Parameters', 'Y Context'],
     links: {
       ...templateLinks,
