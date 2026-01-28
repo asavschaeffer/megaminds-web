@@ -2,8 +2,10 @@ import type { ModelProfile, ModelSlug } from './types'
 import type { ModelTagId } from './tags'
 import { validateTagConflicts, validateTagCoverage } from './tags'
 import { deepseekR1 } from '@/content/eval/models/deepseek-r1'
+import { gemini3Flash } from '@/content/eval/models/gemini-3-flash'
+import { gemini3Pro } from '@/content/eval/models/gemini-3-pro'
 
-const MODELS: ModelProfile[] = [deepseekR1]
+const MODELS: ModelProfile[] = [deepseekR1, gemini3Flash, gemini3Pro]
 
 const tagCoverageErrors = MODELS.flatMap((model) => {
   const tagIds = model.meta.tagIds ?? []

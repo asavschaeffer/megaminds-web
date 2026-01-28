@@ -117,6 +117,9 @@ export const ModelPageTemplate = ({ profile, footer, className = '' }: ModelPage
               <ModelHeader
                 name={meta.name}
                 family={meta.family}
+                variant={meta.variant}
+                modelVersion={meta.modelVersion}
+                nameOrder={meta.nameOrder}
                 organization={organizationName}
                 releaseDate={meta.releaseDate}
                 releaseDateDisplay={meta.releaseDateDisplay}

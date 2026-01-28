@@ -95,12 +95,12 @@ export function BrandCard({
                 </span>
               )}
               {variantLayout === 'inline' && (modelVariant || versionNumber) ? (
-                <span className="whitespace-nowrap text-lg font-semibold text-slate-900 tracking-tight">
+                <span className="whitespace-nowrap text-xl font-semibold text-slate-900 tracking-tight">
                   {[modelVariant, versionNumber].filter(Boolean).join(' ')}
                 </span>
               ) : null}
               {variantLayout === 'stacked' && modelVariant ? (
-                <span className="whitespace-nowrap text-lg font-semibold text-slate-900 tracking-tight">
+                <span className="whitespace-nowrap text-xl font-semibold text-slate-900 tracking-tight">
                   {modelVariant}
                 </span>
               ) : null}

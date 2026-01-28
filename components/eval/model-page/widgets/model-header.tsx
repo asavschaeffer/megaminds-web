@@ -2,6 +2,7 @@ import { ModelIconClient } from '@/components/ui/model-icon-client'
 import type { ModelHeaderProps } from '@/lib/models/types'
 import type { ModelLinkTypeId } from '@/lib/models/link-types'
 import { getLinkType, isValidLinkTypeId } from '@/lib/models/link-types'
+import { composeModelName } from '@/lib/models/names'
 import { getTag } from '@/lib/models/tags'
 import { HeaderLinkButton } from './header-link-button'
 import { Tag } from './tag'
@@ -18,6 +19,9 @@ const buildLinks = (links?: ModelHeaderProps['links']): LinkEntry[] => {
 export const ModelHeader = ({
   name,
   family,
+  variant,
+  modelVersion,
+  nameOrder,
   organization,
   releaseDate,
   releaseDateDisplay,
@@ -26,6 +30,7 @@ export const ModelHeader = ({
   tags = [],
   links = {},
 }: ModelHeaderProps) => {
+  const displayName = composeModelName({ name, family, variant, modelVersion, nameOrder })
   const hasLinks = Object.values(links).some(Boolean)
   const typedLinks = buildLinks(links)
   const primaryLinks = typedLinks.filter((link) => link.primary)
@@ -39,18 +44,19 @@ export const ModelHeader = ({
       <hgroup className="space-y-2">
         <div className="flex items-center gap-4 flex-wrap">
           <ModelIconClient name={iconMatchName} size={48} className="shrink-0" />
-          <div className="flex items-baseline gap-3 flex-wrap">
+          <div className="flex items-center gap-6 flex-wrap">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-              {name}
+              {displayName}
             </h1>
-            {family && <span className="text-xl text-neutral-500 dark:text-neutral-400 font-light">{family}</span>}
+            {(organization || releaseDate) && (
+              <p className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
+                {organization && <span className="font-semibold text-neutral-700 dark:text-neutral-300">{organization}</span>}
+                {organization && releaseDate && <span aria-hidden="true">·</span>}
+                {releaseDate && <time dateTime={releaseDate}>{releaseDateDisplay || releaseDate}</time>}
+              </p>
+            )}
           </div>
         </div>
-        <p className="flex gap-4 text-sm text-neutral-600 dark:text-neutral-400">
-          {organization && <span className="font-semibold text-neutral-800 dark:text-neutral-200">{organization}</span>}
-          {organization && releaseDate && <span aria-hidden="true">·</span>}
-          {releaseDate && <time dateTime={releaseDate}>{releaseDateDisplay || releaseDate}</time>}
-        </p>
       </hgroup>
 
       {hasTags && (

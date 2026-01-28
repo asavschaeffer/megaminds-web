@@ -1,3 +1,5 @@
+'use client'
+
 import { Calculator, MessageCircle } from 'lucide-react'
 import type { KeyboardEvent } from 'react'
 import { useState, useRef } from 'react'
@@ -64,7 +66,8 @@ export const PricingCalculator = ({ apiData, chatData }: PricingCalculatorProps)
   const chatPanelId = 'pricing-panel-chat'
 
   return (
-    <figure className="rounded-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden my-8">
+    <div className="not-prose">
+      <figure className="rounded-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden my-8">
       <div
         className="flex border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900"
         role="tablist"
@@ -79,7 +82,8 @@ export const PricingCalculator = ({ apiData, chatData }: PricingCalculatorProps)
           aria-controls={apiPanelId}
           onClick={() => setActiveTab('api')}
           onKeyDown={(e) => handleTabKeyDown(e, 'api')}
-          className={tabClass(activeTab === 'api')}
+          className={`${tabClass(activeTab === 'api')} cursor-pointer`}
+          type="button"
         >
           <span className="flex items-center justify-center gap-2">
             <Calculator className="w-4 h-4" aria-hidden="true" />
@@ -95,7 +99,8 @@ export const PricingCalculator = ({ apiData, chatData }: PricingCalculatorProps)
           aria-controls={chatPanelId}
           onClick={() => setActiveTab('chat')}
           onKeyDown={(e) => handleTabKeyDown(e, 'chat')}
-          className={tabClass(activeTab === 'chat')}
+          className={`${tabClass(activeTab === 'chat')} cursor-pointer`}
+          type="button"
         >
           <span className="flex items-center justify-center gap-2">
             <MessageCircle className="w-4 h-4" aria-hidden="true" />
@@ -121,7 +126,7 @@ export const PricingCalculator = ({ apiData, chatData }: PricingCalculatorProps)
               step="0.1"
               value={tokens}
               onChange={(e) => setTokens(parseFloat(e.target.value))}
-              className="w-full h-2 bg-neutral-200 dark:bg-neutral-700 rounded-lg appearance-none cursor-pointer accent-blue-600 mb-1"
+              className="w-full h-2 bg-neutral-200 dark:bg-neutral-700 rounded-lg appearance-none cursor-pointer accent-blue-600 mb-1 pointer-events-auto"
             />
             <div className="flex justify-between text-xs text-neutral-400 mb-6" aria-hidden="true">
               <span>100K</span>
@@ -138,31 +143,68 @@ export const PricingCalculator = ({ apiData, chatData }: PricingCalculatorProps)
                 </tr>
               </thead>
               <tbody className="space-y-2">
-                <tr className="flex items-center justify-between p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800">
-                  <td className="font-medium text-blue-900 dark:text-blue-100">{apiData.baseModel.name}</td>
-                  <td className="font-bold text-blue-700 dark:text-blue-300 tabular-nums">
-                    <output>${baseCost.toFixed(2)}</output>
-                  </td>
-                </tr>
+                {(() => {
+                  // Combine base model and competitors, then sort by total cost
+                  const allModels = [
+                    { ...apiData.baseModel, isBase: true },
+                    ...apiData.competitors.map((comp) => ({ ...comp, isBase: false })),
+                  ]
+                  
+                  const sortedModels = allModels.sort((a, b) => {
+                    const costA = (a.input + a.output) * tokens
+                    const costB = (b.input + b.output) * tokens
+                    return costA - costB
+                  })
 
-                {apiData.competitors.map((comp, idx) => {
-                  const cost = (comp.input + comp.output) * tokens
-                  const savingsPercent = (((cost - baseCost) / cost) * 100).toFixed(0)
-                  return (
-                    <tr
-                      key={idx}
-                      className="flex items-center justify-between p-3 border-b border-neutral-100 dark:border-neutral-800 last:border-0"
-                    >
-                      <td className="text-neutral-600 dark:text-neutral-400">{comp.name}</td>
-                      <td className="text-right">
-                        <output className="font-medium text-neutral-900 dark:text-neutral-100 tabular-nums">
-                          ${cost.toFixed(2)}
-                        </output>
-                        <span className="ml-3 text-xs text-green-600 dark:text-green-400">{savingsPercent}% more</span>
-                      </td>
-                    </tr>
-                  )
-                })}
+                  return sortedModels.map((model, idx) => {
+                    const cost = (model.input + model.output) * tokens
+                    const diffPercent = ((cost - baseCost) / cost) * 100
+                    const isCheaper = diffPercent < 0
+                    const absPercent = Math.abs(diffPercent).toFixed(0)
+                    const isBaseModel = model.isBase
+
+                    return (
+                      <tr
+                        key={idx}
+                        className={`flex items-center justify-between p-3 border-b border-neutral-100 dark:border-neutral-800 last:border-0 ${
+                          isBaseModel
+                            ? 'rounded-lg bg-blue-50 dark:bg-blue-900/20 border-blue-100 dark:border-blue-800'
+                            : ''
+                        }`}
+                      >
+                        <td
+                          className={
+                            isBaseModel
+                              ? 'font-medium text-blue-900 dark:text-blue-100'
+                              : 'text-neutral-600 dark:text-neutral-400'
+                          }
+                        >
+                          {model.name}
+                        </td>
+                        <td className="text-left">
+                          <output
+                            className={`tabular-nums ${
+                              isBaseModel
+                                ? 'font-bold text-blue-700 dark:text-blue-300'
+                                : 'font-medium text-neutral-900 dark:text-neutral-100'
+                            }`}
+                          >
+                            ${cost.toFixed(2)}
+                          </output>
+                          {!isBaseModel && (
+                            <>
+                              {isCheaper ? (
+                                <span className="ml-3 text-[10px] text-green-600 dark:text-green-400">-{absPercent}% less</span>
+                              ) : (
+                                <span className="ml-3 text-xs text-red-600 dark:text-red-400">+{absPercent}% more</span>
+                              )}
+                            </>
+                          )}
+                        </td>
+                      </tr>
+                    )
+                  })
+                })()}
               </tbody>
             </table>
           </div>
@@ -180,7 +222,7 @@ export const PricingCalculator = ({ apiData, chatData }: PricingCalculatorProps)
               step="1"
               value={msgsPerDay}
               onChange={(e) => setMsgsPerDay(parseInt(e.target.value))}
-              className="w-full h-2 bg-neutral-200 dark:bg-neutral-700 rounded-lg appearance-none cursor-pointer accent-blue-600 mb-1"
+              className="w-full h-2 bg-neutral-200 dark:bg-neutral-700 rounded-lg appearance-none cursor-pointer accent-blue-600 mb-1 pointer-events-auto"
             />
             <div className="flex justify-between text-xs text-neutral-400 mb-6" aria-hidden="true">
               <span>1</span>
@@ -213,9 +255,10 @@ export const PricingCalculator = ({ apiData, chatData }: PricingCalculatorProps)
             </p>
           </div>
         )}
-      </div>
-      <figcaption className="sr-only">Interactive pricing calculator comparing API costs and chat usage limits across providers</figcaption>
-    </figure>
+        </div>
+        <figcaption className="sr-only">Interactive pricing calculator comparing API costs and chat usage limits across providers</figcaption>
+      </figure>
+    </div>
   )
 }
 

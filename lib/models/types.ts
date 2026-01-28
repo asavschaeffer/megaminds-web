@@ -7,6 +7,8 @@ import type { ModelTagId } from './tags'
 import type { ModelLinkTypeId } from './link-types'
 import type { OrganizationId } from './organizations'
 
+export type NameOrder = 'family-version-variant' | 'family-variant-version'
+
 export type ModelSlug = string
 
 export type SectionId =
@@ -148,6 +150,9 @@ export interface ModelLinks {
 export interface ModelMeta {
   name: string
   family?: string
+  variant?: string
+  modelVersion?: string
+  nameOrder?: NameOrder
   organizationId?: OrganizationId
   organization?: string
   releaseDate?: string
@@ -156,6 +161,20 @@ export interface ModelMeta {
   tagIds?: ModelTagId[]
   tags?: string[]
   links: ModelLinks
+  subscriptionPlans?: string[]
+  apiRates?: {
+    input: number
+    output: number
+    unit?: string
+  }
+  chatLimits?: {
+    free?: number
+    plans?: Array<{
+      name: string
+      messages: number
+      price: string
+    }>
+  }
 }
 
 export interface ModelProfile {
@@ -178,6 +197,9 @@ export interface ModelProfile {
 export interface ModelHeaderProps {
   name: string
   family?: string
+  variant?: string
+  modelVersion?: string
+  nameOrder?: NameOrder
   organization?: string
   releaseDate?: string
   releaseDateDisplay?: string
@@ -185,6 +207,20 @@ export interface ModelHeaderProps {
   tagIds?: ModelTagId[]
   tags?: string[]
   links?: ModelLinks
+  subscriptionPlans?: string[]
+  apiRates?: {
+    input: number
+    output: number
+    unit?: string
+  }
+  chatLimits?: {
+    free?: number
+    plans?: Array<{
+      name: string
+      messages: number
+      price: string
+    }>
+  }
 }
 
 export interface StrengthsWeaknessesProps {

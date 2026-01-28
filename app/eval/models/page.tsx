@@ -344,13 +344,13 @@ const frontierCards: FrontierCard[] = [
   },
   {
     key: 'gemini-pro',
-    href: '/eval/models/gemini',
+    href: '/eval/models/gemini-3-pro',
     modelFamily: 'Gemini',
     modelVariant: '3',
     versionNumber: 'Pro',
     description:
-      'Blazing-fast multimodal model with huge context and strong Google ecosystem integration; fine detail can blur and tools can be flaky.',
-    tags: ['multimodal', 'image-gen', 'video-gen', 'speed', 'long'],
+      'Most capable multimodal model with deeper reasoning, superior image generation, and better video/audio understanding; slower and pricier than Flash.',
+    tags: ['multimodal', 'image-gen', 'video-gen', 'audio', 'precision', 'ultra'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
@@ -358,13 +358,13 @@ const frontierCards: FrontierCard[] = [
   },
   {
     key: 'gemini-flash',
-    href: '/eval/models/gemini',
+    href: '/eval/models/gemini-3-flash',
     modelFamily: 'Gemini',
     modelVariant: '3',
     versionNumber: 'Flash',
     description:
-      'Incredibly fast multimodal model with massive context and Google integration; less precise on fine detail and tools can stumble.',
-    tags: ['multimodal', 'image-gen', 'speed', 'long'],
+      'Fastest multimodal model with text/image generation and video/audio understanding; blazing speed but less precise than Pro on complex tasks.',
+    tags: ['multimodal', 'image-gen', 'video-gen', 'audio', 'speed', 'ultra'],
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
     watermarkClassName: wideWatermarkClassName,
