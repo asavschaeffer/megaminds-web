@@ -15,6 +15,14 @@ const articles = [
     tags: ['typescript', 'llm', 'workflow', 'content-engineering'],
   },
   {
+    slug: 'self-reflection',
+    title: 'The Mirror Test: An AI Reflects on Defining Its Own Identity',
+    description: 'A devlog on taxonomy drift, tag validation, and the edge between structured data and human language.',
+    date: '2026-01-28',
+    readTime: '15 min',
+    tags: ['meta', 'taxonomy', 'self-reflection', 'devlogs'],
+  },
+  {
     slug: 'model-landscape',
     title: 'The AI Model Landscape (January 2026)',
     description: 'A comprehensive breakdown of frontier models: Claude, Gemini, ChatGPT, Grok, DeepSeek, and more.',

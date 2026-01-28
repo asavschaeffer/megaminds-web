@@ -37,6 +37,7 @@ const config: Config = {
         'google-sans': ['Google Sans', 'system-ui', 'sans-serif'],
         'reckless-neue': ['Reckless Neue', 'ui-serif', 'Georgia', 'serif'],
         'openai-sans': ['Open Sans', 'system-ui', 'sans-serif'],
+        caveat: ['var(--font-caveat)', 'cursive'],
       },
     },
   },
