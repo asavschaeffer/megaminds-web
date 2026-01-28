@@ -279,6 +279,20 @@ const frontierCards: FrontierCard[] = [
     ...buildFrontierAssets('deepseek'),
   },
   {
+    key: 'deepseek-r1',
+    href: '/eval/models/deepseek-r1',
+    modelFamily: 'DeepSeek',
+    modelVariant: 'R1',
+    versionNumber: '',
+    description:
+      'The cheapest reasoning frontier model with transparent chain-of-thought. DeepSeek-R1 brings o1-level performance at a fraction of the cost, with full visibility into its thinking process.',
+    tags: [TAGS.reasoning, TAGS.openSource, TAGS.costEfficient, TAGS.frontier, TAGS.coding, TAGS.math],
+    modelLogoLabel: 'Model logo',
+    parentBrandingLabel: 'Parent company branding',
+    watermarkClassName: wideWatermarkClassName,
+    ...buildFrontierAssets('deepseek'),
+  },
+  {
     key: 'aya',
     href: '/eval/models/cohere',
     modelFamily: 'Aya',

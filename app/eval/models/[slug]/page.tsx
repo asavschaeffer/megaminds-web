@@ -1,7 +1,22 @@
+'use client'
+
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import { ArrowLeft, BookOpen, ExternalLink, MessageSquare, ScrollText } from 'lucide-react'
-import { ModelIcon } from '@/components/ui/model-icon'
+import type { ReactNode } from 'react'
+import {
+  Zap,
+  Code,
+  FileText,
+  ExternalLink,
+  CheckCircle2,
+  XCircle,
+  HelpCircle,
+  Twitter,
+  MessageCircle,
+  Play,
+  Download,
+  Users,
+  BookOpen,
+} from 'lucide-react'
 import manifest from '../../../../public/icons/manifest.json'
 
 type ManifestIcon = {
@@ -48,11 +63,16 @@ const modelData: Record<string, {
   tagline: string
   identity?: string
   tags?: string[]
+  intro?: string
+  facts?: Array<{
+    label: string
+    value: string
+  }>
   links?: Array<{
     label: string
     href: string
     description: string
-    icon: 'whitepaper' | 'web' | 'docs' | 'api' | 'report'
+    icon: 'chat' | 'playground' | 'api' | 'docs' | 'paper' | 'weights' | 'github' | 'community'
   }>
   strengths: string[]
   weaknesses: string[]
@@ -186,10 +206,6 @@ Tweet: https://x.com/asavs_/status/2008063402921644396?s=20
 Gemini likely benefits from deep training on Google search data (TODO: find
 research). It integrates into Gmail and Gsuite. Antigravity kind of sucks
 (Cursor is better). The Gemini CLI also feels behind Claude Code.
-
-Google is a massive company competing for attention. Usage limits are generous,
-Gemini Pro is free for students, and it is ~50% off for everyone else. On the
-flip side, they are harvesting every bit of data they can.
 
 ## Tooling and Reliability
 
@@ -325,36 +341,49 @@ storyteller lemmy link).
     identity:
       'DeepSeek V3.2 is a frontier-grade, open-weights MoE model that delivers strong reasoning and coding at a fraction of closed-model cost.',
     tags: ['Open Source', 'MoE', 'Reasoning', 'Cost Efficient', 'Coding', 'Long Context'],
+    intro:
+      'DeepSeek V3.2 feels like a frontier model that got a price cut. It is fast on long contexts, strong on reasoning, and widely accessible.',
+    facts: [
+      { label: 'Family', value: 'DeepSeek V3.2' },
+      { label: 'Org', value: 'DeepSeek-AI' },
+      { label: 'Release', value: 'Dec 2025' },
+      { label: 'Context', value: '128k' },
+      { label: 'Modes', value: 'Chat / Speciale' },
+      { label: 'Modalities', value: 'Text' },
+    ],
     links: [
-      {
-        label: 'Technical report',
-        href: 'https://arxiv.org/abs/2512.02556',
-        description: 'Model architecture, training, and evals',
-        icon: 'whitepaper',
-      },
+      // Try it
       {
         label: 'Web chat',
         href: 'https://chat.deepseek.com',
         description: 'Try V3.2 in the official UI',
-        icon: 'web',
+        icon: 'chat',
       },
+      // Build with it
       {
-        label: 'API docs',
-        href: 'https://api-docs.deepseek.com/',
-        description: 'Endpoints, pricing, and SDK guidance',
-        icon: 'docs',
-      },
-      {
-        label: 'API base',
+        label: 'API',
         href: 'https://api.deepseek.com',
         description: 'OpenAI-compatible API access',
         icon: 'api',
       },
       {
-        label: 'Model card',
+        label: 'Docs',
+        href: 'https://api-docs.deepseek.com/',
+        description: 'Endpoints, pricing, and SDK guidance',
+        icon: 'docs',
+      },
+      // Learn more
+      {
+        label: 'Paper',
+        href: 'https://arxiv.org/abs/2512.02556',
+        description: 'Model architecture, training, and evals',
+        icon: 'paper',
+      },
+      {
+        label: 'Weights',
         href: 'https://huggingface.co/deepseek-ai/DeepSeek-V3.2',
-        description: 'Weights, configs, and community notes',
-        icon: 'report',
+        description: 'Download from HuggingFace',
+        icon: 'weights',
       },
     ],
     strengths: [
@@ -596,261 +625,498 @@ export function generateStaticParams() {
 
 export default function ModelPage({ params }: { params: { slug: string } }) {
   const model = modelData[params.slug]
-  const heroAssets = model?.assets?.filter((asset) => asset.label !== 'Logo (color)') ?? []
-  const watermarkAsset =
-    model?.assets?.find((asset) => asset.label === 'Combine (color)') ??
-    model?.assets?.find((asset) => asset.label === 'Combine (mono)') ??
-    model?.assets?.find((asset) => asset.label === 'Logo (color)') ??
-    model?.assets?.find((asset) => asset.label === 'Logo (mono)')
-
-  const linkIcons: Record<string, JSX.Element> = {
-    whitepaper: <ScrollText className="h-5 w-5 text-slate-700" />,
-    web: <MessageSquare className="h-5 w-5 text-slate-700" />,
-    docs: <BookOpen className="h-5 w-5 text-slate-700" />,
-    api: <ExternalLink className="h-5 w-5 text-slate-700" />,
-    report: <ScrollText className="h-5 w-5 text-slate-700" />,
-  }
 
   if (!model) {
     notFound()
   }
 
-  return (
-    <div className="py-16 px-6 lg:px-8">
-      <div className="mx-auto max-w-4xl">
-        <Link
-          href="/eval/models"
-          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors mb-8"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          All Models
-        </Link>
+  const getFact = (label: string) => model.facts?.find((fact) => fact.label === label)?.value
+  const family = getFact('Family')
+  const organization = getFact('Org')
+  const releaseDate = getFact('Release')
+  const identity = model.identity ?? model.tagline
+  const intro = model.intro ?? model.tagline
 
-        <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8">
-          {watermarkAsset ? (
-            <>
-              <div className="pointer-events-none absolute inset-0">
+  const linksByIcon = new Map(model.links?.map((link) => [link.icon, link]) ?? [])
+  const headerLinks = {
+    // Try it
+    chat: linksByIcon.get('chat')?.href,
+    playground: linksByIcon.get('playground')?.href,
+    // Build with it
+    api: linksByIcon.get('api')?.href,
+    docs: linksByIcon.get('docs')?.href,
+    // Learn more
+    paper: linksByIcon.get('paper')?.href,
+    weights: linksByIcon.get('weights')?.href,
+    github: linksByIcon.get('github')?.href,
+    community: linksByIcon.get('community')?.href,
+  }
+
+  const contentSections: Array<{
+    id?: string
+    title?: string
+    subtitle?: string
+    content?: ReactNode
+  }> = []
+
+  if (model.bestFor?.length) {
+    contentSections.push({
+      title: 'Best for',
+      content: (
+        <div className="flex flex-wrap gap-2 not-prose">
+          {model.bestFor.map((item) => (
+            <span
+              key={item}
+              className="rounded-full border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-3 py-1 text-xs font-medium text-neutral-700 dark:text-neutral-200"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
+      ),
+    })
+  }
+
+  if (model.assets?.length) {
+    contentSections.push({
+      title: 'Brand assets',
+      content: (
+        <div className="grid gap-3 sm:grid-cols-3 not-prose">
+          {model.assets.map((asset) => (
+            <div
+              key={asset.label}
+              className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-3"
+            >
+              <div className="flex h-16 items-center justify-center">
                 <img
-                  src={watermarkAsset.src}
-                  alt=""
-                  aria-hidden="true"
-                  className="absolute -right-12 top-1/2 h-[220%] w-auto -translate-y-1/2 translate-x-[8%] rotate-[6deg] opacity-[0.07]"
+                  src={asset.src}
+                  alt={`${model.name} ${asset.label}`}
+                  className={`max-h-12 max-w-full ${asset.className ?? ''}`}
                 />
               </div>
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white via-white/70 to-transparent" />
-            </>
-          ) : null}
-          <div className="relative z-10">
-            <div className="flex flex-wrap items-center gap-4">
-              <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 ring-1 ring-slate-200">
-                  <ModelIcon name={model.name} size={40} />
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold text-gray-900">{model.name}</h1>
-                  <p className="mt-1 text-lg text-gray-600">{model.tagline}</p>
-                </div>
-              </div>
-              {model.tags?.length ? (
-                <div className="flex flex-wrap gap-2">
-                  {model.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
+              <p className="mt-2 text-xs text-neutral-500 text-center">{asset.label}</p>
             </div>
-            {model.identity ? (
-              <p className="mt-4 max-w-2xl text-base text-slate-700">{model.identity}</p>
-            ) : null}
-            {heroAssets.length ? (
-              <div className="mt-5 flex flex-wrap items-center gap-3">
-                {heroAssets.map((asset) => (
-                  <div
-                    key={asset.label}
-                    className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-500"
-                  >
-                    <img
-                      src={asset.src}
-                      alt={`${model.name} ${asset.label}`}
-                      className={`max-h-5 max-w-[120px] ${asset.className ?? ''}`}
-                    />
-                    <span className="hidden sm:inline">{asset.label}</span>
-                  </div>
-                ))}
-              </div>
-            ) : null}
-          </div>
+          ))}
         </div>
+      ),
+    })
+  }
 
-        {model.links?.length ? (
-          <div className="mt-8 grid gap-3 md:grid-cols-2">
-            {model.links.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noreferrer"
-                className="group flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg"
-              >
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 ring-1 ring-slate-200">
-                  {linkIcons[link.icon]}
-                </div>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-semibold text-slate-900">{link.label}</p>
-                    <ExternalLink className="h-3.5 w-3.5 text-slate-400 opacity-0 transition group-hover:opacity-100" />
-                  </div>
-                  <p className="mt-1 text-sm text-slate-600">{link.description}</p>
-                </div>
-              </a>
+  if (model.sections?.length) {
+    model.sections.forEach((section) => {
+      contentSections.push({
+        id: section.title.toLowerCase().replace(/\s+/g, '-'),
+        title: section.title,
+        content: (
+          <>
+            {section.body.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
             ))}
-          </div>
-        ) : null}
-
-        {model.assets?.length ? (
-          <div className="mt-6">
-            <h3 className="text-sm font-semibold text-gray-700">Brand Assets</h3>
-            <div className="mt-3 grid gap-3 sm:grid-cols-3">
-              {model.assets.map((asset) => (
-                <div key={asset.label} className="rounded-lg border border-gray-200 bg-white p-3">
-                  <div className="flex h-16 items-center justify-center">
-                    <img
-                      src={asset.src}
-                      alt={`${model.name} ${asset.label}`}
-                      className={`max-h-12 max-w-full ${asset.className ?? ''}`}
-                    />
-                  </div>
-                  <p className="mt-2 text-xs text-gray-500 text-center">{asset.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : null}
-
-        <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-emerald-900">
-              Strengths
-            </h3>
-            <div className="mt-4 space-y-3">
-              {model.strengths.map((item) => (
-                <div key={item} className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between text-sm font-medium text-emerald-900">
-                    <span>{item}</span>
-                    <span className="text-xs text-emerald-700">High</span>
-                  </div>
-                  <div className="h-2 rounded-full bg-emerald-100">
-                    <div className="h-2 w-11/12 rounded-full bg-emerald-500" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="rounded-2xl border border-rose-200 bg-rose-50 p-5">
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-rose-900">
-              Weaknesses
-            </h3>
-            <div className="mt-4 space-y-3">
-              {model.weaknesses.map((item) => (
-                <div key={item} className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between text-sm font-medium text-rose-900">
-                    <span>{item}</span>
-                    <span className="text-xs text-rose-700">Watch</span>
-                  </div>
-                  <div className="h-2 rounded-full bg-rose-100">
-                    <div className="h-2 w-7/12 rounded-full bg-rose-500" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-          <h3 className="font-semibold text-gray-900">Best For</h3>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {model.bestFor.map((item) => (
-              <span key={item} className="text-sm bg-white border border-gray-200 px-3 py-1 rounded-full">
-                {item}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {model.sections?.length ? (
-          <div className="mt-12 grid gap-6">
-            {model.sections.map((section) => (
-              <div key={section.title} className="rounded-2xl border border-slate-200 bg-white p-6">
-                <h2 className="text-lg font-semibold text-slate-900">{section.title}</h2>
-                <div className="mt-3 space-y-3 text-sm text-slate-600">
-                  {section.body.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="mt-12 prose prose-gray max-w-none">
-            {model.content.split('\n\n').map((paragraph, i) => {
-              if (paragraph.startsWith('## ')) {
-                return (
-                  <h2 key={i} className="text-xl font-semibold text-gray-900 mt-8 mb-4">
-                    {paragraph.replace('## ', '')}
-                  </h2>
-                )
-              }
-              if (paragraph.startsWith('**')) {
-                return (
-                  <p key={i} className="text-gray-600 whitespace-pre-line">
-                    {paragraph}
-                  </p>
-                )
-              }
+          </>
+        ),
+      })
+    })
+  } else {
+    contentSections.push({
+      content: (
+        <>
+          {model.content.split('\n\n').map((paragraph, i) => {
+            if (paragraph.startsWith('## ')) {
               return (
-                <p key={i} className="text-gray-600 mb-4">
+                <h2 key={i} className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mt-8 mb-4">
+                  {paragraph.replace('## ', '')}
+                </h2>
+              )
+            }
+            if (paragraph.startsWith('**')) {
+              return (
+                <p key={i} className="whitespace-pre-line">
                   {paragraph}
                 </p>
               )
-            })}
-          </div>
-        )}
+            }
+            return <p key={i}>{paragraph}</p>
+          })}
+        </>
+      ),
+    })
+  }
 
-        {model.socialProof?.length ? (
-          <div className="mt-10 rounded-3xl border border-slate-200 bg-white p-6">
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-              Community reactions
-            </h3>
-            <div className="mt-4 grid gap-4 md:grid-cols-2">
-              {model.socialProof.map((item) => (
-                <a
-                  key={item.quote}
-                  href={item.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg"
-                >
-                  <blockquote className="text-sm text-slate-700">&ldquo;{item.quote}&rdquo;</blockquote>
-                  <p className="mt-3 text-xs font-medium text-slate-500">{item.source}</p>
-                </a>
-              ))}
+  if (model.closing) {
+    contentSections.push({
+      title: 'Closing thought',
+      content: <p className="text-sm italic text-neutral-600 dark:text-neutral-400">{model.closing}</p>,
+    })
+  }
+
+  return (
+    <div className="relative min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 font-sans selection:bg-blue-100 dark:selection:bg-blue-900">
+      <CompanyWatermark text={model.name} />
+
+      <div className="relative z-10">
+        <div className="min-h-[90vh] flex flex-col justify-center px-6 py-12 md:px-12 max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-[1fr,400px] gap-12 flex-1 items-center">
+            <div className="flex flex-col justify-center">
+              <ModelHeader
+                name={model.name}
+                family={family}
+                organization={organization}
+                releaseDate={releaseDate}
+                identity={identity}
+                tags={model.tags ?? []}
+                links={headerLinks}
+              />
+            </div>
+
+            <div className="flex flex-col justify-center bg-neutral-50/80 dark:bg-neutral-900/80 backdrop-blur-sm rounded-2xl p-8 border border-neutral-200 dark:border-neutral-800 shadow-sm">
+              <StrengthsWeaknesses strengths={model.strengths} weaknesses={model.weaknesses} />
             </div>
           </div>
-        ) : null}
 
-        {model.closing ? (
-          <div className="mt-10 rounded-2xl border border-slate-200 bg-slate-900 p-6 text-white">
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-300">
-              Closing thought
-            </h3>
-            <p className="mt-3 text-base text-slate-100">{model.closing}</p>
+          {intro ? (
+            <div className="mt-16 max-w-3xl">
+              <p className="text-xl leading-relaxed text-neutral-700 dark:text-neutral-300 font-light">
+                {intro}
+              </p>
+            </div>
+          ) : null}
+        </div>
+
+        <div className="max-w-4xl mx-auto px-6 md:px-8 pb-32 space-y-16">
+          {contentSections.map((section, idx) => (
+            <ContentSection key={section.id ?? idx} id={section.id} title={section.title} subtitle={section.subtitle}>
+              {section.content}
+            </ContentSection>
+          ))}
+
+          {model.socialProof?.length ? (
+            <div className="space-y-8">
+              {model.socialProof.map((item) => (
+                <div key={item.quote} className="max-w-3xl mx-auto">
+                  <SocialEmbed type="quote" author={item.source} content={item.quote} url={item.href} />
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </div>
+
+        <footer className="border-t border-neutral-200 dark:border-neutral-800 py-12 text-center text-sm text-neutral-500 dark:text-neutral-500">
+          <p>© {new Date().getFullYear()} Model Analysis Template. All rights reserved.</p>
+        </footer>
+      </div>
+    </div>
+  )
+}
+
+const Badge = ({ children, className = '' }: { children: ReactNode; className?: string }) => (
+  <span
+    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-700 ${className}`}
+  >
+    {children}
+  </span>
+)
+
+const SocialEmbed = ({
+  type = 'quote',
+  author,
+  handle,
+  content,
+  date,
+  url,
+}: {
+  type?: 'quote' | 'tweet'
+  author: string
+  handle?: string
+  content: string
+  date?: string
+  url?: string
+}) => {
+  return (
+    <div className="my-8 p-6 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg">
+      <div className="flex items-start gap-4">
+        <div className="flex-shrink-0 w-10 h-10 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center">
+          {type === 'tweet' ? (
+            <Twitter className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+          ) : (
+            <MessageCircle className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+          )}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
+            <span className="font-semibold text-sm">{author}</span>
+            {handle && <span className="text-sm text-neutral-500 dark:text-neutral-400">{handle}</span>}
+            {date && (
+              <>
+                <span className="text-neutral-400 dark:text-neutral-600">·</span>
+                <span className="text-sm text-neutral-500 dark:text-neutral-400">{date}</span>
+              </>
+            )}
           </div>
-        ) : null}
+          <p className="text-neutral-800 dark:text-neutral-200 leading-relaxed whitespace-pre-wrap">
+            {content}
+          </p>
+          {url && url !== '#' && (
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-3 text-sm text-blue-600 dark:text-blue-400 hover:underline"
+            >
+              View original →
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const ContentSection = ({
+  title,
+  subtitle,
+  children,
+  id,
+}: {
+  title?: string
+  subtitle?: string
+  children: ReactNode
+  id?: string
+}) => {
+  return (
+    <section id={id} className="py-2 scroll-mt-24">
+      {title && (
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold mb-1 text-neutral-900 dark:text-neutral-100">{title}</h2>
+          {subtitle && <p className="text-sm text-neutral-600 dark:text-neutral-400">{subtitle}</p>}
+        </div>
+      )}
+      <div className="prose dark:prose-invert prose-neutral max-w-none text-neutral-700 dark:text-neutral-300 leading-relaxed">
+        {children}
+      </div>
+    </section>
+  )
+}
+
+const StrengthsWeaknesses = ({
+  strengths = [],
+  weaknesses = [],
+  unknowns = [],
+}: {
+  strengths?: string[]
+  weaknesses?: string[]
+  unknowns?: string[]
+}) => {
+  return (
+    <div className="grid gap-6 md:grid-cols-2">
+      {strengths.length > 0 && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm font-semibold text-green-700 dark:text-green-400">
+            <CheckCircle2 className="w-4 h-4" />
+            <span>Strengths</span>
+          </div>
+          <ul className="space-y-2 text-sm">
+            {strengths.map((strength) => (
+              <li key={strength} className="flex items-start gap-2 text-neutral-700 dark:text-neutral-300">
+                <span className="text-green-500 dark:text-green-400 mt-0.5 shrink-0">✓</span>
+                <span>{strength}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {weaknesses.length > 0 && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm font-semibold text-red-700 dark:text-red-400">
+            <XCircle className="w-4 h-4" />
+            <span>Weaknesses</span>
+          </div>
+          <ul className="space-y-2 text-sm">
+            {weaknesses.map((weakness) => (
+              <li key={weakness} className="flex items-start gap-2 text-neutral-700 dark:text-neutral-300">
+                <span className="text-red-500 dark:text-red-400 mt-0.5 shrink-0">✗</span>
+                <span>{weakness}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {unknowns.length > 0 && (
+        <div className="space-y-2 md:col-span-2">
+          <div className="flex items-center gap-2 text-sm font-semibold text-amber-700 dark:text-amber-400">
+            <HelpCircle className="w-4 h-4" />
+            <span>Unknowns</span>
+          </div>
+          <ul className="flex flex-wrap gap-3 text-sm">
+            {unknowns.map((unknown) => (
+              <li key={unknown} className="flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
+                <span className="text-amber-500 dark:text-amber-400 mt-0.5 shrink-0">?</span>
+                <span>{unknown}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  )
+}
+
+/**
+ * Link organization:
+ * - Primary: Try it (chat, playground)
+ * - Secondary: Build with it (API, docs - which includes pricing)
+ * - Tertiary: Learn more (paper, weights, GitHub, community)
+ * 
+ * Styling is intentionally similar across tiers - this is organizational, not visual hierarchy.
+ */
+const HeaderLinkButton = ({
+  href,
+  icon: Icon,
+  label,
+  description,
+  primary = false,
+}: {
+  href: string
+  icon: React.ComponentType<{ className?: string }>
+  label: string
+  description?: string
+  primary?: boolean
+}) => {
+  const baseClasses = primary
+    ? 'bg-neutral-900 dark:bg-neutral-100 text-white dark:text-black hover:bg-neutral-800 dark:hover:bg-neutral-200'
+    : 'bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 text-neutral-900 dark:text-neutral-100'
+
+  const descClasses = primary
+    ? 'text-white/70 dark:text-black/60'
+    : 'text-neutral-500 dark:text-neutral-400'
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`group inline-flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm font-medium ${baseClasses}`}
+    >
+      <Icon className="w-4 h-4 shrink-0" />
+      <span className="flex flex-col items-start leading-tight">
+        <span>{label}</span>
+        {description && (
+          <span className={`hidden md:block text-[10px] font-normal leading-tight ${descClasses}`}>
+            {description}
+          </span>
+        )}
+      </span>
+    </a>
+  )
+}
+
+const ModelHeader = ({
+  name,
+  family,
+  organization,
+  releaseDate,
+  identity,
+  tags = [],
+  links = {},
+}: {
+  name: string
+  family?: string
+  organization?: string
+  releaseDate?: string
+  identity?: string
+  tags?: string[]
+  links?: {
+    // Try it
+    chat?: string
+    playground?: string
+    // Build with it
+    api?: string
+    docs?: string  // includes pricing as a sub-page
+    // Learn more
+    paper?: string      // technical/research paper (arXiv, etc.)
+    weights?: string    // open weights (HuggingFace, etc.)
+    github?: string
+    community?: string
+  }
+}) => {
+  const hasLinks = Object.values(links).some(Boolean)
+
+  // Standard icon mapping:
+  // chat: MessageCircle, playground: Play, api: Code, docs: BookOpen
+  // paper: FileText, weights: Download, github: ExternalLink, community: Users
+  const tryItLinks = [
+    links.chat && { href: links.chat, icon: MessageCircle, label: 'Chat free', description: 'Try in browser' },
+    links.playground && { href: links.playground, icon: Play, label: 'Playground', description: 'Interactive sandbox' },
+  ].filter(Boolean) as Array<{ href: string; icon: typeof MessageCircle; label: string; description: string }>
+
+  const buildLinks = [
+    links.api && { href: links.api, icon: Code, label: 'API', description: 'Endpoints & SDKs' },
+    links.docs && { href: links.docs, icon: BookOpen, label: 'Docs', description: 'Guides & pricing' },
+  ].filter(Boolean) as Array<{ href: string; icon: typeof Code; label: string; description: string }>
+
+  const learnMoreLinks = [
+    links.paper && { href: links.paper, icon: FileText, label: 'Paper', description: 'Technical report' },
+    links.weights && { href: links.weights, icon: Download, label: 'Weights', description: 'Download model' },
+    links.github && { href: links.github, icon: ExternalLink, label: 'GitHub', description: 'Source & examples' },
+    links.community && { href: links.community, icon: Users, label: 'Community', description: 'Discord & forums' },
+  ].filter(Boolean) as Array<{ href: string; icon: typeof FileText; label: string; description: string }>
+
+  return (
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <div className="flex items-baseline gap-3 flex-wrap">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+            {name}
+          </h1>
+          {family && <span className="text-xl text-neutral-500 dark:text-neutral-400 font-light">{family}</span>}
+        </div>
+        <div className="flex gap-4 text-sm text-neutral-600 dark:text-neutral-400">
+          {organization && <span className="font-semibold text-neutral-800 dark:text-neutral-200">{organization}</span>}
+          {organization && releaseDate && <span>·</span>}
+          {releaseDate && <span>{releaseDate}</span>}
+        </div>
+      </div>
+
+      {tags.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <Badge key={tag}>{tag}</Badge>
+          ))}
+        </div>
+      )}
+
+      {identity && (
+        <p className="text-lg leading-relaxed text-neutral-700 dark:text-neutral-300 max-w-2xl">{identity}</p>
+      )}
+
+      {hasLinks && (
+        <div className="flex gap-3 flex-wrap pt-2">
+          {tryItLinks.map((link) => (
+            <HeaderLinkButton key={link.label} {...link} primary />
+          ))}
+          {buildLinks.map((link) => (
+            <HeaderLinkButton key={link.label} {...link} />
+          ))}
+          {learnMoreLinks.map((link) => (
+            <HeaderLinkButton key={link.label} {...link} />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+const CompanyWatermark = ({ text }: { text: string }) => {
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <span
+          className="text-[15rem] md:text-[20rem] font-bold opacity-[0.03] dark:opacity-[0.02] select-none whitespace-nowrap text-neutral-900 dark:text-neutral-100"
+          style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
+        >
+          {text}
+        </span>
       </div>
     </div>
   )

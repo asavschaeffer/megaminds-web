@@ -73,11 +73,10 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
           <button
             type="button"
             onClick={() => updateTag('')}
-            className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
-              activeTag
+            className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag
                 ? 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                 : 'border-slate-900 bg-slate-900 text-white'
-            }`}
+              }`}
           >
             All
           </button>
@@ -86,11 +85,10 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
               key={tag}
               type="button"
               onClick={() => updateTag(tag)}
-              className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
-                activeTag === tag
+              className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag === tag
                   ? 'border-slate-900 bg-slate-900 text-white'
                   : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-              }`}
+                }`}
             >
               {tag}
             </button>
@@ -109,11 +107,10 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
           <button
             type="button"
             onClick={() => updateTag('')}
-            className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
-              activeTag
+            className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag
                 ? 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                 : 'border-slate-900 bg-slate-900 text-white'
-            }`}
+              }`}
           >
             All
           </button>
@@ -122,11 +119,10 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
               key={tag}
               type="button"
               onClick={() => updateTag(tag)}
-              className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
-                activeTag === tag
+              className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag === tag
                   ? 'border-slate-900 bg-slate-900 text-white'
                   : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-              }`}
+                }`}
             >
               {tag}
             </button>
@@ -195,11 +191,10 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
                   updateTag('')
                   setIsTagPickerOpen(false)
                 }}
-                className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
-                  activeTag
+                className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag
                     ? 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                     : 'border-slate-900 bg-slate-900 text-white'
-                }`}
+                  }`}
               >
                 All
               </button>
@@ -211,11 +206,10 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
                     updateTag(tag)
                     setIsTagPickerOpen(false)
                   }}
-                  className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
-                    activeTag === tag
+                  className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag === tag
                       ? 'border-slate-900 bg-slate-900 text-white'
                       : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-                  }`}
+                    }`}
                 >
                   {tag}
                 </button>
