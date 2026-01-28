@@ -61,8 +61,8 @@ export const SentimentMarquee = ({ items }: SentimentMarqueeProps) => {
 
       <div ref={scrollRef} className="overflow-x-auto py-10 scrollbar-hide scroll-smooth" role="region" aria-label="Scrollable testimonials">
         <ul className="flex gap-5 px-6 md:px-12 w-max list-none" role="list">
-          {items.map((item, idx) => (
-            <li key={idx} className="flex-shrink-0 w-80">
+          {items.map((item, idx) => {
+            const CardContent = (
               <figure className="h-full p-5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors snap-start">
                 <blockquote className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed mb-4 line-clamp-3">
                   <p>&ldquo;{item.content}&rdquo;</p>
@@ -83,8 +83,26 @@ export const SentimentMarquee = ({ items }: SentimentMarqueeProps) => {
                   />
                 </figcaption>
               </figure>
-            </li>
-          ))}
+            )
+
+            return (
+              <li key={idx} className="flex-shrink-0 w-80">
+                {item.url ? (
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block h-full hover:no-underline"
+                    aria-label={`View tweet by ${item.author}`}
+                  >
+                    {CardContent}
+                  </a>
+                ) : (
+                  CardContent
+                )}
+              </li>
+            )
+          })}
         </ul>
       </div>
 
