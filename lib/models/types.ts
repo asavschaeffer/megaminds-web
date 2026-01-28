@@ -6,6 +6,7 @@ import type { ComponentType, ReactNode } from 'react'
 import type { ModelTagId } from './tags'
 import type { ModelLinkTypeId } from './link-types'
 import type { OrganizationId } from './organizations'
+import type { BrandStyle } from './branding'
 
 export type NameOrder = 'family-version-variant' | 'family-variant-version'
 
@@ -167,6 +168,7 @@ export interface ModelMeta {
   links: ModelLinks
   subscriptionPlans?: string[]
   apiRates?: ApiPricing
+  branding?: BrandStyle
   pricingSources?: Array<{
     label: string
     href: string

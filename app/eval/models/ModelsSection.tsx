@@ -7,13 +7,13 @@ import type { ModelTagId } from '@/lib/models/tags'
 import { getTag, isValidTagId } from '@/lib/models/tags'
 
 type BrandCardProps = Parameters<typeof BrandCard>[0]
-type FrontierCard = BrandCardProps & {
+type ModelCard = BrandCardProps & {
   key: string
   tags: ModelTagId[]
 }
 
-type FrontierModelsSectionProps = {
-  cards: FrontierCard[]
+type ModelsSectionProps = {
+  cards: ModelCard[]
   tags: ModelTagId[]
 }
 
@@ -21,7 +21,7 @@ const fadeDurationMs = 200
 const featuredTagCountMobile = 6
 const featuredTagCountDesktop = 18
 
-export default function FrontierModelsSection({ cards, tags }: FrontierModelsSectionProps) {
+export default function ModelsSection({ cards, tags }: ModelsSectionProps) {
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -68,17 +68,20 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
 
   return (
     <>
-      <div className="mt-10">
+      <section className="mt-10" aria-labelledby="model-tags-title">
         <div className="flex items-center justify-between gap-4">
-          <h2 className="text-xl font-semibold text-gray-900">Tags</h2>
+          <h2 id="model-tags-title" className="text-xl font-semibold text-gray-900">
+            Tags
+          </h2>
         </div>
-        <div className="mt-4 flex flex-wrap gap-2 sm:hidden">
+        <nav aria-label="Filter models by tag">
+          <div className="mt-4 flex flex-wrap gap-2 sm:hidden">
           <button
             type="button"
             onClick={() => updateTag('')}
             className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag
-                ? 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-                : 'border-slate-900 bg-slate-900 text-white'
+              ? 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+              : 'border-slate-900 bg-slate-900 text-white'
               }`}
           >
             All
@@ -89,8 +92,8 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
               type="button"
               onClick={() => updateTag(tag)}
               className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag === tag
-                  ? 'border-slate-900 bg-slate-900 text-white'
-                  : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                ? 'border-slate-900 bg-slate-900 text-white'
+                : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                 }`}
             >
               {getTag(tag).label}
@@ -105,14 +108,14 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
               More
             </button>
           ) : null}
-        </div>
-        <div className="mt-4 hidden flex-wrap gap-2 sm:flex">
+          </div>
+          <div className="mt-4 hidden flex-wrap gap-2 sm:flex">
           <button
             type="button"
             onClick={() => updateTag('')}
             className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag
-                ? 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-                : 'border-slate-900 bg-slate-900 text-white'
+              ? 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+              : 'border-slate-900 bg-slate-900 text-white'
               }`}
           >
             All
@@ -139,23 +142,26 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
               {isDesktopExpanded ? 'Less' : 'More'}
             </button>
           ) : null}
-        </div>
-      </div>
+          </div>
+        </nav>
+      </section>
 
-      <div className="mt-10">
-        <h2 className="text-xl font-semibold text-gray-900">Frontier models</h2>
-        <div className={`mt-6 flex flex-col gap-6 transition-opacity duration-200 ${isFading ? 'opacity-0' : 'opacity-100'}`}>
-          {displayedCards.length ? (
-            displayedCards.map(({ key, tags: cardTags, ...cardProps }) => (
-              <BrandCard key={key} tags={cardTags.map((tag) => getTag(tag).label)} {...cardProps} />
-            ))
-          ) : (
-            <div className="rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center text-sm text-slate-500">
-              No models match this tag yet.
-            </div>
-          )}
-        </div>
-      </div>
+      <section className="mt-10" aria-labelledby="models-list-title">
+        <h2 id="models-list-title" className="text-xl font-semibold text-gray-900">Models</h2>
+        {displayedCards.length ? (
+          <ul className={`mt-6 flex flex-col gap-6 transition-opacity duration-200 ${isFading ? 'opacity-0' : 'opacity-100'}`}>
+            {displayedCards.map(({ key, tags: cardTags, ...cardProps }) => (
+              <li key={key}>
+                <BrandCard tags={(cardTags ?? []).map((tag) => getTag(tag).label)} {...cardProps} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="mt-6 rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center text-sm text-slate-500">
+            No models match this tag yet.
+          </div>
+        )}
+      </section>
 
       {isTagPickerOpen ? (
         <div className="fixed inset-0 z-50">
@@ -165,7 +171,7 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
             aria-label="Close tag list"
             onClick={() => setIsTagPickerOpen(false)}
           />
-          <div className="absolute inset-x-0 bottom-0 rounded-t-2xl bg-white px-4 pb-6 pt-5 shadow-2xl sm:inset-auto sm:right-8 sm:top-24 sm:bottom-auto sm:w-[420px] sm:rounded-2xl">
+          <div className="absolute inset-x-0 bottom-0 rounded-t-2xl bg-white px-4 pb-6 pt-5 shadow-2xl overscroll-contain sm:inset-auto sm:right-8 sm:top-24 sm:bottom-auto sm:w-[420px] sm:rounded-2xl">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold text-slate-900">All tags</h3>
               <button
@@ -185,8 +191,10 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
                 type="search"
                 value={tagQuery}
                 onChange={(event) => setTagQuery(event.target.value)}
-                placeholder="Search tags"
-                className="w-full rounded-full border border-slate-200 px-4 py-2 text-sm text-slate-700 outline-none transition focus:border-slate-300"
+                name="tag-search"
+                autoComplete="off"
+                placeholder="Search tags…"
+                className="w-full rounded-full border border-slate-200 px-4 py-2 text-sm text-slate-700 transition focus:border-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-200"
               />
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
@@ -197,8 +205,8 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
                   setIsTagPickerOpen(false)
                 }}
                 className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag
-                    ? 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
-                    : 'border-slate-900 bg-slate-900 text-white'
+                  ? 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                  : 'border-slate-900 bg-slate-900 text-white'
                   }`}
               >
                 All
@@ -212,8 +220,8 @@ export default function FrontierModelsSection({ cards, tags }: FrontierModelsSec
                     setIsTagPickerOpen(false)
                   }}
                   className={`rounded-full border px-3 py-1 text-xs font-medium transition ${activeTag === tag
-                      ? 'border-slate-900 bg-slate-900 text-white'
-                      : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                    ? 'border-slate-900 bg-slate-900 text-white'
+                    : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                     }`}
                 >
                   {getTag(tag).label}

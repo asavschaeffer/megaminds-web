@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import { useId } from 'react'
+import type { ModelProfile, ModelMeta } from '@/lib/models/types'
+import { getOrganization } from '@/lib/models/organizations'
 
-interface BrandCardProps {
+export interface BrandCardProps {
   href?: string
   modelFamily?: string
   modelVariant?: string
@@ -19,15 +21,17 @@ interface BrandCardProps {
   sublineLogoSrc?: string
   sublineLogoLabel?: string
   modelFamilyClassName?: string
+  organizationId?: ModelMeta['organizationId']
+  model?: ModelProfile | { meta: ModelMeta; slug: string }
 }
 
 export function BrandCard({
-  href,
-  modelFamily = 'Model family',
-  modelVariant = '',
-  versionNumber = '',
-  description = 'Paragraph element',
-  tags = ['tag1', 'tag2', 'tag3'],
+  href: hrefProp,
+  modelFamily: modelFamilyProp,
+  modelVariant: modelVariantProp,
+  versionNumber: versionNumberProp,
+  description: descriptionProp,
+  tags: tagsProp,
   modelIconSrc,
   modelTextLogoSrc,
   parentIconSrc,
@@ -39,7 +43,36 @@ export function BrandCard({
   sublineLogoSrc,
   sublineLogoLabel,
   modelFamilyClassName,
+  organizationId,
+  model,
 }: BrandCardProps) {
+  // Extract values from model metadata if provided, otherwise use props
+  const href = hrefProp ?? (model ? `/eval/models/${model.slug}` : undefined)
+  const modelFamily = modelFamilyProp ?? model?.meta.family ?? 'Model family'
+  const modelVariant = modelVariantProp ?? model?.meta.variant ?? ''
+  const versionNumber = versionNumberProp ?? model?.meta.modelVersion ?? ''
+  const description = descriptionProp ?? model?.meta.identity ?? 'Paragraph element'
+  const tags = tagsProp ?? model?.meta.tags ?? ['tag1', 'tag2', 'tag3']
+  const nameOrder = model?.meta.nameOrder
+
+  // Determine the order of variant and version based on nameOrder
+  const getVariantVersionOrder = () => {
+    if (nameOrder === 'family-variant-version') {
+      return [modelVariant, versionNumber].filter(Boolean)
+    } else {
+      // default: family-version-variant (Gemini 3 Flash)
+      return [versionNumber, modelVariant].filter(Boolean)
+    }
+  }
+
+  const resolvedOrganizationId = model?.meta.organizationId ?? organizationId
+  const organization = resolvedOrganizationId ? getOrganization(resolvedOrganizationId) : undefined
+  const brandStyle = model?.meta.branding ?? organization?.brandStyle
+  const fontFamilyClass = brandStyle?.fontClassName ?? ''
+  const inlineGapClassName = brandStyle?.inlineGapClassName ?? 'gap-2'
+  const wordmarkImageClassName = brandStyle?.wordmarkImageClassName ?? 'w-auto max-w-[180px]'
+  const usesAnthropicVariant = brandStyle?.variantStyle === 'anthropic'
+
   const id = useId()
   const headingId = `${id}-heading`
   const descriptionId = `${id}-description`
@@ -47,6 +80,7 @@ export function BrandCard({
   const modelWordmarkAlt = modelLogoLabel || `${modelFamily} wordmark`
   const watermarkAlignmentClass =
     watermarkAlign === 'left' ? 'flex items-center justify-start' : 'flex items-center justify-center'
+  const watermarkSrc = parentIconSrc ?? modelIconSrc
 
   const content = (
     <article className="relative h-full overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg">
@@ -57,8 +91,8 @@ export function BrandCard({
             'absolute -right-2 top-1/2 h-[110%] w-auto -translate-y-1/2 translate-x-[12%] rotate-[9deg] opacity-[0.12] sm:-right-4 sm:h-[116%] sm:translate-x-[18%] lg:-right-7 lg:h-[121%] lg:translate-x-[24%]'} ${watermarkAlignmentClass}`
           }
         >
-          {parentIconSrc ? (
-            <img src={parentIconSrc} alt="" aria-hidden="true" className="h-full w-auto" />
+          {watermarkSrc ? (
+            <img src={watermarkSrc} alt="" aria-hidden="true" className="h-full w-auto" />
           ) : (
             <svg viewBox="0 0 100 100" className="h-full w-auto" aria-hidden="true">
               <rect x="6" y="6" width="88" height="88" rx="18" className="fill-red-400/80 stroke-red-500" />
@@ -80,27 +114,43 @@ export function BrandCard({
             </div>
           )}
           <div className="min-w-0 min-h-14 flex flex-col justify-center">
-            <h3 id={headingId} className="flex flex-nowrap items-center gap-2">
+            <h3 id={headingId} className={`flex flex-nowrap items-center ${inlineGapClassName}`}>
               {modelTextLogoSrc ? (
                 <img
                   src={modelTextLogoSrc}
                   alt={modelWordmarkAlt}
-                  className="h-6 w-auto max-w-[180px]"
+                  className={`h-6 ${wordmarkImageClassName} block`}
                 />
               ) : (
                 <span
-                  className={`whitespace-nowrap font-semibold text-slate-900 ${modelFamilyClassName ?? 'text-lg'}`}
+                  className={`whitespace-nowrap font-semibold text-slate-900 ${modelFamilyClassName ?? 'text-lg'} ${fontFamilyClass}`}
                 >
                   {modelFamily}
                 </span>
               )}
               {variantLayout === 'inline' && (modelVariant || versionNumber) ? (
-                <span className="whitespace-nowrap text-xl font-semibold text-slate-900 tracking-tight">
-                  {[modelVariant, versionNumber].filter(Boolean).join(' ')}
-                </span>
+                usesAnthropicVariant ? (
+                  <span className={`whitespace-nowrap text-2xl text-slate-900 tracking-tight ${fontFamilyClass}`}>
+                    {nameOrder === 'family-variant-version' ? (
+                      <>
+                        {modelVariant && <span className="font-normal">{modelVariant} </span>}
+                        {versionNumber && <span className="font-medium">{versionNumber}</span>}
+                      </>
+                    ) : (
+                      <>
+                        {versionNumber && <span className="font-medium">{versionNumber} </span>}
+                        {modelVariant && <span className="font-normal">{modelVariant}</span>}
+                      </>
+                    )}
+                  </span>
+                ) : (
+                  <span className={`whitespace-nowrap text-2xl font-medium text-slate-900 tracking-tight ${fontFamilyClass}`}>
+                    {getVariantVersionOrder().join(' ')}
+                  </span>
+                )
               ) : null}
               {variantLayout === 'stacked' && modelVariant ? (
-                <span className="whitespace-nowrap text-xl font-semibold text-slate-900 tracking-tight">
+                <span className={`whitespace-nowrap text-2xl font-medium text-slate-900 tracking-tight ${fontFamilyClass}`}>
                   {modelVariant}
                 </span>
               ) : null}

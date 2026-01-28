@@ -6,6 +6,7 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './content/**/*.{js,ts,jsx,tsx,mdx}',
+    './lib/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -33,6 +34,9 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-mono)', 'monospace'],
+        'google-sans': ['Google Sans', 'system-ui', 'sans-serif'],
+        'reckless-neue': ['Reckless Neue', 'ui-serif', 'Georgia', 'serif'],
+        'openai-sans': ['Open Sans', 'system-ui', 'sans-serif'],
       },
     },
   },

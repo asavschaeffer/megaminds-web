@@ -1,3 +1,5 @@
+import type { BrandStyle } from './branding'
+
 export interface Organization {
   id: string
   name: string
@@ -6,6 +8,7 @@ export interface Organization {
   iconId?: string
   region?: string
   type?: 'company' | 'research-lab' | 'non-profit' | 'government' | 'community'
+  brandStyle?: BrandStyle
 }
 
 export type OrganizationId =
@@ -42,6 +45,15 @@ export const ORGANIZATIONS: Record<OrganizationId, Organization> = {
     iconId: 'openai',
     region: 'USA',
     type: 'company',
+    brandStyle: {
+      fontClassName: 'font-openai-sans',
+      sources: [
+        {
+          label: 'OpenAI Brand Guidelines',
+          href: 'https://openai.com/brand/',
+        },
+      ],
+    },
   },
   anthropic: {
     id: 'anthropic',
@@ -51,6 +63,10 @@ export const ORGANIZATIONS: Record<OrganizationId, Organization> = {
     iconId: 'anthropic',
     region: 'USA',
     type: 'company',
+    brandStyle: {
+      fontClassName: 'font-reckless-neue',
+      variantStyle: 'anthropic',
+    },
   },
   google: {
     id: 'google',
@@ -60,6 +76,11 @@ export const ORGANIZATIONS: Record<OrganizationId, Organization> = {
     iconId: 'google',
     region: 'USA',
     type: 'company',
+    brandStyle: {
+      fontClassName: 'font-google-sans',
+      inlineGapClassName: 'gap-1',
+      wordmarkImageClassName: 'w-[98px] -mr-1',
+    },
   },
   'google-deepmind': {
     id: 'google-deepmind',
