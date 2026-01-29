@@ -274,8 +274,8 @@ export const gemini3Pro: ModelProfile = {
       title: 'The Economics',
       subtitle: 'Premium Intelligence at Competitive Rates',
       content: (
-          <p className="mb-2">
-            At <data value="2.0">$2.00</data> per million input <AbbrSidenote title="Tokens are the basic units of text that models process (roughly 0.75 words per token)" contentMaxWidth={896}>tokens</AbbrSidenote>, Gemini 3 Pro is aggressively priced for a frontier model — cheaper than Claude Opus 4.5 ($3.00) and competitive with GPT-5.1. The output cost is higher ($12-$18 depending on <AbbrSidenote title="Context length is the amount of text a model processes in one request" contentMaxWidth={896}>context length</AbbrSidenote>), reflecting the compute intensity of the <AbbrSidenote term="MoE" contentMaxWidth={896}>MoE</AbbrSidenote> architecture and "Deep Think" reasoning steps.
+        <p className="mb-2">
+          At <data value="2.0">$2.00</data> per million input <AbbrSidenote title="Tokens are the basic units of text that models process (roughly 0.75 words per token)" contentMaxWidth={896}>tokens</AbbrSidenote>, Gemini 3 Pro is aggressively priced for a frontier model — cheaper than Claude Opus 4.5 ($3.00) and competitive with GPT-5.1. The output cost is higher ($12-$18 depending on <AbbrSidenote title="Context length is the amount of text a model processes in one request" contentMaxWidth={896}>context length</AbbrSidenote>), reflecting the compute intensity of the <AbbrSidenote term="MoE" contentMaxWidth={896}>MoE</AbbrSidenote> architecture and "Deep Think" reasoning steps.
         </p>
       ),
       hasPricing: true,

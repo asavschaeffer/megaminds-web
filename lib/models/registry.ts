@@ -4,8 +4,9 @@ import { validateTagConflicts, validateTagCoverage, validateTagIds } from './tag
 import { deepseekR1 } from '@/content/eval/models/deepseek-r1'
 import { gemini3Flash } from '@/content/eval/models/gemini-3-flash'
 import { gemini3Pro } from '@/content/eval/models/gemini-3-pro'
+import { kimiK25Model } from '@/content/eval/models/kimi-k2-5'
 
-const MODELS: ModelProfile[] = [deepseekR1, gemini3Flash, gemini3Pro]
+const MODELS: ModelProfile[] = [deepseekR1, gemini3Flash, gemini3Pro, kimiK25Model]
 
 const tagCoverageErrors = MODELS.flatMap((model) => {
   const tagIds = model.meta.tagIds ?? []

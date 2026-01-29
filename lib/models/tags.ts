@@ -35,6 +35,7 @@ export type ModelTagId =
   | 'roleplay'
   | 'worldbuilding'
   | 'frontier'
+  | 'agentic-swarm'
   | 'design'
   | 'text'
   | 'vision'
@@ -201,6 +202,12 @@ export const MODEL_TAGS: Record<ModelTagId, ModelTag> = {
     label: 'Frontier',
     category: 'capability',
     description: 'Frontier-level capability across tasks',
+  },
+  'agentic-swarm': {
+    id: 'agentic-swarm',
+    label: 'Agentic Swarm',
+    category: 'capability',
+    description: 'Spawns parallel sub-agents for autonomous task execution',
   },
   text: {
     id: 'text',

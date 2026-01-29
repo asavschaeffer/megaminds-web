@@ -303,20 +303,23 @@ export const modelCards: ModelCard[] = [
     ...buildModelAssets('nousresearch'),
     modelTextLogoSrc: undefined,
   },
-  {
-    key: 'kimi',
-    href: '/eval/models/kimi',
-    modelFamily: 'Kimi',
-    modelVariant: 'K2',
-    versionNumber: '',
-    description: 'Design-forward model great for slides, frontend, and programming with solid tools; 256k context.',
-    tags: ['design', 'creativity', 'ideation', 'coding', 'tool-use'],
-    organizationId: 'moonshot',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildModelAssets('kimi', 'moonshot'),
-  },
+  ...(() => {
+    const kimiK25 = getModelBySlug('kimi-k2-5')
+    return kimiK25
+      ? [
+        {
+          key: 'kimi-k2-5',
+          model: kimiK25,
+          tags: (kimiK25?.meta.tagIds ?? []) as ModelTagId[],
+          organizationId: 'moonshot',
+          modelLogoLabel: 'Model logo',
+          parentBrandingLabel: 'Parent company branding',
+          watermarkClassName: wideWatermarkClassName,
+          ...buildModelAssets('kimi', 'moonshot'),
+        },
+      ]
+      : []
+  })(),
   ...(() => {
     const geminiPro = getModelBySlug('gemini-3-pro')
     const geminiFlash = getModelBySlug('gemini-3-flash')

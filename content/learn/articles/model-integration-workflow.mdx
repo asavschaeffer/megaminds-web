@@ -1,0 +1,413 @@
+---
+title: "Adding a New Model to the Megaminds Ecosystem: A Workflow Case Study"
+description: "A step-by-step walkthrough of integrating Kimi K2.5 into our typed React + TypeScript model evaluation system, with lessons for AI-assisted development."
+date: "2026-01-28"
+readTime: "20 min"
+tags: ["workflow", "typescript", "agentic", "meta"]
+---
+
+What does it actually take to add a new AI model to a typed, component-based website? This article documents the real-time workflow used to integrate **Moonshot Kimi K2.5** into the Megaminds evaluation ecosystem—from research document to live production.
+
+The goal isn't just to explain *what* was done, but to analyze the friction points, propose improvements, and explore how TypeScript + React + agentic AI can enable a more streamlined model integration pipeline.
+
+---
+
+## The Starting Point
+
+I was asked to create a new model evaluation page for **Kimi K2.5**, a 1-trillion parameter MoE model from Moonshot AI with a novel "Agent Swarm" capability. The inputs were:
+
+1. **A template file** (`content/eval/models/template.tsx`) — a typed ModelProfile schema with sections for metadata, analysis, pricing, benchmarks, and content sections.
+2. **A research document** (`AI Model Research and Comparison Plan.md`) — a 7,000+ word technical analysis covering architecture, benchmarks, community sentiment, and competitive positioning.
+
+The task: Create a new file, fill out the header metadata, propose section names (without content), and integrate the model into the broader site ecosystem.
+
+---
+
+## The Integration Steps
+
+### Step 1: Create the Model Profile
+
+The first step was creating `content/eval/models/kimi-k2-5.tsx`. This file exports a `ModelProfile` object with:
+
+```typescript
+export const kimiK25Model: ModelProfile = {
+  slug: 'kimi-k2-5',
+  meta: {
+    name: 'Kimi K2.5',
+    family: 'Kimi',
+    variant: 'K',
+    modelVersion: '2.5',
+    nameOrder: 'family-variant-version',
+    organization: 'Moonshot AI',
+    releaseDate: '2026-01-15',
+    identity: 'The open-weight agentic powerhouse...',
+    tagIds: ['reasoning', 'coding', 'tool-use', 'agentic-swarm', ...],
+    links: { weights: '...', github: '...', docs: '...', api: '...', ... },
+  },
+  analysis: {
+    strengths: [...],
+    weaknesses: [...],
+    unknowns: [...],
+  },
+  sections: [
+    { id: 'why-it-matters', title: 'Why It Matters', content: '' },
+    { id: 'agent-swarm', title: 'Agent Swarm Architecture', content: '' },
+    // ... 20 more sections
+  ],
+}
+```
+
+**Friction encountered:**
+- **Invalid tag IDs.** I initially used tags like `'agentic'`, `'image'`, `'video'`, and `'long-context'` that didn't exist in the `ModelTagId` type. TypeScript caught this immediately.
+- **Invalid link types.** I used `'huggingface'` and `'documentation'` instead of the valid `'weights'` and `'docs'` keys.
+
+**Resolution:** Cross-referenced `lib/models/tags.ts` and `lib/models/link-types.ts` to use only valid type literals. Changed `'agentic'` → `'tool-use'`, `'long-context'` → `'ultra'`, `'huggingface'` → `'weights'`, etc.
+
+---
+
+### Step 2: Register the Model
+
+The model profile by itself is just data. To make it queryable, it needs to be added to the central registry.
+
+```typescript
+// lib/models/registry.ts
+import { kimiK25Model } from '@/content/eval/models/kimi-k2-5'
+
+const MODELS: ModelProfile[] = [deepseekR1, gemini3Flash, gemini3Pro, kimiK25Model]
+```
+
+This makes `getModelBySlug('kimi-k2-5')` work across the entire codebase.
+
+**Why this matters:** The registry pattern enables:
+- Slug-based routing (`/eval/models/kimi-k2-5`)
+- Tag-based filtering (`getModelsByTag('agentic-swarm')`)
+- Organization grouping (`getModelsByOrganization('moonshot')`)
+- Automatic validation (tag coverage, conflicts, duplicate detection)
+
+---
+
+### Step 3: Update the Model Card System
+
+The homepage and eval pages render model cards using a unified `BrandCard` component. Previously, Kimi was defined inline with hardcoded values:
+
+```typescript
+// Before
+{
+  key: 'kimi',
+  href: '/eval/models/kimi',
+  modelFamily: 'Kimi',
+  modelVariant: 'K2',
+  description: 'Design-forward model...',
+  tags: ['design', 'creativity', 'ideation', 'coding', 'tool-use'],
+}
+```
+
+This was replaced with the registry-driven pattern:
+
+```typescript
+// After
+...(() => {
+  const kimiK25 = getModelBySlug('kimi-k2-5')
+  return kimiK25 ? [{
+    key: 'kimi-k2-5',
+    model: kimiK25,
+    tags: (kimiK25?.meta.tagIds ?? []) as ModelTagId[],
+    ...buildModelAssets('kimi', 'moonshot'),
+  }] : []
+})(),
+```
+
+**Benefits:**
+- Single source of truth (model profile)
+- Automatic description from `identity`
+- Automatic tags from `tagIds`
+- Automatic href from `slug`
+
+---
+
+### Step 4: Fix the Display Name Order
+
+The card initially showed just "Kimi" instead of "Kimi K 2.5". The issue was the model metadata structure:
+
+```typescript
+// Missing fields
+family: 'Kimi',
+variant: 'K',       // ← was missing
+modelVersion: '2.5', // ← was missing
+nameOrder: 'family-variant-version', // ← was missing
+```
+
+The `BrandCard` component uses `nameOrder` to determine display order:
+- `'family-version-variant'` → "Gemini 3 Flash"
+- `'family-variant-version'` → "Claude Opus 4.5" or "Kimi K 2.5"
+
+---
+
+### Step 5: Add New Tag Types
+
+Kimi K2.5's unique "Agent Swarm" capability wasn't covered by existing tags. Rather than use a freeform string in the `tags` array, the proper solution was to extend the type system:
+
+```typescript
+// lib/models/tags.ts
+
+// 1. Add to the union type
+export type ModelTagId =
+  | 'generalist'
+  | 'reasoning'
+  // ...
+  | 'agentic-swarm'  // ← NEW
+  | 'design'
+  // ...
+
+// 2. Add the tag definition
+'agentic-swarm': {
+  id: 'agentic-swarm',
+  label: 'Agentic Swarm',
+  category: 'capability',
+  description: 'Spawns parallel sub-agents for autonomous task execution',
+},
+```
+
+Now `'agentic-swarm'` is a first-class citizen in the type system, can be used in filters, and displays with a proper label.
+
+---
+
+### Step 6: Update Legacy References
+
+The old model name "Kimi K2" appeared in several places:
+- `app/tools/model-picker/page.tsx`
+- `content/learn/articles/model-landscape.mdx`
+
+These were updated to "Kimi K2.5" via search-and-replace.
+
+---
+
+### Step 7: Add to Homepage
+
+Finally, the model needed to appear in the "Latest Model Evaluations" section on the homepage:
+
+```tsx
+// app/page.tsx
+import { getModelBySlug } from '@/lib/models/registry'
+
+<BrandCard model={getModelBySlug('kimi-k2-5')} />
+```
+
+This replaced a placeholder card with dummy data.
+
+---
+
+## Friction Analysis
+
+| Friction Point | Time Spent | Root Cause |
+|----------------|------------|------------|
+| Invalid tag IDs | ~3 min | Didn't check tags.ts first |
+| Invalid link types | ~2 min | Assumed HuggingFace was a valid link type |
+| Missing nameOrder | ~2 min | Different display patterns for different models |
+| Model not in registry | ~1 min | Forgot registration step |
+| Card not using model prop | ~3 min | Hardcoded values vs registry pattern |
+
+**Total integration time:** ~25 minutes for a model with 22 sections and full metadata.
+
+---
+
+## A Better Methodology
+
+The current workflow works, but it's manual and error-prone. Here's how we could improve it:
+
+### 1. Schema-First Generation
+
+Instead of manually creating the model file, use a typed form or CLI:
+
+```bash
+npx megaminds create-model kimi-k2-5
+```
+
+This would:
+- Scaffold the file with all required fields
+- Prompt for organization, release date, etc.
+- Validate tag IDs as you type
+- Auto-register in the registry
+
+### 2. Research Document → Schema Pipeline
+
+The research document (`AI Model Research and Comparison Plan.md`) contains all the information needed for the model profile. An LLM pipeline could:
+
+1. **Parse** the markdown into structured sections
+2. **Extract** metadata (parameters, context length, pricing)
+3. **Map** capabilities to `tagIds`
+4. **Generate** the `strengths`, `weaknesses`, `unknowns` arrays
+5. **Propose** section structure based on unique model features
+
+```typescript
+// Hypothetical API
+const profile = await generateModelProfile({
+  researchDoc: './AI Model Research and Comparison Plan.md',
+  template: './content/eval/models/template.tsx',
+  model: 'kimi-k2-5',
+})
+```
+
+### 3. Type-Driven Validation at Build Time
+
+The current setup throws at runtime if tags are invalid. Better:
+
+```typescript
+// zod schema with exhaustive validation
+const ModelProfileSchema = z.object({
+  slug: z.string().regex(/^[a-z0-9-]+$/),
+  meta: z.object({
+    tagIds: z.array(ModelTagIdSchema),
+    links: z.record(ModelLinkTypeIdSchema, z.string().url()),
+    // ...
+  }),
+})
+
+// At build time
+MODELS.forEach(model => ModelProfileSchema.parse(model))
+```
+
+### 4. Component-Level Storybook Previews
+
+Before deploying, preview the model card and report in isolation:
+
+```tsx
+// storybook story
+export const KimiK25Card = () => (
+  <BrandCard model={getModelBySlug('kimi-k2-5')} />
+)
+```
+
+### 5. Automated Link Checking
+
+Links rot. Add a CI job that validates all URLs in model profiles:
+
+```bash
+npx megaminds check-links --models
+```
+
+---
+
+## The Agentic Future
+
+The integration workflow I just described was performed by an AI agent (me) in conversation with a human. Here's what's notable:
+
+1. **Type safety caught errors.** TypeScript + linting surfaced invalid tags and links immediately—no runtime debugging needed.
+
+2. **The registry pattern enabled composition.** Adding a model to the registry automatically made it available everywhere: cards, routing, search, filters.
+
+3. **Human-in-the-loop was essential.** The user corrected me on:
+   - Tag naming (`agentic` → `agentic-swarm`)
+   - Name ordering (variant/version order matters)
+   - Scope decisions (add tags to types vs use freeform strings)
+
+4. **Iterative refinement beat single-shot.** The model profile went through ~6 edits as requirements clarified.
+
+### Toward Fully Agentic Model Onboarding
+
+The dream workflow:
+
+```
+1. Receive notification: "Moonshot released Kimi K2.5"
+2. Agent scrapes official sources (HuggingFace, blog, paper)
+3. Agent generates draft ModelProfile
+4. Human reviews and approves (10 min)
+5. Agent registers, updates cards, adds to homepage
+6. PR auto-created with all changes
+7. CI runs validations, preview deploys
+8. Human merges
+```
+
+The infrastructure is already in place. What's missing is the orchestration layer—the "Agent Swarm" for our own development workflow.
+
+---
+
+## Key Takeaways
+
+1. **TypeScript types are documentation.** `ModelTagId` and `ModelLinkTypeId` made invalid states unrepresentable.
+
+2. **Registry patterns scale.** One import, one array push, and every component gets the new model.
+
+3. **Schema-driven UI reduces duplication.** `BrandCard` reads from `model.meta`—no hardcoding required.
+
+4. **Extend types, don't escape them.** Adding `'agentic-swarm'` to the type system was better than using a freeform string.
+
+5. **Agentic AI accelerates, but humans validate.** The agent did 90% of the work; the human caught the 10% that mattered.
+
+---
+
+## Files Changed in This Integration
+
+| File | Purpose |
+|------|---------|
+| `content/eval/models/kimi-k2-5.tsx` | New model profile |
+| `lib/models/registry.ts` | Model registration |
+| `lib/models/model-cards.ts` | Card configuration |
+| `lib/models/tags.ts` | New tag type |
+| `app/page.tsx` | Homepage card |
+| `app/tools/model-picker/page.tsx` | Legacy reference update |
+| `content/learn/articles/model-landscape.mdx` | Legacy reference update |
+
+Total: **7 files**, **~300 lines added/modified**, **~25 minutes**.
+
+---
+
+*This article was written on January 28, 2026, immediately after completing the Kimi K2.5 integration. The workflow, friction points, and proposed improvements are documented in real-time.*
+
+---
+
+## P.S. — We Missed One
+
+While writing this article, we discovered another friction point we hadn't accounted for. The homepage card was showing placeholder icons instead of the Kimi and Moonshot logos.
+
+**The issue:** When adding the card to the homepage, we used:
+
+```tsx
+<BrandCard model={getModelBySlug('kimi-k2-5')} />
+```
+
+This pulls model metadata correctly, but the `BrandCard` component also needs **icon asset paths** (`modelIconSrc`, `modelTextLogoSrc`, `parentIconSrc`) to render the logos. In `model-cards.ts`, this is handled by the `buildModelAssets('kimi', 'moonshot')` function—but we forgot to include it on the homepage.
+
+**The fix:**
+
+```tsx
+<BrandCard
+  model={getModelBySlug('kimi-k2-5')}
+  modelIconSrc="/icons/kimi/kimi-color.svg"
+  modelTextLogoSrc="/icons/kimi/kimi-text.svg"
+  parentIconSrc="/icons/moonshot/moonshot-mono.svg"
+  tags={['Agentic Swarm', 'Open Weights', '1T Params', 'Vision']}
+/>
+```
+
+**Lesson learned:** The registry pattern provides *data*, but *asset resolution* is a separate concern. A future improvement would be to store icon paths in the model profile or organization config, so `<BrandCard model={...} />` truly is a one-liner everywhere.
+
+---
+
+## P.P.S. — Proposal: Automatic Homepage Population
+
+One final improvement: **the homepage shouldn't require manual updates at all**.
+
+Currently, adding a model to "Latest Model Evaluations" requires editing `app/page.tsx`. But the registry already has all the data we need—including `releaseDate` on each model profile.
+
+**Proposed solution:**
+
+```tsx
+// app/page.tsx
+import { getRecentModels } from '@/lib/models/registry'
+
+const latestModels = getRecentModels(3) // Returns 3 most recent by releaseDate
+
+{latestModels.map(model => (
+  <BrandCard key={model.slug} model={model} {...buildModelAssets(model)} />
+))}
+```
+
+With this pattern:
+- New models automatically appear on the homepage when registered
+- No manual homepage edits required
+- The "Latest" section is always up-to-date
+- Ordering is deterministic and based on release date
+
+This would reduce the integration workflow from 7 files to 5, eliminating the homepage as a manual touchpoint entirely.
+

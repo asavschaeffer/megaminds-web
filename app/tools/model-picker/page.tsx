@@ -151,7 +151,7 @@ function getRecommendation(answers: Record<string, string>): Recommendation {
   // Creative/design
   if (task === 'creative') {
     return {
-      model: 'Kimi K2',
+      model: 'Kimi K2.5',
       reason: 'Excellent for UI design, pitch decks, visual work',
       alternatives: [
         { model: 'ChatGPT 5.2', reason: 'Strong ideation and naming' },

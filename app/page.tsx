@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { ArrowRight, Cpu, BookOpen, Wrench, Users } from 'lucide-react'
 import { ModelIcon } from '@/components/ui/model-icon'
 import { BrandCard } from '@/components/ui/brand-card'
+import { getModelBySlug } from '@/lib/models/registry'
 
 export default function Home() {
   return (
@@ -76,14 +77,11 @@ export default function Home() {
               href="/eval/models/claude"
             />
             <BrandCard
-              href="/eval/models/copilot"
-              modelFamily="Model family"
-              modelVariant="Model variant"
-              versionNumber="Version #"
-              description="Paragraph element"
-              tags={['tag1', 'tag2', 'tag3']}
-              modelLogoLabel="Model logo"
-              parentBrandingLabel="Parent company branding"
+              model={getModelBySlug('kimi-k2-5')}
+              modelIconSrc="/icons/kimi/kimi-color.svg"
+              modelTextLogoSrc="/icons/kimi/kimi-text.svg"
+              parentIconSrc="/icons/moonshot/moonshot-mono.svg"
+              tags={['Agentic Swarm', 'Open Weights', '1T Params', 'Vision']}
             />
             <ModelCard
               name="DeepSeek R1/V3"
