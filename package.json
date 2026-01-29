@@ -10,9 +10,6 @@
     "lint:abbr": "node scripts/check-abbr-usage.js"
   },
   "dependencies": {
-    "@lobehub/fluent-emoji": "^4.1.0",
-    "@lobehub/icons": "^4.0.3",
-    "@lobehub/ui": "^4.30.2",
     "@mdx-js/loader": "^3.0.0",
     "@mdx-js/react": "^3.0.0",
     "@next/mdx": "^14.2.0",

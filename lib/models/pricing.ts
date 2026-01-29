@@ -36,17 +36,16 @@ const getBaseRates = (profile: ModelProfile): PricingCandidate | null => {
 const getCandidatesFromMeta = (models: ModelProfile[], baseSlug: string): PricingCandidate[] =>
   models
     .filter((model) => model.slug !== baseSlug)
-    .map((model) => {
+    .flatMap((model): PricingCandidate[] => {
       const apiRates = resolveApiRates(model.meta)
-      if (!apiRates) return null
-      return {
+      if (!apiRates) return []
+      return [{
         name: model.meta.name,
         input: apiRates.input,
         output: apiRates.output,
-        provider: apiRates.provider,
-      }
+        ...(apiRates.provider && { provider: apiRates.provider }),
+      }]
     })
-    .filter((candidate): candidate is PricingCandidate => Boolean(candidate))
 
 type PricingCandidateWithTotal = PricingCandidate & { total: number }
 

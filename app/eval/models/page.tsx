@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import ModelsSection from './ModelsSection'
 import { MODEL_TAGS, modelCards } from '@/lib/models/model-cards'
 
@@ -20,8 +21,11 @@ export default function ModelsPage() {
           </p>
         </header>
 
-        <ModelsSection cards={modelCards} tags={MODEL_TAGS} />
+        <Suspense fallback={<div className="mt-8 text-gray-400">Loading models...</div>}>
+          <ModelsSection cards={modelCards} tags={MODEL_TAGS} />
+        </Suspense>
       </section>
     </main>
   )
 }
+

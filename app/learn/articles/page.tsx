@@ -1,11 +1,13 @@
 import Link from 'next/link'
+import { getAllArticles, type ArticleMeta } from '@/lib/articles/loader'
 
 export const metadata = {
   title: 'Articles | Megaminds Learn',
   description: 'Deep dives on AI topics.',
 }
 
-const articles = [
+// Legacy TSX articles not yet migrated to MDX
+const legacyArticles: ArticleMeta[] = [
   {
     slug: 'typescript-llm-pipeline',
     title: 'From Scratch Notes to Ship-Ready Reports: A TypeScript + LLM Content Pipeline',
@@ -22,31 +24,22 @@ const articles = [
     readTime: '15 min',
     tags: ['meta', 'taxonomy', 'self-reflection', 'devlogs'],
   },
-  {
-    slug: 'model-landscape',
-    title: 'The AI Model Landscape (January 2026)',
-    description: 'A comprehensive breakdown of frontier models: Claude, Gemini, ChatGPT, Grok, DeepSeek, and more.',
-    date: '2026-01-21',
-    readTime: '15 min',
-    tags: ['models', 'comparison'],
-  },
-  {
-    slug: 'llm-dnd-eval',
-    title: 'Why We Use D&D to Evaluate AI',
-    description: 'How tabletop roleplay scenarios test theory of mind, consistency, and creative reasoning.',
-    date: '2026-01-15',
-    readTime: '8 min',
-    tags: ['eval', 'methodology'],
-  },
-  {
-    slug: 'sycophancy-problem',
-    title: 'The Sycophancy Problem',
-    description: 'Why ChatGPT wants to be your friend, why that\'s dangerous, and what alternatives exist.',
-    date: '2026-01-10',
-    readTime: '10 min',
-    tags: ['alignment', 'personality'],
-  },
 ]
+
+// Combine MDX articles with legacy TSX articles
+function getArticles(): ArticleMeta[] {
+  const mdxArticles = getAllArticles()
+  const mdxSlugs = new Set(mdxArticles.map(a => a.slug))
+
+  // Filter out legacy articles that now exist as MDX
+  const filteredLegacy = legacyArticles.filter(a => !mdxSlugs.has(a.slug))
+
+  return [...mdxArticles, ...filteredLegacy].sort((a, b) =>
+    new Date(b.date).getTime() - new Date(a.date).getTime()
+  )
+}
+
+const articles = getArticles()
 
 export default function ArticlesPage() {
   return (

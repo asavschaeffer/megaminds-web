@@ -193,6 +193,7 @@ export const templateModel: ModelProfile = {
       title: 'For ML Engineers',
       subtitle: 'Implementation details and gotchas',
       variant: 'advanced',
+      content: null,
       expandables: [
         {
           title: 'Fine-tuning',

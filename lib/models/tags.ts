@@ -496,7 +496,7 @@ export function validateTagIds(tagIds: unknown): { valid: boolean; errors: strin
   return { valid: errors.length === 0, errors }
 }
 
-const OPTIONAL_TAG_CATEGORIES: Set<TagCategory> = new Set(['architecture', 'output'])
+const OPTIONAL_TAG_CATEGORIES: Set<TagCategory> = new Set<TagCategory>(['architecture', 'output'])
 
 export function validateTagCoverage(tagIds: ModelTagId[]): { valid: boolean; missing: TagCategory[] } {
   const covered = new Set<TagCategory>()
