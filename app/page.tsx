@@ -71,10 +71,12 @@ export default function Home() {
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold text-gray-900 mb-8">Latest Model Evaluations</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <ModelCard
-              name="Claude Opus 4.5"
-              description="Best for reflection"
-              href="/eval/models/claude"
+            <BrandCard
+              model={getModelBySlug('qwen3-max')}
+              modelIconSrc="/icons/qwen/qwen-color.svg"
+              modelTextLogoSrc="/icons/qwen/qwen-text.svg"
+              parentIconSrc="/icons/alibaba/alibaba-mono.svg"
+              tags={['Reasoning', 'Test-Time Scaling', '1T Params', 'Tool Use']}
             />
             <BrandCard
               model={getModelBySlug('kimi-k2-5')}
@@ -83,11 +85,12 @@ export default function Home() {
               parentIconSrc="/icons/moonshot/moonshot-mono.svg"
               tags={['Agentic Swarm', 'Open Weights', '1T Params', 'Vision']}
             />
-            <ModelCard
-              name="DeepSeek R1/V3"
-              description="Best for transparent reasoning at low cost"
-              href="/eval/models/deepseek"
-              tags={['Visible reasoning trace', 'Cheapest', 'Open source']}
+            <BrandCard
+              model={getModelBySlug('deepseek-v3-2')}
+              modelIconSrc="/icons/deepseek/deepseek-color.svg"
+              modelTextLogoSrc="/icons/deepseek/deepseek-text.svg"
+              parentIconSrc="/icons/deepseek/deepseek-mono.svg"
+              tags={['Reasoning', 'Open Source', '671B Params', 'Coding']}
             />
           </div>
         </div>

@@ -165,21 +165,7 @@ export const modelCards: ModelCard[] = [
     ...buildModelAssets('mistral'),
     modelTextLogoSrc: undefined,
   },
-  {
-    key: 'deepseek',
-    href: '/eval/models/deepseek',
-    modelFamily: 'DeepSeek',
-    modelVariant: 'R1/V3',
-    versionNumber: '',
-    description:
-      'Low-cost, open model with strong reasoning traces and a smart team; not always SOTA despite rumors.',
-    tags: ['cost-efficient', 'open-source', 'reasoning', 'moe', 'frontier'],
-    organizationId: 'deepseek',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildModelAssets('deepseek'),
-  },
+
   {
     key: 'deepseek-r1',
     href: '/eval/models/deepseek-r1',
@@ -195,6 +181,23 @@ export const modelCards: ModelCard[] = [
     watermarkClassName: wideWatermarkClassName,
     ...buildModelAssets('deepseek'),
   },
+  ...(() => {
+    const deepseekV3_2Model = getModelBySlug('deepseek-v3-2')
+    return deepseekV3_2Model
+      ? [
+        {
+          key: 'deepseek-v3-2',
+          model: deepseekV3_2Model,
+          tags: (deepseekV3_2Model?.meta.tagIds ?? []) as ModelTagId[],
+          organizationId: 'deepseek',
+          modelLogoLabel: 'Model logo',
+          parentBrandingLabel: 'Parent company branding',
+          watermarkClassName: wideWatermarkClassName,
+          ...buildModelAssets('deepseek'),
+        },
+      ]
+      : []
+  })(),
   {
     key: 'aya',
     href: '/eval/models/cohere',
@@ -247,20 +250,7 @@ export const modelCards: ModelCard[] = [
     sublineLogoLabel: 'Nvidia',
     modelFamilyClassName: 'text-xl',
   },
-  {
-    key: 'qwen',
-    href: '/eval/models/qwen',
-    modelFamily: 'Qwen',
-    modelVariant: '3',
-    versionNumber: '',
-    description: 'Paragraph element',
-    tags: ['open-source', 'multimodal', 'coding', 'reasoning', 'translation'],
-    organizationId: 'alibaba',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: alibabaWatermarkClassName,
-    ...buildModelAssets('qwen', 'alibaba'),
-  },
+
   {
     key: 'manus',
     href: '/eval/models/manus',
@@ -414,4 +404,21 @@ export const modelCards: ModelCard[] = [
     watermarkClassName: wideWatermarkClassName,
     ...buildModelAssets('minimax'),
   },
+  ...(() => {
+    const qwen3MaxModel = getModelBySlug('qwen3-max')
+    return qwen3MaxModel
+      ? [
+        {
+          key: 'qwen3-max',
+          model: qwen3MaxModel,
+          tags: (qwen3MaxModel?.meta.tagIds ?? []) as ModelTagId[],
+          organizationId: 'alibaba',
+          modelLogoLabel: 'Model logo',
+          parentBrandingLabel: 'Parent company branding',
+          watermarkClassName: alibabaWatermarkClassName,
+          ...buildModelAssets('qwen', 'alibaba'),
+        },
+      ]
+      : []
+  })(),
 ]

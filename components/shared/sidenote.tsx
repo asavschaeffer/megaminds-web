@@ -77,9 +77,11 @@ export interface SidenoteProps {
   children: ReactNode
   label?: string
   contentMaxWidth?: number
+  triggerAs?: 'span' | 'dfn' | 'abbr'
 }
 
-export function Sidenote({ children, label, contentMaxWidth = CONTENT_MAX_WIDTH }: SidenoteProps) {
+export function Sidenote({ children, label, contentMaxWidth = CONTENT_MAX_WIDTH, triggerAs = 'span' }: SidenoteProps) {
+  const TriggerTag = triggerAs
   const containerRef = useRef<HTMLSpanElement>(null)
   const noteRef = useRef<HTMLElement>(null)
   const noteIdRef = useRef<number | null>(null)
@@ -218,12 +220,12 @@ export function Sidenote({ children, label, contentMaxWidth = CONTENT_MAX_WIDTH 
         className="relative inline"
         onClick={() => !showSidenote && setIsModalOpen(true)}
       >
-        <span
-          className={`sidenote-trigger text-gray-700 dark:text-gray-300 ${!showSidenote ? 'cursor-pointer hover:text-gray-600 dark:hover:text-gray-200' : ''}`}
+        <TriggerTag
+          className={`sidenote-trigger text-gray-700 dark:text-gray-300 decoration-dotted underline-offset-4 decoration-neutral-400 dark:decoration-neutral-600 not-italic ${!showSidenote ? 'cursor-pointer hover:text-gray-600 dark:hover:text-gray-200 underline' : 'underline'}`}
           title={showSidenote ? undefined : 'Click for definition'}
         >
           {label}
-        </span>
+        </TriggerTag>
       </span>
 
       {/* Desktop: fixed sidenote centered in right margin */}
@@ -514,7 +516,7 @@ export interface GlossarySidenoteProps {
 export function GlossarySidenote({ term, label, contentMaxWidth }: GlossarySidenoteProps) {
   const entry = getGlossary(term)
   return (
-    <Sidenote label={label ?? term} contentMaxWidth={contentMaxWidth}>
+    <Sidenote label={label ?? term} contentMaxWidth={contentMaxWidth} triggerAs="dfn">
       <strong>{entry.title}</strong> {entry.definition}
     </Sidenote>
   )

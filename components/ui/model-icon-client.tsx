@@ -15,6 +15,9 @@ const iconMatchers: Array<{ pattern: RegExp; src: string }> = [
   { pattern: /deepseek/i, src: '/icons/deepseek/deepseek-color.svg' },
   { pattern: /grok|xai|x\.ai/i, src: '/icons/grok/grok-mono.svg' },
   { pattern: /kimi|moonshot/i, src: '/icons/kimi/kimi-color.svg' },
+  { pattern: /alibaba cloud/i, src: '/icons/qwen/qwen-color.svg' },
+  { pattern: /qwen/i, src: '/icons/qwen/qwen-color.svg' },
+  { pattern: /alibaba/i, src: '/icons/alibaba/alibaba-color.svg' },
 ]
 
 export function ModelIconClient({ name, size = 32, className }: ModelIconClientProps) {

@@ -1,13 +1,23 @@
 import type { SectionId, SectionRegistry, SectionRegistryEntry } from './types'
 
 export const SECTION_ORDER: Record<string, number> = {
+  'test-time-scaling': 5,
   'why-it-matters': 10,
+  'the-max-moment': 11,
+  'experience-cumulative': 12,
+  'moe-blueprint': 14,
   multimodality: 15,
   'social-proof': 20,
   speed: 25,
   'core-features': 30,
+  benchmarks: 32,
   context: 35,
+  enterprise: 38,
   economics: 40,
+  'developer-experience': 42,
+  'agentic-excellence': 44,
+  alignment: 46,
+  'limitations': 48,
   training: 50,
   ecosystem: 55,
   issues: 60,
