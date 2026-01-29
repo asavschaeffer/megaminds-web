@@ -113,6 +113,10 @@ export const templateModel: ModelProfile = {
     },
   ],
   sections: [
+    // ═══════════════════════════════════════════════════════════════════════════
+    // CORE SECTIONS — Use these as the backbone for most reports
+    // ═══════════════════════════════════════════════════════════════════════════
+
     {
       id: 'why-it-matters',
       title: 'Why It Matters',
@@ -207,6 +211,53 @@ export const templateModel: ModelProfile = {
       title: 'The Verdict',
       content:
         'Mandatory section: summarize who should use this model, when, and why. Be decisive.',
+    },
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // CAPABILITY SECTIONS — Pick relevant ones based on model strengths
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    {
+      id: 'multimodality',
+      title: 'Native Multimodality',
+      subtitle: 'Seeing, Hearing, and Speaking All at Once',
+      hasBenchmarks: true,
+      content:
+        'Explain multimodal architecture: is it bolted-on encoders or native training? Cover supported modalities (text, image, video, audio) and benchmark performance on tasks like Video-MMMU, MMMU-Pro.',
+    },
+    {
+      id: 'agentic-capabilities',
+      title: 'Agentic Excellence',
+      subtitle: 'Built to Do, Not Just Chat',
+      content:
+        'Cover planning, multi-step execution, and tool use. Reference benchmarks like Vending-Bench 2. Discuss Deep Think or chain-of-thought modes if applicable.',
+      // Optional: include socialData for an inline tweet
+      // socialData: { type: 'tweet', author: '...', handle: '...', content: '...', date: '...', url: '...' },
+    },
+    {
+      id: 'context',
+      title: 'Context & Memory',
+      subtitle: 'How Much Can It Hold — and Actually Use?',
+      content:
+        'Discuss context window size, retrieval accuracy at different scales (e.g., 128k vs 1M), and practical advice on when to trust long-context vs. chunking strategies.',
+    },
+    {
+      id: 'coding',
+      title: 'Coding & Development',
+      subtitle: 'Capabilities and Consistency for Developers',
+      content:
+        'Cover coding benchmarks (LiveCodeBench, SWE-bench), real-world consistency, instruction following, and any known failure modes in code generation.',
+      // Optional: include socialData for developer testimonials
+      // socialData: { type: 'tweet', author: '...', handle: '...', content: '...', date: '...', url: '...' },
+    },
+    {
+      id: 'personality',
+      title: 'Personality & Safety',
+      subtitle: 'The Model\'s Character and Guardrails',
+      content:
+        'Describe the model\'s tone, persona quirks, refusal patterns, and any "mental" bugs (loops, self-deprecation, evaluation paranoia). Include safety alignment notes.',
+      // Optional: include socialData for user reactions
+      // socialData: { type: 'tweet', author: '...', handle: '...', content: '...', date: '...', url: '...' },
     },
   ],
 }

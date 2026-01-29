@@ -515,7 +515,8 @@ export function GlossarySidenote({ term, label, contentMaxWidth }: GlossarySiden
   const entry = getGlossary(term)
   return (
     <Sidenote label={label ?? term} contentMaxWidth={contentMaxWidth}>
-      {entry.definition}
+      <strong>{entry.title}</strong> {entry.definition}
     </Sidenote>
   )
 }
+

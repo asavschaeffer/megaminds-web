@@ -53,7 +53,7 @@ export const GLOSSARY: Record<string, GlossaryEntry> = {
   },
   MoE: {
     title: 'Mixture of Experts',
-    definition: 'An architecture that routes inputs to specialized sub-models to scale capacity efficiently.',
+    definition: '**Mixture of Experts**: An architecture that routes inputs to specialized sub-models to scale capacity efficiently.',
   },
   PPO: {
     title: 'Proximal Policy Optimization',
@@ -90,6 +90,23 @@ export const GLOSSARY: Record<string, GlossaryEntry> = {
     definition:
       'A formal way to define concepts and how they relate to each other in a system or domain.',
   },
+  PDF: {
+    title: 'Portable Document Format',
+    definition: 'A file format used to present documents in a manner independent of application software, hardware, and operating systems.',
+  },
+  multimodality: {
+    title: 'Multimodality',
+    definition: 'A model architecture that processes multiple input types (text, images, audio, video) in a unified system.',
+  },
+  'agentic workflows': {
+    title: 'Agentic Workflows',
+    definition: 'AI processes where models autonomously plan, use tools, and execute multi-step tasks to achieve a goal.',
+  },
+  'context caching': {
+    title: 'Context Caching',
+    definition: 'A feature that reduces cost and latency by "remembering" large amounts of data between API calls.',
+  },
+
 }
 
 export type GlossaryTerm = keyof typeof GLOSSARY
