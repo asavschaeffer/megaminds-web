@@ -1,6 +1,8 @@
+import React from 'react'
 import type { ModelLinkTypeId } from '@/lib/models/link-types'
 import type { ModelProfile } from '@/lib/models/types'
 import { MODEL_LINK_TYPES } from '@/lib/models/link-types'
+import { getModelPricingFromReference, mergePricingData } from '@/lib/models/utils'
 import { AbbrSidenote } from '@/components/shared/sidenote'
 
 const kimiK25Links: Partial<Record<ModelLinkTypeId, string>> = {
@@ -78,15 +80,10 @@ export const kimiK25Model: ModelProfile = {
     intro: {
         text: 'Kimi K2.5 represents a fundamental shift in how we think about AI capabilities. While the industry has been fixated on raw intelligence benchmarks, Moonshot AI has built something different: a model designed from the ground up for autonomous execution. With its trillion-parameter Mixture-of-Experts architecture, Kimi can spawn up to 100 parallel sub-agents to tackle complex tasks simultaneously—reducing end-to-end latency by 4.5x compared to traditional single-agent approaches. What makes this truly disruptive is the economics: at $0.15 per million tokens (cache hit), Kimi undercuts Western frontier models by an order of magnitude while delivering competitive performance on real-world agentic benchmarks like Humanity\'s Last Exam. This is not just another large language model; it is a blueprint for the next era of autonomous systems.',
     },
-    pricingData: {
-        baseModel: { name: 'Kimi K2.5 (Cache Hit)', input: 0.15, output: 3.0 },
-        competitors: [
-            { name: 'Kimi K2.5 (Cache Miss)', input: 0.6, output: 3.0 },
-            { name: 'Claude 4.5 Opus', input: 15.0, output: 75.0 },
-            { name: 'GPT-5.2', input: 10.0, output: 30.0 },
-            { name: 'Gemini 3 Pro', input: 7.0, output: 21.0 },
-        ],
-    },
+    pricingData: mergePricingData(
+        getModelPricingFromReference('kimi-k2-5'),
+        ['claude-opus-4-5', 'gpt-5-2', 'gemini-3-pro']
+    ),
     chatLimits: [
         {
             name: 'Kimi K2.5 API',
@@ -396,4 +393,25 @@ export const kimiK25Model: ModelProfile = {
             content: 'Kimi K2.5 marks a pivotal moment: the commoditization of agentic intelligence. While GPT-5.2 remains the Scientist for abstract reasoning and Claude 4.5 Opus the Engineer for precision software work, Kimi has claimed the mantle of Universal Agent. Use Kimi when your work involves researching, browsing, aggregating, and drafting—tasks that benefit from parallel execution and external tool use. Use it when cost efficiency matters: the $0.15 cache-hit pricing enables agentic workflows that would be economically impossible with frontier competitors. Use it for visual coding, document understanding, and any scenario where UI-to-code translation accelerates development. Do not use Kimi for pure mathematical derivation, tasks requiring extreme context coherence beyond 32K tokens, or situations where tool-calling reliability is paramount—Claude remains superior for critical refactoring. The open-weights release matters most for enterprises seeking customization and compliance flexibility, though hardware requirements mean most users will interact via API. Kimi is not just another model; it is a blueprint for the swarm era of AI.',
         },
     ],
+    governance: {
+        lastUpdated: '2026-01-27',
+        dataSources: [
+            {
+                type: 'official',
+                url: 'https://www.kimi.com/blog/kimi-k2-5.html',
+                description: 'Kimi K2.5 Launch Blog',
+            },
+            {
+                type: 'community',
+                url: 'https://huggingface.co/moonshotai/Kimi-K2.5',
+                description: 'HuggingFace Model Card',
+            },
+        ],
+        confidence: {
+            overall: 85,
+            pricing: 100,
+            benchmarks: 85, // Community verified but new
+            features: 90,
+        },
+    },
 }

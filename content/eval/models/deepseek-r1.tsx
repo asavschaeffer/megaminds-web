@@ -1,4 +1,6 @@
+import React from 'react'
 import type { ModelProfile } from '@/lib/models/types'
+import { getModelPricingFromReference, mergePricingData } from '@/lib/models/utils'
 import { AbbrSidenote } from '@/components/shared/sidenote'
 
 export const deepseekR1: ModelProfile = {
@@ -69,14 +71,10 @@ export const deepseekR1: ModelProfile = {
     text:
       "DeepSeek-R1 landed on January 20, 2025 like a pricing nuke. While OpenAI's o1 dominated reasoning tasks at $15/million tokens, DeepSeek offered comparable performance for $0.55. That's not a typo. What makes this more remarkable: DeepSeek is a hedge fund skunkworks project that trained R1 for roughly $5-6 million — a fraction of what competitors spend. The model uses pure reinforcement learning (no supervised fine-tuning) to generate visible chain-of-thought reasoning, meaning you can actually watch it think. For developers building agents, math tutors, or code assistants, R1 became the obvious choice overnight. It's not perfect — the reasoning can get chatty, and it lacks vision — but it fundamentally reset expectations for what \"expensive\" means in AI.",
   },
-  pricingData: {
-    baseModel: { name: 'DeepSeek-R1', input: 0.55, output: 2.19, provider: 'DeepSeek API' },
-    competitors: [
-      { name: 'OpenAI o1', input: 15.0, output: 60.0, provider: 'OpenAI' },
-      { name: 'GPT-4o', input: 2.5, output: 10.0, provider: 'OpenAI' },
-      { name: 'Claude 3.5 Sonnet', input: 3.0, output: 15.0, provider: 'Anthropic' },
-    ],
-  },
+  pricingData: mergePricingData(
+    getModelPricingFromReference('deepseek-r1'),
+    ['gpt-4-o', 'claude-3-5-sonnet']
+  ),
   chatLimits: [
     {
       name: 'DeepSeek',
@@ -534,4 +532,30 @@ export const deepseekR1: ModelProfile = {
       ),
     },
   ],
+  governance: {
+    lastUpdated: '2025-01-20',
+    dataSources: [
+      {
+        type: 'official',
+        url: 'https://api-docs.deepseek.com',
+        description: 'DeepSeek API Docs',
+      },
+      {
+        type: 'paper',
+        url: 'https://arxiv.org/abs/2501.12948',
+        description: 'DeepSeek-R1 Technical Report',
+      },
+      {
+        type: 'weights',
+        url: 'https://huggingface.co/deepseek-ai/DeepSeek-R1',
+        description: 'HuggingFace Model Weights',
+      },
+    ],
+    confidence: {
+      overall: 95,
+      pricing: 100,
+      benchmarks: 95,
+      features: 90,
+    },
+  },
 }

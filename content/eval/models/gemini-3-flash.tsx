@@ -1,4 +1,6 @@
+import React from 'react'
 import type { ModelProfile } from '@/lib/models/types'
+import { getModelPricingFromReference, mergePricingData } from '@/lib/models/utils'
 import { GlossarySidenote, AbbrSidenote } from '@/components/shared/sidenote'
 
 export const gemini3Flash: ModelProfile = {
@@ -167,14 +169,10 @@ export const gemini3Flash: ModelProfile = {
       url: 'https://x.com/0xFridgee/status/2016653693924626687',
     },
   ],
-  pricingData: {
-    baseModel: { name: 'Gemini 3 Flash', input: 0.5, output: 3.0, provider: 'Google AI Studio' },
-    competitors: [
-      { name: 'GPT-5.2', input: 1.0, output: 6.0, provider: 'OpenAI' },
-      { name: 'Claude Opus 4.5', input: 3.0, output: 15.0, provider: 'Anthropic' },
-      { name: 'Gemini 3 Pro', input: 2.0, output: 12.0, provider: 'Google AI Studio' },
-    ],
-  },
+  pricingData: mergePricingData(
+    getModelPricingFromReference('gemini-3-flash'),
+    ['gpt-5-2', 'claude-opus-4-5', 'gemini-3-pro']
+  ),
   chatLimits: [
     {
       name: 'Gemini',
@@ -372,4 +370,26 @@ export const gemini3Flash: ModelProfile = {
       ),
     },
   ],
+
+  governance: {
+    lastUpdated: '2025-12-18',
+    dataSources: [
+      {
+        type: 'official',
+        url: 'https://ai.google.dev/gemini-api/docs/models/gemini-3',
+        description: 'Google AI Studio Model Docs',
+      },
+      {
+        type: 'blog',
+        url: 'https://blog.google/products-and-platforms/products/gemini/gemini-3-flash',
+        description: 'Gemini 3 Flash Launch Post',
+      },
+    ],
+    confidence: {
+      overall: 95,
+      pricing: 100,
+      benchmarks: 90,
+      features: 95,
+    },
+  },
 }

@@ -1,4 +1,5 @@
 import type { ModelLinkTypeId } from '@/lib/models/link-types'
+import React from 'react'
 import type { ModelProfile } from '@/lib/models/types'
 import { MODEL_LINK_TYPES } from '@/lib/models/link-types'
 import { GlossarySidenote } from '@/components/shared/sidenote'

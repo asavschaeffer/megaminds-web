@@ -94,6 +94,16 @@ export const MODEL_PRICING_REFERENCES: Record<string, ModelPricingReference> = {
     unit: 'per million tokens',
     lastUpdated: '2025-12-01',
   },
+  'deepseek-r1': {
+    id: 'deepseek-r1',
+    name: 'DeepSeek R1',
+    provider: 'DeepSeek',
+    input: 0.55,
+    output: 2.19,
+    currency: 'USD',
+    unit: 'per million tokens',
+    lastUpdated: '2025-01-20',
+  },
 }
 
 export function getModelPricing(modelId: string): ModelPricingReference | undefined {
