@@ -2,6 +2,7 @@ import type { ModelLinkTypeId } from '@/lib/models/link-types'
 import type { ModelProfile } from '@/lib/models/types'
 import { MODEL_LINK_TYPES } from '@/lib/models/link-types'
 import { AbbrSidenote } from '@/components/shared/sidenote'
+import { getModelPricingFromReference, mergePricingData } from '@/lib/models/utils'
 
 const templateLinks = (Object.keys(MODEL_LINK_TYPES) as ModelLinkTypeId[]).reduce(
   (acc, id) => {
@@ -18,26 +19,17 @@ export const templateModel: ModelProfile = {
     family: 'Model Family',
     organization: 'Organization Name',
     releaseDate: '2025-01-01',
-    releaseDateDisplay: 'January 2025',
     identity:
       'One-sentence identity that captures why this model matters and who it is for.',
     tagIds: [
-      // Capability (choose 2-5)
       'reasoning',
       'coding',
-      // Modality (choose 1-3)
       'text',
-      // Architecture (optional)
-      // Licensing (choose 1-2)
       'proprietary',
-      // Size/Performance (choose 1-2)
       'medium',
-      // Context (choose 1)
       'medium-context',
-      // Deployment (choose 1-2)
       'cloud',
       'api',
-      // Output (optional)
       'output-8k',
     ],
     tags: ['X Parameters', 'Y Context'],
@@ -62,15 +54,12 @@ export const templateModel: ModelProfile = {
   },
   intro: {
     text:
-      'Use the intro to set the scene: launch context, why it is notable, and what makes it different.',
+      'Use this intro to set the scene: launch context, why it is notable, and what makes it different.',
   },
-  pricingData: {
-    baseModel: { name: 'Model Name', input: 1.0, output: 3.0 },
-    competitors: [
-      { name: 'Competitor A', input: 5.0, output: 15.0 },
-      { name: 'Competitor B', input: 2.5, output: 10.0 },
-    ],
-  },
+  pricingData: mergePricingData(
+    { name: 'Model Name', input: 1.0, output: 3.0 },
+    ['gemini-3-pro', 'gpt-5-1', 'claude-opus-4-5']
+  ),
   chatLimits: [
     {
       name: 'Model Chat',
@@ -113,10 +102,6 @@ export const templateModel: ModelProfile = {
     },
   ],
   sections: [
-    // ═══════════════════════════════════════════════════════════════════════════
-    // CORE SECTIONS — Use these as the backbone for most reports
-    // ═══════════════════════════════════════════════════════════════════════════
-
     {
       id: 'why-it-matters',
       title: 'Why It Matters',
@@ -133,7 +118,6 @@ export const templateModel: ModelProfile = {
         author: 'Notable voice',
         content: 'A featured quote that anchors the narrative.',
         date: '2025-01',
-        dateDisplay: 'Jan 2025',
       },
     },
     {
@@ -197,8 +181,8 @@ export const templateModel: ModelProfile = {
       expandables: [
         {
           title: 'Fine-tuning',
-          preview: 'How to adapt the model for a specific domain',
-          content: 'Outline the recommended fine-tuning workflow and constraints.',
+          preview: 'How to adapt model for a specific domain',
+          content: 'Outline recommended fine-tuning workflow and constraints.',
         },
         {
           title: 'Inference Optimization',
@@ -213,11 +197,6 @@ export const templateModel: ModelProfile = {
       content:
         'Mandatory section: summarize who should use this model, when, and why. Be decisive.',
     },
-
-    // ═══════════════════════════════════════════════════════════════════════════
-    // CAPABILITY SECTIONS — Pick relevant ones based on model strengths
-    // ═══════════════════════════════════════════════════════════════════════════
-
     {
       id: 'multimodality',
       title: 'Native Multimodality',
@@ -232,8 +211,6 @@ export const templateModel: ModelProfile = {
       subtitle: 'Built to Do, Not Just Chat',
       content:
         'Cover planning, multi-step execution, and tool use. Reference benchmarks like Vending-Bench 2. Discuss Deep Think or chain-of-thought modes if applicable.',
-      // Optional: include socialData for an inline tweet
-      // socialData: { type: 'tweet', author: '...', handle: '...', content: '...', date: '...', url: '...' },
     },
     {
       id: 'context',
@@ -248,17 +225,34 @@ export const templateModel: ModelProfile = {
       subtitle: 'Capabilities and Consistency for Developers',
       content:
         'Cover coding benchmarks (LiveCodeBench, SWE-bench), real-world consistency, instruction following, and any known failure modes in code generation.',
-      // Optional: include socialData for developer testimonials
-      // socialData: { type: 'tweet', author: '...', handle: '...', content: '...', date: '...', url: '...' },
     },
     {
       id: 'personality',
       title: 'Personality & Safety',
-      subtitle: 'The Model\'s Character and Guardrails',
+      subtitle: "The Model's Character and Guardrails",
       content:
-        'Describe the model\'s tone, persona quirks, refusal patterns, and any "mental" bugs (loops, self-deprecation, evaluation paranoia). Include safety alignment notes.',
-      // Optional: include socialData for user reactions
-      // socialData: { type: 'tweet', author: '...', handle: '...', content: '...', date: '...', url: '...' },
+        "Describe model's tone, persona quirks, refusal patterns, and any 'mental' bugs (loops, self-deprecation, evaluation paranoia). Include safety alignment notes.",
     },
   ],
+  governance: {
+    lastUpdated: '2025-01-01',
+    dataSources: [
+      {
+        type: 'official',
+        url: 'https://example.com/official',
+        description: 'Official model documentation and release notes',
+      },
+      {
+        type: 'benchmark',
+        url: 'https://example.com/benchmarks',
+        description: 'Public benchmark results and evaluations',
+      },
+    ],
+    confidence: {
+      overall: 85,
+      pricing: 90,
+      benchmarks: 80,
+      features: 85,
+    },
+  },
 }

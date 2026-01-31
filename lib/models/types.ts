@@ -140,6 +140,25 @@ export interface Definition {
 
 export type Glossary = Record<string, Definition>
 
+export interface DataSource {
+  type: string
+  url?: string
+  description?: string
+}
+
+export interface ConfidenceScores {
+  overall?: number
+  pricing?: number
+  benchmarks?: number
+  features?: number
+}
+
+export interface Governance {
+  lastUpdated?: string
+  dataSources?: DataSource[]
+  confidence?: ConfidenceScores
+}
+
 export interface ModelLinks {
   chat?: string
   playground?: string
@@ -199,6 +218,7 @@ export interface ModelProfile {
   glossary?: Glossary
   updatedAt?: string
   author?: string
+  governance?: Governance
 }
 
 export interface ModelHeaderProps {
