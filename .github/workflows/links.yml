@@ -1,0 +1,38 @@
+name: Link Checker
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  link-checker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Install Lychee
+        run: |
+          curl -sSfL https://github.com/lycheeverse/lychee/releases/download/v0.14.3/lychee-v0.14.3-x86_64-unknown-linux-gnu.tar.gz | tar -xz
+          sudo mv lychee /usr/local/bin/
+
+      - name: Check internal links
+        run: lychee --base dist --exclude-all-private --no-progress --timeout 30 .
+        continue-on-error: true
+
+      - name: Check external links
+        run: lychee --base dist --exclude-all-private --exclude-mail --no-progress --timeout 60 --max-concurrency 10 --user-agent "Mozilla/5.0" --retry-wait-time 10 .
+        continue-on-error: true

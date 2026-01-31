@@ -34,6 +34,9 @@ Thumbs.db
 # Vercel
 .vercel
 
+# Icons (using Lucide instead)
+public/icons/
+
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
