@@ -31,20 +31,20 @@ const modules = [
         ]
       },
       {
-        title: 'Roleplay', slug: 'roleplay', status: 'coming', bullets: [
+        title: 'Roleplay', slug: 'roleplay', status: 'available', bullets: [
           'you are an expert turbotax accountant who focuses on getting every dime',
           'you are a software engineer with 30 years of experience who hates inefficient code',
           'in the style of Picasso..',
         ]
       },
       {
-        title: 'Examples', slug: 'examples', status: 'coming', bullets: [
+        title: 'Examples', slug: 'examples', status: 'available', bullets: [
           'make me a multiplication table like in school i want it to look like this:',
           'my poetry sucks can you make it more like this [attached file]',
         ]
       },
       {
-        title: 'Prompt a Prompt', slug: 'prompt-a-prompt', status: 'coming', bullets: [
+        title: 'Prompt a Prompt', slug: 'prompt-a-prompt', status: 'available', bullets: [
           '1) here is my goal what information did i forget I need?',
           '2) with this information who are the people i need to ask?',
           '3) give me a prompt to ask this person this information',
@@ -52,7 +52,7 @@ const modules = [
         ]
       },
       {
-        title: "Don't Overthink It", slug: 'dont-overthink', status: 'coming', bullets: [
+        title: "Don't Overthink It", slug: 'dont-overthink', status: 'available', bullets: [
           'just do the easiest laziest thing',
           "it'll probably work",
           "at the very least u can read the llms thoughts and improve your prompt from noticing how it doesn't read your mind",
@@ -60,7 +60,7 @@ const modules = [
         ]
       },
       {
-        title: 'Multimodeling', slug: 'multimodeling', status: 'coming', bullets: [
+        title: 'Multimodeling', slug: 'multimodeling', status: 'available', bullets: [
           "take a model's response that you don't understand, make a new chat, get a better understanding, formulate a better prompt",
         ]
       },
@@ -72,12 +72,12 @@ const modules = [
     description: 'Why your chat goes off the rails and what to do about it',
     lessons: [
       {
-        title: 'Output is Determined by Input', slug: 'output-determined-by-input', status: 'coming', bullets: [
+        title: 'Output is Determined by Input', slug: 'output-determined-by-input', status: 'available', bullets: [
           'llm is a machine learning algorithm - its output is determined by the input',
         ]
       },
       {
-        title: 'The Long Prompt Problem', slug: 'long-prompt-problem', status: 'coming', bullets: [
+        title: 'The Long Prompt Problem', slug: 'long-prompt-problem', status: 'available', bullets: [
           'the input is your prompt, but remember there is no such thing as memory its all one long prompt',
           'every time you get a bad response and you say no i dont like that do it like this, you are adding to the actual payload the llm is receiving',
           'TODO add diagram of a long series of failures and a llm reading through all of those to try and figure out what you fuckin want',
@@ -85,12 +85,12 @@ const modules = [
         ]
       },
       {
-        title: 'Slipping Into the Basin', slug: 'slipping-into-basin', status: 'coming', bullets: [
+        title: 'Slipping Into the Basin', slug: 'slipping-into-basin', status: 'available', bullets: [
           'its trained on the whole internet remember? so its fine tuned to think like a PhD, but every time it gets something wrong and you get mad, it slips towards the basin of',
         ]
       },
       {
-        title: 'Start a New Chat', slug: 'start-new-chat', status: 'coming', bullets: [
+        title: 'Start a New Chat', slug: 'start-new-chat', status: 'available', bullets: [
           'start a new chat start a new chat start a new chat start a new chat',
         ]
       },
@@ -101,13 +101,13 @@ const modules = [
     title: 'Tools',
     description: 'Built-in capabilities beyond chat',
     lessons: [
-      { title: 'Web Search', slug: 'web-search', status: 'coming' },
+      { title: 'Web Search', slug: 'web-search', status: 'available' },
       {
-        title: 'Canvas Mode', slug: 'canvas-mode', status: 'coming', bullets: [
+        title: 'Canvas Mode', slug: 'canvas-mode', status: 'available', bullets: [
           'are you making a spreadsheet? tell gemini to make a google sheet',
           'oftentimes the best document is not a document its a webpage',
           'its version controlled',
-          'it rapes your context',
+          'it consumes your context',
         ]
       },
       { title: 'Imagen', slug: 'imagen', status: 'coming' },

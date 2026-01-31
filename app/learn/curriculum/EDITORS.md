@@ -29,7 +29,19 @@ These URLs have been used in the curriculum and should be periodically checked f
 |------|-----|---------|
 | Neural Networks: Zero to Hero (course) | https://karpathy.ai/zero-to-hero.html | Lesson 1 (ML basics), Lesson 2 (Shakespeare GPT) |
 | Intro to Large Language Models (talk) | https://www.youtube.com/watch?v=zjkBMFhNj_g | Lesson 1 ("LLM is two files", compression) |
-| GPT from scratch (video) | _Same as Zero to Hero series_ | Lesson 2 (stochastic parrot demo). **NOTE:** The original notes cite this as a separate thing but it's part of the Zero to Hero series. |
+| **The Unreasonable Effectiveness of RNNs** (blog, 2015) | https://karpathy.github.io/2015/05/21/rnn-effectiveness/ | Lesson 2 — **this is the actual source of the Shakespeare char-RNN output**. The famous generated text starts with PANDARUS. See "Fabricated Content" section below for the real output. |
+| nanoGPT (GitHub) | https://github.com/karpathy/nanoGPT | The transformer version of the Shakespeare demo. Part of the Zero to Hero series. |
+
+### Ilya Sutskever — Dwarkesh Podcast
+
+| What | URL | Used in | Status |
+|------|-----|---------|--------|
+| "Building AGI, Alignment, Spies, Microsoft, & Enlightenment" (March 2023) | https://www.youtube.com/watch?v=Yf1o0TQzry8 | Lesson 1 (compression), Lesson 2 | **NEEDS MANUAL VERIFICATION** — URL from training data, may be slightly off. Also try: https://www.dwarkeshpatel.com/p/ilya-sutskever |
+
+Key quotes (paraphrased — verify against transcript):
+- "Prediction is compression. And the better the prediction, the better the compression. And the better the compression, the more you understand the data."
+- "What does it mean to predict the next token well? It means you understand the underlying reality that led to the creation of that token."
+- The detective novel thought experiment: predicting the final reveal tokens requires understanding the mystery, not just surface patterns.
 
 ### Anthropic Research
 
@@ -40,11 +52,13 @@ These URLs have been used in the curriculum and should be periodically checked f
 
 ### @repligate (Twitter/X)
 
+**STATUS: ALL THREE URLs NEED MANUAL VERIFICATION.** Twitter/X blocks automated fetching. Open each in a browser where you're logged in. If any 404, search X with `from:repligate "keyword"`.
+
 | What | URL | Used in | Status |
 |------|-----|---------|--------|
-| "This is what LLMs experience during training" | https://x.com/repligate/status/1945245561394790496 | Lesson 2 | From original notes [5]. Verify URL still works. |
-| "How information flows through transformers" | https://x.com/repligate/status/1965960676104712451 | Lesson 2 (references section), how-llms-work page | URL needs verification. |
-| On LLM experience under RLHF | https://x.com/repligate/status/1988260847324405859 | Lesson 3 | From original notes [3]. Verify. |
+| "This is what LLMs experience during training" | https://x.com/repligate/status/1945245561394790496 | Lesson 2 | From original notes [5]. **VERIFY IN BROWSER.** |
+| "How information flows through transformers" | https://x.com/repligate/status/1965960676104712451 | Lesson 2 (references section), how-llms-work page | **VERIFY IN BROWSER.** |
+| On LLM experience under RLHF | https://x.com/repligate/status/1988260847324405859 | Lesson 3 | From original notes [3]. **VERIFY IN BROWSER.** |
 
 ### Hugging Face
 
@@ -54,10 +68,12 @@ These URLs have been used in the curriculum and should be periodically checked f
 
 ### Other Twitter/X
 
+**Also need manual verification — same Twitter auth issue.**
+
 | What | URL | Used in | Status |
 |------|-----|---------|--------|
-| @Ninjascalp — word vector clustering visualization | https://x.com/Ninjascalp/status/1812273611711099268 | Not yet cited inline | From original notes. Shows vector space word clustering. Good for Lesson 2 or a future vectors lesson. |
-| @viemccoy — latent space cartography | https://x.com/viemccoy/status/2008361819216445596 | Not yet cited inline | From original notes [4]. "Empiricism or red teaming or latent space cartography." Good for Module 2 (Latent Space). |
+| @Ninjascalp — word vector clustering visualization | https://x.com/Ninjascalp/status/1812273611711099268 | Not yet cited inline | From original notes. **VERIFY IN BROWSER.** |
+| @viemccoy — latent space cartography | https://x.com/viemccoy/status/2008361819216445596 | Not yet cited inline | From original notes [4]. Full quote: "While unknowable, I should clarify that I think we can begin to sketch a map of proto-superintelligence that will map roughly onto regions of actual ASI (like a low-bit version) by doing something like empiricism or red teaming or latent space cartography." **VERIFY IN BROWSER.** |
 
 ---
 
