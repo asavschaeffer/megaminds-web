@@ -7,13 +7,13 @@ export const metadata = {
 
 const videos = {
   ours: [
-    {
-      title: 'Introduction to Megaminds',
-      description: 'Who we are, what we do, and why AI evaluation matters.',
-      thumbnail: '/images/video-placeholder.jpg',
-      duration: '5:00',
-      href: '#',
-    },
+    // {
+    //   title: 'Introduction to Megaminds',
+    //   description: 'Who we are, what we do, and why AI evaluation matters.',
+    //   thumbnail: '/images/video-placeholder.jpg',
+    //   duration: '5:00',
+    //   href: '#',
+    // },
   ],
   curated: [
     {
