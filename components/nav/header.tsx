@@ -21,25 +21,18 @@ const navigation: Record<string, NavSection> = {
   eval: {
     label: 'Eval',
     items: [
-      { label: 'Model Arena', href: '/eval/arena', description: 'Watch models compete in agentic scenarios' },
+      { label: 'Model Picker', href: '/tools/model-picker', description: 'Find the right model for your task' },
       { label: 'Benchmarks', href: '/eval/benchmarks', description: 'Our evaluation methodology and results' },
       { label: 'Model Reports', href: '/eval/models', description: 'Deep dives on individual models' },
+      { label: 'LLM D&D', href: 'https://llmdnd.net', external: true, description: 'Watch models compete in agentic scenarios' },
     ]
   },
   tools: {
     label: 'Tools',
     items: [
-      { label: 'Model Picker', href: '/tools/model-picker', description: 'Find the right model for your task' },
-      { label: 'Prompt Library', href: '/tools/prompts', description: 'Curated prompts by category' },
-      { label: 'Submit a Prompt', href: '/tools/submit', description: 'Contribute to the library' },
-    ]
-  },
-  build: {
-    label: 'Build',
-    items: [
-      { label: 'LLM D&D', href: 'https://llmdnd.net', external: true, description: 'Agentic roleplay arena' },
-      { label: 'Yes Chef', href: '/build/yes-chef', description: 'AI cooking assistant' },
-      { label: 'Photo Organizer', href: '/build/photo-organizer', description: 'AI-powered photo management' },
+      { label: 'Inbox Cleanup', href: '/tools/inbox-cleanup', description: 'Fast, private email triage' },
+      { label: 'Heard Chef', href: '/tools/heard-chef', description: 'FaceTime AI for your pantry & recipes' },
+      { label: 'Photo Organizer', href: '/tools/photo-organizer', description: 'Organize, dedupe, remove objects' },
     ]
   },
   learn: {
@@ -48,6 +41,7 @@ const navigation: Record<string, NavSection> = {
       { label: 'Curriculum', href: '/learn/curriculum', description: 'How LLMs work, from basics to advanced' },
       { label: 'Articles', href: '/learn/articles', description: 'Deep dives and analysis' },
       { label: 'Videos', href: '/learn/videos', description: 'Curated video content' },
+      { label: 'Prompt Library', href: '/tools/prompts', description: 'Curated prompts by category' },
     ]
   },
 }

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { GraduationCap, FileText, Video } from 'lucide-react'
+import { GraduationCap, FileText, Video, Library } from 'lucide-react'
 
 export const metadata = {
   title: 'Learn | Megaminds',
@@ -16,7 +16,7 @@ export default function LearnPage() {
           how they think, where they excel, and where they fail.
         </p>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <LearnCard
             icon={<GraduationCap className="w-6 h-6" />}
             title="Curriculum"
@@ -34,6 +34,12 @@ export default function LearnPage() {
             title="Videos"
             description="Curated video content—ours and others. Visual explanations of complex concepts."
             href="/learn/videos"
+          />
+          <LearnCard
+            icon={<Library className="w-6 h-6" />}
+            title="Prompt Library"
+            description="Curated prompts by category. Finance, travel, health, business, and more."
+            href="/tools/prompts"
           />
         </div>
 

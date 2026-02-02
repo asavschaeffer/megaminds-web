@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Play, BarChart3, FileText } from 'lucide-react'
+import { ArrowRight, Play, BarChart3, FileText, Compass } from 'lucide-react'
 
 export const metadata = {
   title: 'Eval | Megaminds',
@@ -19,10 +19,16 @@ export default function EvalPage() {
 
         <div className="mt-12 grid gap-6">
           <EvalCard
+            icon={<Compass className="w-5 h-5" />}
+            title="Model Picker"
+            description="Answer a few questions about your task and get a model recommendation backed by our eval data."
+            href="/tools/model-picker"
+          />
+          <EvalCard
             icon={<Play className="w-5 h-5" />}
-            title="Model Arena"
-            description="Watch models compete in LLM D&D scenarios. Theory of mind, consistency, creative problem solving—all observable."
-            href="/eval/arena"
+            title="LLM D&D"
+            description="Watch models compete in agentic roleplay scenarios. Theory of mind, consistency, creative problem solving—all observable."
+            href="/eval/llmdnd"
           />
           <EvalCard
             icon={<BarChart3 className="w-5 h-5" />}

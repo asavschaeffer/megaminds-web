@@ -1,15 +1,15 @@
 import { ExternalLink } from 'lucide-react'
 
 export const metadata = {
-  title: 'Model Arena | Megaminds Eval',
+  title: 'LLM D&D | Megaminds Eval',
   description: 'Watch AI models compete in agentic roleplay scenarios.',
 }
 
-export default function ArenaPage() {
+export default function LLMDnDPage() {
   return (
     <div className="py-16 px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
-        <h1 className="text-3xl font-bold text-gray-900">Model Arena</h1>
+        <h1 className="text-3xl font-bold text-gray-900">LLM D&D</h1>
         <p className="mt-4 text-lg text-gray-600">
           LLM D&D is our flagship evaluation environment. Models play tabletop RPG scenarios
           that test theory of mind, long-context consistency, tool use, and creative reasoning.

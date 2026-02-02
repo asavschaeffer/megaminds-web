@@ -47,7 +47,7 @@ export default function Home() {
             <ValueCard
               icon={<Wrench className="w-6 h-6" />}
               title="Tools"
-              description="Model Picker, prompt library, and workflows powered by our evaluation data."
+              description="Apps we built to manage your inbox, kitchen, and photo library with AI."
               href="/tools"
             />
             <ValueCard

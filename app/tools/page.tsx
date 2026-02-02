@@ -1,9 +1,9 @@
 import Link from 'next/link'
-import { Compass, Library, PlusCircle } from 'lucide-react'
+import { Compass, Mail, ChefHat, Image } from 'lucide-react'
 
 export const metadata = {
   title: 'Tools | Megaminds',
-  description: 'AI tools powered by our evaluation data.',
+  description: 'AI-powered apps we built to manage your inbox, kitchen, and photo library.',
 }
 
 export default function ToolsPage() {
@@ -12,11 +12,11 @@ export default function ToolsPage() {
       <div className="mx-auto max-w-4xl">
         <h1 className="text-3xl font-bold text-gray-900">Tools</h1>
         <p className="mt-4 text-lg text-gray-600">
-          Practical tools powered by our evaluation data. Find the right model,
-          discover effective prompts, and contribute to the community library.
+          Apps we built to solve real problems. Try them out—and if you want
+          something custom, <Link href="/consulting" className="text-gray-900 underline hover:no-underline">let's talk</Link>.
         </p>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
           <ToolCard
             icon={<Compass className="w-6 h-6" />}
             title="Model Picker"
@@ -24,16 +24,22 @@ export default function ToolsPage() {
             href="/tools/model-picker"
           />
           <ToolCard
-            icon={<Library className="w-6 h-6" />}
-            title="Prompt Library"
-            description="Curated prompts organized by category. Finance, travel, health, business, and more."
-            href="/tools/prompts"
+            icon={<Mail className="w-6 h-6" />}
+            title="Inbox Cleanup"
+            description="Lightning-fast, privacy-first email triage. Categorize and batch-archive thousands of emails."
+            href="/tools/inbox-cleanup"
           />
           <ToolCard
-            icon={<PlusCircle className="w-6 h-6" />}
-            title="Submit a Prompt"
-            description="Contribute your own prompts to the community library."
-            href="/tools/submit"
+            icon={<ChefHat className="w-6 h-6" />}
+            title="Heard Chef"
+            description="FaceTime AI for your pantry & recipes. Call, text, or video chat while you cook."
+            href="/tools/heard-chef"
+          />
+          <ToolCard
+            icon={<Image className="w-6 h-6" />}
+            title="Photo Organizer"
+            description="Rename, organize, dedupe, and remove objects from your photos with AI assistance."
+            href="/tools/photo-organizer"
           />
         </div>
       </div>

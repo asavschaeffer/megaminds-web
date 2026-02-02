@@ -21,7 +21,7 @@ export default function CommunityPage() {
             icon={<Lightbulb className="w-6 h-6" />}
             title="Submit Prompts"
             description="Share prompts that have worked well for you. If they meet our standards, they'll be added to the library with credit."
-            href="/tools/submit"
+            href="/community/submit"
             cta="Submit a prompt"
           />
           <ContributeCard

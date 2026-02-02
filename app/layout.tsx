@@ -11,7 +11,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Megaminds | AI Evaluation & Cognitive Architecture',
+  title: 'Megaminds | AI Eval, Tools & Education',
   description: 'Match minds to models to workflows to outcomes. AI evaluation, tools, and consulting.',
   manifest: '/manifest.json',
   icons: {

@@ -16,7 +16,7 @@ const faqItems = [
   },
   {
     question: 'I have a great prompt I want to share.',
-    answer: 'Excellent! You can contribute to our growing library by using our [prompt submission form](/tools/submit).',
+    answer: 'Excellent! You can contribute to our growing library by using our [prompt submission form](/community/submit).',
   },
   {
     question: 'I found a bug or have a feature request for the website.',

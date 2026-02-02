@@ -5,17 +5,18 @@ const footerLinks = {
   eval: {
     title: 'Eval',
     links: [
-      { label: 'Model Arena', href: '/eval/arena' },
+      { label: 'Model Picker', href: '/tools/model-picker' },
       { label: 'Benchmarks', href: '/eval/benchmarks' },
       { label: 'Model Reports', href: '/eval/models' },
+      { label: 'LLM D&D', href: 'https://llmdnd.net' },
     ]
   },
   tools: {
     title: 'Tools',
     links: [
-      { label: 'Model Picker', href: '/tools/model-picker' },
-      { label: 'Prompt Library', href: '/tools/prompts' },
-      { label: 'Submit a Prompt', href: '/tools/submit' },
+      { label: 'Inbox Cleanup', href: '/tools/inbox-cleanup' },
+      { label: 'Heard Chef', href: '/tools/heard-chef' },
+      { label: 'Photo Organizer', href: '/tools/photo-organizer' },
     ]
   },
   learn: {
@@ -24,6 +25,7 @@ const footerLinks = {
       { label: 'Curriculum', href: '/learn/curriculum' },
       { label: 'Articles', href: '/learn/articles' },
       { label: 'Videos', href: '/learn/videos' },
+      { label: 'Prompt Library', href: '/tools/prompts' },
     ]
   },
   company: {
