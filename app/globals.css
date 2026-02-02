@@ -100,8 +100,6 @@
   html {
     scroll-behavior: smooth;
   }
-  * {
-  }
   body {
     @apply bg-white text-foreground antialiased;
   }
