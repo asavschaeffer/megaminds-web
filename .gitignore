@@ -34,8 +34,8 @@ Thumbs.db
 # Vercel
 .vercel
 
-# Icons (using Lucide instead)
-public/icons/
+# Icons (using Lucide instead - but keep PWA/favicon icons)
+# public/icons/ is used for PWA icons, specific Lucide icons should be ignored if needed
 
 # TypeScript
 *.tsbuildinfo
