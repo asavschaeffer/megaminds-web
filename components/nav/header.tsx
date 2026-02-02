@@ -67,7 +67,6 @@ export function Header() {
                 alt="Megaminds Logo"
                 width={150}
                 height={40}
-                priority
               />
             </Link>
           </div>
