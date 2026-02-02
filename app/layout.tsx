@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   title: 'Megaminds | AI Evaluation & Cognitive Architecture',
   description: 'Match minds to models to workflows to outcomes. AI evaluation, tools, and consulting.',
   manifest: '/manifest.json',
+  icons: {
+    icon: '/icon.png',
+  },
 }
 
 export const viewport: Viewport = {
