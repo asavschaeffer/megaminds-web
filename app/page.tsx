@@ -14,7 +14,7 @@ export default function Home() {
             AI fluency for everyone
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            Start from zero. Stay up to date. Build solutions yourself—or with our help.
+            Start from zero. Stay up to date. Build solutions yourself—or leave it to us.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <Link
