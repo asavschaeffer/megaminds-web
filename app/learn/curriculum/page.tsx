@@ -203,8 +203,7 @@ export default function CurriculumPage() {
       <div className="mx-auto max-w-3xl">
         <h1 className="text-3xl font-bold text-gray-900">AI Curriculum</h1>
         <p className="mt-4 text-gray-600">
-          A structured path from fundamentals to applied practice. No prerequisites—
-          just curiosity about how these systems actually work.
+          A structured path from fundamentals to applied practice. Go from "what is AI?" to using it confidently.
         </p>
 
         <div className="mt-12 space-y-12">

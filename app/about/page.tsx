@@ -14,16 +14,15 @@ export default function AboutPage() {
 
         <div className="mt-8 prose prose-gray max-w-none">
           <p className="text-lg text-gray-600">
-            We're building the bridge between humans and AI systems. Not through hype,
-            but through rigorous evaluation, practical tools, and genuine education.
+            We're building the bridge between humans and AI systems. Not through hype or hot takes,
+            but through rigorous evaluation, tools that actually work, and education that sticks.
           </p>
 
           <h2 className="text-xl font-semibold text-gray-900 mt-12">What We Do</h2>
           <p className="text-gray-600">
-            Megaminds operates at the intersection of AI evaluation, education, and consulting.
-            We believe that using AI effectively requires understanding how it actually works—not
-            just which buttons to press, but the underlying mechanics, failure modes, and
-            strengths of different systems.
+            We run models through real-world tests, build tools we actually use ourselves,
+            and teach what we've learned the hard way. No snake oil, no buzzwords—just
+            practical knowledge you can apply immediately.
           </p>
 
           <h2 className="text-xl font-semibold text-gray-900 mt-8">Our Philosophy</h2>
@@ -50,12 +49,12 @@ export default function AboutPage() {
             <TeamMember
               name="Val"
               role="Co-founder"
-              bio="Background in business strategy and operations. Focused on making AI accessible to professionals and organizations."
+              bio="Former operations consultant who got tired of AI demos that didn't work in reality. Now focused on making AI accessible to people who have jobs to do."
             />
             <TeamMember
               name="Asa"
               role="Co-founder"
-              bio="Cognitive Systems degree from UBC. Focused on AI evaluation, human-AI interaction design, and building tools that make the complex familiar."
+              bio="Cognitive systems background, but more importantly: obsessed with making complex things feel obvious. Believes good AI tools should feel like an extension of your own thinking."
             />
           </div>
         </div>
@@ -96,8 +95,7 @@ export default function AboutPage() {
         <div className="mt-16 p-6 bg-gray-50 rounded-lg">
           <h2 className="font-semibold text-gray-900">Want to work with us?</h2>
           <p className="text-sm text-gray-600 mt-2">
-            Whether you're an individual looking to level up your AI skills or an organization
-            seeking strategic guidance, we'd love to hear from you.
+            Have a problem that might need AI, but not sure where to start? That's literally what we're here for.
           </p>
           <Link
             href="/consulting/intake"

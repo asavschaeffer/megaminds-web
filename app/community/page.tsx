@@ -10,10 +10,10 @@ export default function CommunityPage() {
   return (
     <div className="py-16 px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
-        <h1 className="text-3xl font-bold text-gray-900">The Community</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Built by users like you</h1>
         <p className="mt-4 text-lg text-gray-600">
-          Megaminds is built on community knowledge. The best prompts, the sharpest
-          model insights, the most useful workflows—they come from real people doing real work.
+          The best prompts, model insights, and workflows? They come from people actually doing the work.
+          This is where we collect and share that knowledge.
         </p>
 
         <div className="mt-12 grid gap-6 md:grid-cols-2">
@@ -41,17 +41,17 @@ export default function CommunityPage() {
             <Step
               number={1}
               title="Submit"
-              description="Share your prompt, tool recommendation, or content suggestion through our forms."
+              description="Got something that works? Share it."
             />
             <Step
               number={2}
               title="Review"
-              description="Our team reviews submissions for quality, accuracy, and usefulness."
+              description="We'll test it and make sure it's solid."
             />
             <Step
               number={3}
               title="Publish"
-              description="Accepted contributions are added to the site with full credit to the contributor."
+              description="If it passes muster, it goes live with your name on it."
             />
           </div>
         </div>
@@ -63,11 +63,8 @@ export default function CommunityPage() {
             <h2 className="text-lg font-semibold text-gray-900">Top Contributors</h2>
           </div>
           <p className="text-sm text-gray-600 mb-4">
-            Contributors with the most accepted submissions. Coming soon as we build the community.
+            This leaderboard will showcase our most active contributors. Want to be on it? Start submitting.
           </p>
-          <div className="text-sm text-gray-400">
-            Leaderboard launching soon...
-          </div>
         </div>
 
         {/* Community Guidelines */}
@@ -80,7 +77,7 @@ export default function CommunityPage() {
             </li>
             <li className="flex gap-2">
               <span className="text-gray-400">•</span>
-              <span><strong>Test before submitting:</strong> Make sure your prompts work across the models you claim.</span>
+              <span><strong>Test before submitting:</strong> Make sure it actually works (we'll check too).</span>
             </li>
             <li className="flex gap-2">
               <span className="text-gray-400">•</span>

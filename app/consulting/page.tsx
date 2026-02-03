@@ -12,9 +12,8 @@ export default function ConsultingPage() {
       <div className="mx-auto max-w-4xl">
         <h1 className="text-3xl font-bold text-gray-900">Consulting</h1>
         <p className="mt-4 text-lg text-gray-600">
-          We help you match minds to models to workflows to outcomes.
-          Whether you're an individual looking to integrate AI into your work,
-          or an organization seeking cognitive architecture guidance.
+          Whether you're drowning in options or stuck on your first prompt,
+          we'll find the right approach for your specific situation.
         </p>
 
         <div className="mt-12 grid gap-6 md:grid-cols-2">

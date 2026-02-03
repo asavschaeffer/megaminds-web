@@ -11,24 +11,23 @@ export default function Home() {
       <section className="py-24 px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-            Match minds to models to outcomes
+            AI fluency for everyone
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            We evaluate AI models through rigorous agentic benchmarks, build tools that leverage
-            our findings, and consult on cognitive architecture for individuals and organizations.
+            Start from zero. Stay up to date. Build solutions yourself—or with our help.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <Link
-              href="/consulting/intake"
+              href="/learn/curriculum"
               className="rounded-md bg-gray-900 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 transition-colors"
             >
-              Work with us
+              Start learning
             </Link>
             <Link
-              href="/eval"
+              href="/tools/model-picker"
               className="text-sm font-semibold leading-6 text-gray-900 flex items-center gap-1 hover:text-gray-600 transition-colors"
             >
-              Explore our evals <ArrowRight className="w-4 h-4" />
+              Explore solutions <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -41,25 +40,25 @@ export default function Home() {
             <ValueCard
               icon={<Cpu className="w-6 h-6" />}
               title="Eval"
-              description="Rigorous agentic benchmarks that test what matters: reasoning, consistency, tool use."
+              description="Charting the frontier to keep you informed"
               href="/eval"
             />
             <ValueCard
               icon={<Wrench className="w-6 h-6" />}
               title="Tools"
-              description="Apps we built to manage your inbox, kitchen, and photo library with AI."
+              description="Ready-to-use tools for real problems"
               href="/tools"
             />
             <ValueCard
               icon={<BookOpen className="w-6 h-6" />}
               title="Learn"
-              description="Curriculum on how LLMs work, model landscape breakdowns, and practical guides."
+              description="Understand how AI actually works, then use it effectively"
               href="/learn"
             />
             <ValueCard
               icon={<Users className="w-6 h-6" />}
               title="Consulting"
-              description="Cognitive architecture consulting for individuals and organizations."
+              description="We're with you at every step: Coaching, strategy, workflows, and custom solutions."
               href="/consulting"
             />
           </div>

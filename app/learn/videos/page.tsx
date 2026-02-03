@@ -46,7 +46,7 @@ export default function VideosPage() {
       <div className="mx-auto max-w-4xl">
         <h1 className="text-3xl font-bold text-gray-900">Videos</h1>
         <p className="mt-4 text-gray-600">
-          Visual explanations of complex concepts—our content and curated picks from across the internet.
+          Deep dives from the experts who actually built this stuff.
         </p>
 
         {/* Our Videos */}
