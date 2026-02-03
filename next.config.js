@@ -21,6 +21,11 @@ const nextConfig = {
         hostname: 'raw.githubusercontent.com',
         pathname: '/asavschaeffer/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+        pathname: '/asavschaeffer/heard-iOS/**',
+      },
     ],
   },
 }
