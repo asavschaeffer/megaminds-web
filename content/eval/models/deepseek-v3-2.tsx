@@ -1,8 +1,6 @@
 import type { ModelLinkTypeId } from '@/lib/models/link-types'
-import React from 'react'
 import type { ModelProfile } from '@/lib/models/types'
 import { MODEL_LINK_TYPES } from '@/lib/models/link-types'
-import { GlossarySidenote } from '@/components/shared/sidenote'
 import { mergePricingData, getModelPricingFromReference } from '@/lib/models/utils'
 
 const deepseekLinks: Record<ModelLinkTypeId, string> = {
@@ -25,7 +23,7 @@ export const deepseekV3_2: ModelProfile = {
         nameOrder: 'family-variant-version',
         organization: 'DeepSeek',
         releaseDate: '2025-12-01',
-        identity: 'A powerful open‑source reasoning model that challenges proprietary frontiers with exceptional math and coding capabilities, while balancing efficiency via Mixture‑of‑Experts.',
+        identity: 'A powerful open\u2011source reasoning model that challenges proprietary frontiers with exceptional math and coding capabilities, while balancing efficiency via Mixture\u2011of\u2011Experts.',
         tagIds: [
             'reasoning',
             'coding',
@@ -58,7 +56,7 @@ export const deepseekV3_2: ModelProfile = {
         ],
     },
     intro: {
-        text: 'DeepSeek V3.2 is a landmark open‑source model that delivers GPT‑5‑level reasoning at a fraction of the cost. Built on a sophisticated Mixture‑of‑Experts architecture, it activates only 37B of its 671B parameters per token, achieving exceptional efficiency without sacrificing performance. The model excels in mathematics, coding, and agentic tasks, backed by a dedicated community that celebrates its disruptive potential—even as debates continue about its true frontier status and practical deployment hurdles.',
+        text: 'DeepSeek V3.2 is a landmark open\u2011source model that delivers GPT\u20115\u2011level reasoning at a fraction of the cost. Built on a sophisticated Mixture\u2011of\u2011Experts architecture, it activates only 37B of its 671B parameters per token, achieving exceptional efficiency without sacrificing performance. The model excels in mathematics, coding, and agentic tasks, backed by a dedicated community that celebrates its disruptive potential\u2014even as debates continue about its true frontier status and practical deployment hurdles.',
     },
     pricingData: mergePricingData(
         getModelPricingFromReference('deepseek-v3-2'),
@@ -106,9 +104,9 @@ export const deepseekV3_2: ModelProfile = {
             url: 'https://x.com/robuttal/status/2016602480797257836',
         },
         {
-            author: 'TestingCatalog News 🗞',
+            author: 'TestingCatalog News \ud83d\uddc3',
             handle: '@testingcatalog',
-            content: 'DeepSeek released DeepSeek-V3.2-Exp build on top of previously released V3.1-Terminus model.\n\nIt is 50% cheaper and slightly better at search benchmarks.\n\nDeep dumping 👀',
+            content: 'DeepSeek released DeepSeek-V3.2-Exp build on top of previously released V3.1-Terminus model.\n\nIt is 50% cheaper and slightly better at search benchmarks.\n\nDeep dumping \ud83d\udc40',
             sentiment: 'positive',
             url: 'https://x.com/testingcatalog/status/1972607048711045555',
         },
@@ -122,7 +120,7 @@ export const deepseekV3_2: ModelProfile = {
         {
             author: 'AI with Shekhar',
             handle: '@Shekhar_Builds',
-            content: 'DeepSeek v3.2 + Qwen VL/GLM 4.7 mix crushes it locally! I use Qwen coder for agents, DeepSeek for reasoning—fast on 8GB. Multi-model flows ftw. What\'s your routing logic for best results?',
+            content: 'DeepSeek v3.2 + Qwen VL/GLM 4.7 mix crushes it locally! I use Qwen coder for agents, DeepSeek for reasoning\u2014fast on 8GB. Multi-model flows ftw. What\'s your routing logic for best results?',
             sentiment: 'neutral',
             url: 'https://x.com/Shekhar_Builds/status/2016563338160017736',
         },
@@ -139,12 +137,12 @@ export const deepseekV3_2: ModelProfile = {
             id: 'why-it-matters',
             title: 'Why It Matters',
             subtitle: 'The Open Frontier',
-            content: <>DeepSeek V3.2 represents a pivotal moment for open‑source AI—a model that genuinely challenges proprietary giants like GPT‑5 and Claude on their own turf. Its release signals that state‑of‑the‑art reasoning and coding performance no longer require closed‑source, vendor‑locked ecosystems. For developers and researchers, this means unprecedented access to frontier‑level capabilities without the usual licensing fees or usage restrictions. The community response has been electric, with many hailing it as a "disruptor" that could reshape the competitive landscape. Yet its significance extends beyond benchmarks: by offering both free weights and a relatively affordable <GlossarySidenote term="API" />, DeepSeek lowers the barrier for innovation, enabling smaller teams and independent creators to build sophisticated AI‑powered applications. The geopolitical undertones—highlighted by discussions around Nvidia's involvement—add another layer, reminding us that AI sovereignty is increasingly tied to who controls the underlying models.</>,
+            content: null,
             socialData: {
                 type: 'tweet',
                 author: 'Emmanuel -Big tech and blue chip Lover',
                 handle: '@obienu59136',
-                content: '1️⃣ House China committee chair John Moolenaar says Nvidia helped China\'s DeepSeek in 2024, providing technical support.\n\n2️⃣ The support reportedly cut training compute for DeepSeek-V3 to ~2.788M H800 GPU-hours.\n\n3️⃣ Lawmakers claim DeepSeek models were later used by China\'s military, prompting calls for tighter export licensing.\n\n4️⃣ Nvidia disputes the military-use framing, emphasizing their guidance was technical, not operational.\n\n5️⃣ Potential implication: U.S. lawmakers may tighten AI hardware export rules, impacting global GPU supply.',
+                content: '1\ufe0f\u20e3 House China committee chair John Moolenaar says Nvidia helped China\'s DeepSeek in 2024, providing technical support.\n\n2\ufe0f\u20e3 The support reportedly cut training compute for DeepSeek-V3 to ~2.788M H800 GPU-hours.\n\n3\ufe0f\u20e3 Lawmakers claim DeepSeek models were later used by China\'s military, prompting calls for tighter export licensing.\n\n4\ufe0f\u20e3 Nvidia disputes the military-use framing, emphasizing their guidance was technical, not operational.\n\n5\ufe0f\u20e3 Potential implication: U.S. lawmakers may tighten AI hardware export rules, impacting global GPU supply.',
                 url: 'https://x.com/obienu59136/status/2016639608424181965',
                 date: 'Jan 28, 2026',
             },
@@ -154,12 +152,12 @@ export const deepseekV3_2: ModelProfile = {
             title: 'Coding & Development',
             subtitle: 'A Developer\'s Workbench',
             hasBenchmarks: true,
-            content: 'DeepSeek V3.2 stands out as a formidable coding assistant, delivering state‑of‑the‑art performance on single‑turn generation tasks while holding its own in more complex, iterative development workflows. On the MBPP benchmark, it solves the majority of Python programming problems, surpassing previous leading methods. The EG‑CFG (Execution Guided Line‑by‑Line Code Generation) approach further validates its accuracy, making it a reliable choice for automated code synthesis. For agentic coding—multi‑turn scenarios that mimic real‑world developer interactions—the model achieves a pass@1 rate around 50% on ABC‑Bench, competitive though still trailing Claude Sonnet 4.5\'s 63%. Community feedback highlights its "intention understanding" and planning capabilities, with some users mixing it with Qwen for optimal results. While it may occasionally stumble on the hardest edge‑cases (like any model), its overall coding proficiency, combined with open‑source availability, makes it a compelling alternative to proprietary coding‑focused models.',
+            content: null,
             socialData: {
                 type: 'tweet',
                 author: 'AI with Shekhar',
                 handle: '@Shekhar_Builds',
-                content: 'DeepSeek v3.2 + Qwen VL/GLM 4.7 mix crushes it locally! I use Qwen coder for agents, DeepSeek for reasoning—fast on 8GB. Multi-model flows ftw. What\'s your routing logic for best results?',
+                content: 'DeepSeek v3.2 + Qwen VL/GLM 4.7 mix crushes it locally! I use Qwen coder for agents, DeepSeek for reasoning\u2014fast on 8GB. Multi-model flows ftw. What\'s your routing logic for best results?',
                 url: 'https://x.com/Shekhar_Builds/status/2016563338160017736',
                 date: 'Jan 28, 2026',
             },
@@ -168,7 +166,7 @@ export const deepseekV3_2: ModelProfile = {
             id: 'reasoning',
             title: 'Incentivized Reasoning',
             subtitle: 'The "Think" Mode Revolution',
-            content: <>DeepSeek V3.2 inherits the "Think" mode introduced in V3.1, a feature that lets users toggle between faster, shallower responses and slower, more deliberate reasoning. This isn't just a gimmick—it's a direct result of the Group Relative Policy Optimization (<GlossarySidenote term="GRPO" />) training that explicitly rewards the model for exploring alternative reasoning paths and reflective thinking. The trade‑off is tangible: "Think" mode can produce more accurate, step‑by‑step solutions for complex math and logic problems, but at the cost of higher <GlossarySidenote term="latency" /> and increased token consumption. Community benchmarks show that in "Think" mode, V3.2 matches GPT‑5‑mini on MathArena, yet users note that the model sometimes "overthinks," generating repetitive chains that don't always converge to a correct answer. This highlights a fundamental tension in modern <GlossarySidenote term="LLM" />: we can train them to reason more deeply, but we haven't yet solved metacognition—knowing when to stop. For tasks that benefit from thorough exploration, however, the "Think" mode is a powerful tool that sets DeepSeek apart from models that offer only a single, fixed reasoning style.</>,
+            content: null,
             socialData: {
                 type: 'tweet',
                 author: 'Fisherman',
@@ -187,31 +185,26 @@ export const deepseekV3_2: ModelProfile = {
                 { label: 'Total Params', value: '671B', icon: 'cpu' },
                 { label: 'Active Params', value: '37B', icon: 'zap' },
             ],
-            content: <>At the heart of DeepSeek V3.2 lies a sophisticated Mixture‑of‑Experts (<GlossarySidenote term="MoE" />) architecture that achieves remarkable parameter efficiency. With 671 billion total parameters but only 37 billion activated per token, the model delivers dense‑model performance while keeping <GlossarySidenote term="inference" /> costs manageable. Key innovations like Multi‑head Latent Attention (<GlossarySidenote term="MLA" />) reduce memory bottlenecks, and Memory‑Aware Routing improves expert specialization by up to 35%, boosting downstream accuracy. The model's 61‑layer transformer backbone incorporates two <GlossarySidenote term="RMSNorm" /> operations for training stability, and the entire system is optimized for scalable AI infrastructure—AMD's Instinct MI355X <GlossarySidenote term="GPU" /> are explicitly tuned for it. Training follows a multi‑stage pipeline that includes specialist distillation and reinforcement learning via GRPO, which encourages deeper reasoning but also introduces a tendency toward higher token consumption. This architectural discipline is why V3.2 can compete with models many times its size, though it comes with the hardware demands typical of cutting‑edge MoE systems.</>,
-            expandable: {
-                title: 'DeepSeekMoE Details',
-                preview: 'How "Expert Specialization" works under the hood',
-                content: 'DeepSeekMoE isn’t just a standard Mixture‑of‑Experts implementation—it’s a carefully engineered system designed to maximize expert specialization while minimizing interference. The architecture divides the model’s 671B parameters into hundreds of experts, each a feed‑forward network tuned to specific patterns or domains. A gating network decides which experts to activate for a given token, but unlike earlier MoE models, DeepSeekMoE incorporates Memory‑Aware Routing, which considers both the token’s content and the current GPU memory layout to improve load balancing. This routing mechanism can boost expert specialization by 35% and downstream accuracy by 2–25%, while doubling parameter efficiency. The experts themselves are trained with a combination of dense pre‑training and sparse fine‑tuning, encouraging them to develop distinct “skills.” In practice, this means one expert might specialize in mathematical notation, another in Python syntax, and a third in conversational nuance. The result is a model that can dynamically assemble a bespoke computational pathway for each input, delivering high performance without activating the entire parameter set. This architectural elegance is a major reason why V3.2 punches far above its weight class.',
-            },
+            content: null,
         },
         {
             id: 'deployment',
             title: 'The Hardware Reality',
             subtitle: 'Free Weights, Expensive Metal',
             variant: 'technical',
-            content: <>The promise of “free weights” comes with a stark hardware reality: self‑hosting DeepSeek V3.2 demands institutional‑scale infrastructure. A typical deployment requires multiple high‑end GPUs—think eight GPUs with 96 GB <GlossarySidenote term="VRAM" /> each—just to load the model. This translates to a six‑figure hardware investment before factoring in power, cooling, and maintenance. Even with cloud APIs, the memory footprint forces providers to charge premium rates, and the model’s latency can be a bottleneck. The Speciale variant, optimized for maximum reasoning, generates around 30 tokens per second, a speed that users note feels sluggish compared to lighter models. The “Think” mode exacerbates this, trading speed for depth. These constraints aren’t just theoretical; they directly impact who can use V3.2. For startups and individual developers, the cloud API is the only feasible route, yet its cost‑per‑token, while competitive, adds up quickly for heavy workloads. The hardware barrier underscores a central irony of modern open‑source AI: the models are free, but the compute to run them is anything but.</>
+            content: null,
         },
         {
             id: 'economics',
             title: 'The Economics',
             subtitle: 'API Pricing Warfare',
             hasPricing: true,
-            content: <>DeepSeek's pricing strategy is a direct assault on the proprietary model market. The API is priced aggressively—reportedly around $0.14 per million input tokens and $0.28 per million output tokens—making it one of the most cost‑effective frontier‑grade models available. For comparison, GPT‑5‑mini charges roughly $0.60/$1.20 per million tokens, while Claude 4.5 Opus can exceed $3/$15. This price‑to‑performance ratio is a major reason why developers are flocking to DeepSeek; it's possible to run sophisticated agentic workflows at a fraction of the cost of closed alternatives. However, the GRPO‑induced tendency to generate longer reasoning chains means that effective token consumption can be higher than with more concise models, partially offsetting the per‑token savings. The free weights, of course, change the calculus entirely for organizations with the hardware to run them. But as the community notes, "free weights, expensive metal" captures the trade‑off: you save on licensing but pay heavily in infrastructure. For most users, the cloud API strikes a compelling balance, especially when integrated into platforms like Microsoft Foundry on Azure, which offers enterprise‑grade <GlossarySidenote term="SLA" /> and support.</>,
+            content: null,
             socialData: {
                 type: 'tweet',
-                author: 'TestingCatalog News 🗞',
+                author: 'TestingCatalog News \ud83d\uddc3',
                 handle: '@testingcatalog',
-                content: 'DeepSeek released DeepSeek-V3.2-Exp build on top of previously released V3.1-Terminus model.\n\nIt is 50% cheaper and slightly better at search benchmarks.\n\nDeep dumping 👀',
+                content: 'DeepSeek released DeepSeek-V3.2-Exp build on top of previously released V3.1-Terminus model.\n\nIt is 50% cheaper and slightly better at search benchmarks.\n\nDeep dumping \ud83d\udc40',
                 url: 'https://x.com/testingcatalog/status/1972607048711045555',
                 date: 'Jan 28, 2026',
             },
@@ -219,12 +212,12 @@ export const deepseekV3_2: ModelProfile = {
         {
             id: 'issues',
             title: 'Known Quirks',
-            content: 'Even a model as capable as DeepSeek V3.2 has its quirks. The most discussed is “overthinking”—the tendency to extend reasoning chains with repetitive, unproductive steps, especially in “Think” mode. This can lead to longer latencies and higher token costs without improving accuracy. Another quirk is inconsistency: benchmark scores show high variance, meaning the model can ace a problem one run and flub it the next. Multilingual performance, while decent, doesn’t match its STEM prowess; low‑resource languages remain a weak spot. The GRPO training, while great for incentivizing reasoning, also makes the model “talkative,” generating more tokens than necessary. Some users report that the model occasionally fails to account for contradictory information in a prompt, leading to logical missteps. And despite its low hallucination rate relative to peers, it’s not immune to fabricating details when pushed. These quirks don’t negate the model’s strengths, but they’re important to keep in mind when designing production systems around it.',
+            content: null,
         },
         {
             id: 'verdict',
             title: 'The Verdict',
-            content: 'DeepSeek V3.2 is a landmark achievement that proves open‑source models can compete head‑to‑head with the best proprietary offerings. Its strengths in mathematics, coding, and reasoning are undeniable, and its cost‑efficiency makes it a compelling choice for both experimentation and production. However, the model’s hardware demands and latency trade‑offs mean it’s not a drop‑in replacement for every use case. For teams with the infrastructure to self‑host or the budget for its cloud API, V3.2 delivers frontier‑level performance at a fraction of the cost of closed alternatives. For individual developers and smaller organizations, it represents an unprecedented opportunity to access cutting‑edge AI without vendor lock‑in. The community’s enthusiasm is well‑deserved, but pragmatic adoption requires acknowledging its limitations. In the end, DeepSeek V3.2 isn’t just another model—it’s a statement that the future of AI will be shaped as much by open collaboration as by corporate R&D.',
+            content: null,
         },
     ],
     governance: {

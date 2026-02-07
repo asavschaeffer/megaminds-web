@@ -1,8 +1,6 @@
-import React from 'react'
 import type { ModelLinkTypeId } from '@/lib/models/link-types'
 import type { ModelProfile } from '@/lib/models/types'
 import { getModelPricingFromReference, mergePricingData } from '@/lib/models/utils'
-import { AbbrSidenote, GlossarySidenote } from '@/components/shared/sidenote'
 
 const qwen3MaxLinks: Partial<Record<ModelLinkTypeId, string>> = {
     chat: 'https://chat.qwen.ai/',
@@ -172,19 +170,7 @@ export const qwen3Max: ModelProfile = {
             title: 'Test-Time Scaling',
             subtitle: 'The Core Innovation',
             variant: 'technical',
-            content: (
-                <>
-                    <p className="mb-4">
-                        The defining breakthrough of Qwen 3 Max Thinking is its implementation of <AbbrSidenote title="Test-Time Scaling" definition="A paradigm that shifts computational effort from pre-training to inference, enabling models to dynamically allocate resources based on task complexity">Test-Time Scaling (TTS)</AbbrSidenote>—a fundamental reorientation of how LLMs achieve high performance. Instead of relying solely on pre-training scale, TTS shifts computational effort from training to inference, enabling the model to dynamically allocate resources based on task complexity.
-                    </p>
-                    <p className="mb-4">
-                        At the heart of this system is the "Thinking Budget" mechanism. For simple queries ("Hello"), the model operates in Non-Thinking Mode, delivering fast, low-cost responses. For complex problems (e.g., Olympiad math), it activates Thinking Mode, consuming a configurable budget of reasoning tokens. Critically, the model learns—via <GlossarySidenote term="RL" />—to emit a "stop thinking" token when marginal gains diminish, preventing infinite loops.
-                    </p>
-                    <p className="mb-4">
-                        This approach moves beyond wasteful "Best-of-N" sampling. TTS enables adaptive cognition: the model thinks harder only when necessary, optimizing the trade-off between latency, cost, and accuracy. For developers, this is exposed via an <GlossarySidenote term="API" /> parameter, allowing fine-grained control over reasoning depth—a feature absent in most competitors.
-                    </p>
-                </>
-            ),
+            content: null,
         },
 
         // ═══════════════════════════════════════════════════════════════════════════
@@ -195,16 +181,7 @@ export const qwen3Max: ModelProfile = {
             id: 'the-max-moment',
             title: 'The Max Moment',
             subtitle: 'Why It Matters',
-            content: (
-                <>
-                    <p className="mb-4">
-                        Qwen 3 Max Thinking marks a pivotal inflection point in the global AI landscape—the first Chinese <GlossarySidenote term="LLM" /> to credibly match and, in specific domains, surpass leading Western frontier models like GPT-5.2 and Gemini 3 Pro. This achievement shatters the long-standing assumption that Chinese AI lags 6–12 months behind its U.S. counterparts. Its release signals a paradigm shift: frontier AI is no longer a Western monopoly. Geopolitically, this is profound. Enterprises can no longer default to U.S. providers for "best-in-class" performance; they must now evaluate models on a capability-by-capability basis, potentially splitting infrastructure between East and West.
-                    </p>
-                    <p className="mb-4">
-                        This milestone is especially significant given the context of U.S. export controls on high-end <AbbrSidenote title="Graphics Processing Unit" definition="Specialized hardware optimized for parallel computation, essential for training and running large AI models">GPUs</AbbrSidenote>. Alibaba's ability to train a trillion-parameter model under these constraints demonstrates that algorithmic innovation and software-level parallelism can effectively compensate for hardware limitations. Qwen 3 Max Thinking is not just a technical artifact—it is a strategic declaration that China has arrived at the frontier of artificial intelligence, forcing a reevaluation of global AI supply chains and competitive dynamics.
-                    </p>
-                </>
-            ),
+            content: null,
         },
 
         // ═══════════════════════════════════════════════════════════════════════════
@@ -216,22 +193,7 @@ export const qwen3Max: ModelProfile = {
             title: 'Experience-Cumulative Reasoning',
             subtitle: 'Recursive Self-Aggregation',
             variant: 'advanced',
-            content: (
-                <>
-                    <p className="mb-4">
-                        Qwen 3 Max Thinking's reasoning process is formalized as Experience-Cumulative Reasoning (or Recursive Self-Aggregation). This is not standard chain-of-thought; it is a multi-stage, self-reflective loop:
-                    </p>
-                    <ol className="list-decimal list-inside mb-4 space-y-1">
-                        <li><strong>Generate</strong>: Produce an initial reasoning path.</li>
-                        <li><strong>Critique</strong>: Self-reflect to identify gaps, contradictions, or uncertainties.</li>
-                        <li><strong>Aggregate</strong>: Retain key insights from prior attempts rather than discarding them.</li>
-                        <li><strong>Spiral Upward</strong>: Use distilled experience to inform the next reasoning step, avoiding redundant exploration.</li>
-                    </ol>
-                    <p className="mb-4">
-                        This "spiral" process allows the model to iteratively refine its logic within a single inference session. Crucially, it integrates a <AbbrSidenote title="Code Interpreter" definition="A built-in capability allowing the model to write and execute code (usually Python) to solve computational problems or analyze data">code interpreter</AbbrSidenote> directly into the reasoning loop. For mathematical or computational tasks, it doesn't just predict—it executes Python code, validates results, and incorporates outputs back into its thought process. This hybrid symbolic-neural architecture is why it achieves 100% on AIME 2025 and HMMT, benchmarks designed to challenge elite human problem-solvers.
-                    </p>
-                </>
-            ),
+            content: null,
         },
 
         // ═══════════════════════════════════════════════════════════════════════════
@@ -249,23 +211,7 @@ export const qwen3Max: ModelProfile = {
                 { label: 'Training Tokens', value: '36T', icon: 'database' },
                 { label: 'MFU Gain', value: '+30%', icon: 'trending-up' },
             ],
-            content: (
-                <>
-                    <p className="mb-4">
-                        Qwen 3 Max is built on a highly optimized <AbbrSidenote title="Mixture of Experts" definition="A sparse model architecture that activates only a subset of parameters (experts) for each token, improving efficiency without sacrificing capacity">MoE</AbbrSidenote> architecture:
-                    </p>
-                    <ul className="list-disc list-inside mb-4 space-y-1">
-                        <li>128 total experts, with 8 active per token</li>
-                        <li>No shared experts—a deliberate design choice to simplify routing and reduce overhead</li>
-                        <li>Custom Qwen3MoeSparseMoeBlock MLP architecture for improved efficiency</li>
-                        <li>Trained using PAI-FlashMoE, Alibaba's proprietary framework, which delivers +30% <AbbrSidenote title="Model FLOPs Utilization" definition="A metric measuring how efficiently hardware compute resources are used during training, with higher values indicating better optimization">Model FLOPs Utilization (MFU)</AbbrSidenote> over Qwen2.5-Max</li>
-                        <li>ChunkFlow for long-context training, yielding 3× throughput improvement over standard sequence parallelism</li>
-                    </ul>
-                    <p className="mb-4">
-                        This configuration enables &gt;1 trillion parameters with only ~10–50B active per token, achieving massive knowledge capacity without proportional inference costs. The removal of shared experts reflects confidence in routing stability, while PAI-FlashMoE's efficiency gains were likely essential to training feasibility under GPU export restrictions.
-                    </p>
-                </>
-            ),
+            content: null,
         },
 
         // ═══════════════════════════════════════════════════════════════════════════
@@ -277,33 +223,7 @@ export const qwen3Max: ModelProfile = {
             title: 'The Benchmarks',
             subtitle: 'Specialist, Not Generalist',
             hasBenchmarks: true,
-            content: (
-                <>
-                    <p className="mb-4">
-                        Qwen 3 Max Thinking excels as a specialist, not a generalist:
-                    </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <h4 className="font-semibold text-green-600 dark:text-green-400 mb-2">✅ Strengths</h4>
-                            <ul className="list-disc list-inside space-y-1 text-sm">
-                                <li>100% on AIME 2025 & HMMT (math)</li>
-                                <li>74.8 on Tau2-Bench (agent tool use)—beating GPT-5.2 and Gemini 3 Pro</li>
-                                <li>75.3% on SWE-bench Verified (real-world code fixes)</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold text-red-600 dark:text-red-400 mb-2">❌ Weaknesses</h4>
-                            <ul className="list-disc list-inside space-y-1 text-sm">
-                                <li>Only 15% pass rate on FinBen (financial reasoning) after 48 hours</li>
-                                <li>Trails GPT-5.2 (80%) and Claude 4.5 Opus (80.9%) on SWE-bench</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <p className="mb-4">
-                        This profile confirms: Qwen 3 Max is a precision instrument for math, coding, and agentic tasks, but not a universal reasoner. Its dominance in structured, verifiable domains contrasts with gaps in abstract, domain-specific reasoning like finance.
-                    </p>
-                </>
-            ),
+            content: null,
         },
 
         // ═══════════════════════════════════════════════════════════════════════════
@@ -314,21 +234,7 @@ export const qwen3Max: ModelProfile = {
             id: 'enterprise',
             title: 'Enterprise in Production',
             subtitle: 'Real-World Validation',
-            content: (
-                <>
-                    <p className="mb-4">
-                        Beyond benchmarks, Qwen 3 Max is already deployed in real-world enterprise systems:
-                    </p>
-                    <ul className="list-disc list-inside mb-4 space-y-1">
-                        <li><strong>Hamilton</strong>: Uses Qwen to power its accounting automation engine, enabling rapid, low-cost deployment of intelligent financial workflows.</li>
-                        <li><strong>Cross-sector adoption</strong>: Active in finance, energy, government, education, healthcare, and manufacturing, demonstrating reliability across regulated industries.</li>
-                        <li><strong>Developer traction</strong>: Integrated into LangChain, LlamaIndex, CrewAI, and supported by Vercel's AI Gateway.</li>
-                    </ul>
-                    <p className="mb-4">
-                        These deployments validate its production readiness and business value, moving it beyond academic curiosity into operational infrastructure.
-                    </p>
-                </>
-            ),
+            content: null,
         },
 
         // ═══════════════════════════════════════════════════════════════════════════
@@ -340,22 +246,7 @@ export const qwen3Max: ModelProfile = {
             title: 'The Economics',
             subtitle: 'Premium Positioning for Mission-Critical Tasks',
             hasPricing: true,
-            content: (
-                <>
-                    <p className="mb-4">
-                        Pricing reflects premium positioning for mission-critical tasks:
-                    </p>
-                    <ul className="list-disc list-inside mb-4 space-y-1">
-                        <li>Input: $0.861/M tokens (≤32K context) → $1.434/M (32K–128K)</li>
-                        <li>Output: $3.441/M tokens</li>
-                        <li>Batch calls: 50% discount on input/output</li>
-                        <li><GlossarySidenote term="context caching" />: Up to 90% discount on repeated input tokens</li>
-                    </ul>
-                    <p className="mb-4">
-                        For <AbbrSidenote title="Retrieval-Augmented Generation" definition="A technique where models fetch relevant documents before answering to improve accuracy and reduce hallucinations">RAG</AbbrSidenote> or agent applications with static context, effective input cost drops to ~$0.24/M tokens—a 10× advantage over GPT-5.2 ($10/M input). However, reasoning tokens are billed as output, making deep thinking expensive and unpredictable. Cost control requires strict max_tokens limits.
-                    </p>
-                </>
-            ),
+            content: null,
         },
 
         // ═══════════════════════════════════════════════════════════════════════════
@@ -366,22 +257,7 @@ export const qwen3Max: ModelProfile = {
             id: 'developer-experience',
             title: 'Developer Experience',
             subtitle: 'Frictionless Adoption',
-            content: (
-                <>
-                    <p className="mb-4">
-                        Alibaba prioritized frictionless adoption:
-                    </p>
-                    <ul className="list-disc list-inside mb-4 space-y-1">
-                        <li>OpenAI <AbbrSidenote title="Software Development Kit" definition="A collection of tools, libraries, and documentation that developers use to build applications for a specific platform">SDK</AbbrSidenote> compatible: Drop-in replacement via base_url and model name change</li>
-                        <li>Native qwen3-sdk: Supports RAG (KnowledgeBase) and tool calling (call_tool)</li>
-                        <li>Framework integrations: Full support for LangChain, LlamaIndex, Haystack, CrewAI</li>
-                        <li>Thinking mode control: Toggle via API; reasoning traces returned in &lt;think&gt; tags for debugging or UI display</li>
-                    </ul>
-                    <p className="mb-4">
-                        The main friction point: Alibaba Cloud account verification is more bureaucratic than Western "credit card + email" signups.
-                    </p>
-                </>
-            ),
+            content: null,
         },
 
         // ═══════════════════════════════════════════════════════════════════════════
@@ -392,21 +268,7 @@ export const qwen3Max: ModelProfile = {
             id: 'agentic-excellence',
             title: 'Agentic Excellence',
             subtitle: 'Architected for Agency',
-            content: (
-                <>
-                    <p className="mb-4">
-                        Qwen 3 Max is architected for <GlossarySidenote term="agentic workflows" />:
-                    </p>
-                    <ul className="list-disc list-inside mb-4 space-y-1">
-                        <li>Hybrid thinking mode: Seamlessly switches between fast chat and deep reasoning</li>
-                        <li>Autonomous tool use: Integrates function calling, enable_search, and code interpreter natively</li>
-                        <li>Dominates Tau2-Bench (74.8)—proving superior planning, execution, and tool orchestration vs. GPT-5.2 (45.5%)</li>
-                    </ul>
-                    <p className="mb-4">
-                        This makes it ideal for building autonomous agents that must reason, act, and adapt in dynamic environments.
-                    </p>
-                </>
-            ),
+            content: null,
         },
 
         // ═══════════════════════════════════════════════════════════════════════════
@@ -417,21 +279,7 @@ export const qwen3Max: ModelProfile = {
             id: 'alignment',
             title: 'The Alignment Trade-off',
             subtitle: 'Safety and Censorship',
-            content: (
-                <>
-                    <p className="mb-4">
-                        Safety is enforced via a multi-layered alignment strategy:
-                    </p>
-                    <ul className="list-disc list-inside mb-4 space-y-1">
-                        <li><AbbrSidenote title="Direct Preference Optimization" definition="A reinforcement learning technique that aligns model behavior by directly optimizing on human preference data without requiring a separate reward model">Direct Preference Optimization (DPO)</AbbrSidenote> during training</li>
-                        <li>Content moderation classifiers that filter harmful outputs</li>
-                        <li>Upstream censorship layer: Politically sensitive prompts (e.g., "Tiananmen Square") trigger "Error 400: Inappropriate content" before reaching the model</li>
-                    </ul>
-                    <p className="mb-4">
-                        The result is a hyper-neutral, fact-focused tone that avoids controversy. While this ensures compliance in China, it creates friction for international users seeking nuanced discussion on sensitive topics. Critics argue this "safety reasoning" burns tokens on refusals rather than problem-solving.
-                    </p>
-                </>
-            ),
+            content: null,
         },
 
         // ═══════════════════════════════════════════════════════════════════════════
@@ -442,20 +290,7 @@ export const qwen3Max: ModelProfile = {
             id: 'limitations',
             title: 'Known Limitations',
             subtitle: 'Constraints and Risks',
-            content: (
-                <>
-                    <p className="mb-4">
-                        Despite its strengths, Qwen 3 Max has notable constraints:
-                    </p>
-                    <ul className="list-disc list-inside mb-4 space-y-1">
-                        <li><strong>Domain gaps</strong>: Poor performance on FinBen (15%) shows limited financial reasoning</li>
-                        <li><strong>SWE-bench lag</strong>: 75.3% vs. 80%+ for GPT-5.2/Claude—precision engineering remains a gap</li>
-                        <li><strong>Hallucination risk</strong>: Like all LLMs, it may generate fluent but false information</li>
-                        <li><strong>MoE stability concerns</strong>: Removal of shared experts could increase routing instability over time</li>
-                        <li><strong>Data residency</strong>: Enterprises face compliance questions when using Alibaba Cloud infrastructure</li>
-                    </ul>
-                </>
-            ),
+            content: null,
         },
 
         // ═══════════════════════════════════════════════════════════════════════════
@@ -466,32 +301,7 @@ export const qwen3Max: ModelProfile = {
             id: 'verdict',
             title: 'The Verdict',
             subtitle: 'When to Use, When to Avoid',
-            content: (
-                <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <h4 className="font-semibold mb-2">Use Qwen 3 Max Thinking when:</h4>
-                            <ul className="list-disc list-inside space-y-1 text-sm text-neutral-700 dark:text-neutral-300">
-                                <li>You need mathematical or algorithmic reasoning (AIME 100%, HMMT 100%)</li>
-                                <li>Building agentic systems requiring tool use (Tau2-Bench 74.8)</li>
-                                <li>Cost efficiency matters (input as low as $0.24/M with caching)</li>
-                                <li>You value transparent reasoning traces for debugging or user trust</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold mb-2">Do not use it when:</h4>
-                            <ul className="list-disc list-inside space-y-1 text-sm text-neutral-700 dark:text-neutral-300">
-                                <li>Tasks require political neutrality (censorship layer interferes)</li>
-                                <li>Precision software engineering is critical (SWE-bench 75.3% &lt; GPT-5.2's 80%)</li>
-                                <li>Operating in regulated Western environments with strict data residency rules</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <p className="mb-4">
-                        Qwen 3 Max Thinking is not a compromise—it is a specialist weapon for deep reasoning and autonomous action. In the new multipolar AI world, it earns a permanent seat at the evaluation table.
-                    </p>
-                </>
-            ),
+            content: null,
         },
     ],
     governance: {

@@ -107,6 +107,7 @@ export interface ExpandableBlock {
   title: string
   preview: string
   content: string | ReactNode
+  contentSource?: 'mdx' | 'inline'
 }
 
 export interface TechSpec {
@@ -121,6 +122,7 @@ export interface ContentSection {
   subtitle?: ReactNode
   variant?: SectionVariant
   content: string | ReactNode | null
+  contentSource?: 'mdx' | 'inline'
   specs?: TechSpec[]
   hasBenchmarks?: boolean
   hasPricing?: boolean
@@ -297,3 +299,15 @@ export interface SectionRegistryEntry {
 }
 
 export type SectionRegistry = SectionRegistryEntry[]
+
+export interface MdxExpandableBlock {
+  id: string
+  title: string
+  preview: string
+  content: string
+}
+
+export type MdxSectionMap = Record<string, {
+  content: string
+  expandables: MdxExpandableBlock[]
+}>

@@ -108,7 +108,7 @@ export const modelCards: ModelCard[] = [
   },
   {
     key: 'claude-sonnet',
-    href: '/eval/models/claude',
+    href: '/eval/models/claude-sonnet-4-5',
     modelFamily: 'Claude',
     modelVariant: 'Sonnet',
     versionNumber: '4.5',

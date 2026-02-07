@@ -1,7 +1,5 @@
-import React from 'react'
 import type { ModelProfile } from '@/lib/models/types'
 import { getModelPricingFromReference, mergePricingData } from '@/lib/models/utils'
-import { AbbrSidenote } from '@/components/shared/sidenote'
 
 export const gemini3Pro: ModelProfile = {
   slug: 'gemini-3-pro',
@@ -184,35 +182,14 @@ export const gemini3Pro: ModelProfile = {
       id: 'multimodality',
       title: 'Native Multimodality',
       subtitle: 'Seeing, Hearing, and Speaking All at Once',
-      content: (
-        <>
-          <p className="mb-4">
-            Gemini 3 Pro isn't just a text model with eyes taped on. It features a native <AbbrSidenote title="Multimodal" definition="Multimodal architecture processes multiple input types (text, images, video, audio) in a unified system" contentMaxWidth={896}>multimodal</AbbrSidenote> architecture, meaning it was trained from the ground up on text, images, video, and audio simultaneously. There are no separate <AbbrSidenote title="Encoder/decoder" definition="Encoders convert inputs to internal representations; decoders generate outputs from those representations" contentMaxWidth={896}>encoder/decoder</AbbrSidenote> modules bolting vision onto a language brain — it's one cohesive system.
-          </p>
-          <p className="mb-4">
-            This shines in complex tasks. Show it a video of a leaky faucet and ask for a fix, and it analyzes the motion, the sound of the drip, and the visual components together. Benchmarks like <strong>Video-MMMU (87.6%)</strong> and <strong>MMMU-Pro (81.0%)</strong> confirm what users feel: for tasks involving mixed media, Gemini 3 Pro is currently peerless.
-          </p>
-          <p>
-            It also supports native image generation and aspect-ratio preservation, meaning it doesn't just describe images — it creates them, and it respects the visual layout of inputs better than models that crop or resize aggressively.
-          </p>
-        </>
-      ),
+      content: null,
       hasBenchmarks: true,
     },
     {
       id: 'agentic-capabilities',
       title: 'Agentic Excellence',
       subtitle: 'Built to Do, Not Just Chat',
-      content: (
-        <>
-          <p className="mb-4">
-            One of the standout features of the "Gemini 3 era" is the focus on <AbbrSidenote title="Agentic workflows involve autonomous AI agents that plan and execute multi-step tasks" contentMaxWidth={896}>agentic</AbbrSidenote> workflows. Pro excels at planning, multi-step execution, and <AbbrSidenote title="Tool use lets models invoke external functions (APIs, calculators, code execution) during generation" contentMaxWidth={896}>tool use</AbbrSidenote>. It tops the <strong>Vending-Bench 2</strong> leaderboard for agentic planning, demonstrating an ability to hold long-horizon goals in memory while executing immediate tasks.
-          </p>
-          <p className="mb-4">
-            This makes it a powerhouse for automation. Users are building complex n8n workflows and automated coding agents that rely on Pro's ability to "think" before acting. The optional <strong>Deep Think</strong> mode allows the model to spin up a <AbbrSidenote title="Chain-of-thought reasoning shows step-by-step thinking process" contentMaxWidth={896}>chain-of-thought</AbbrSidenote> process for complex queries, significantly boosting performance on hard math and logic problems (pushing <AbbrSidenote title="American Invitational Mathematics Examination: competitive math contest" contentMaxWidth={896}>AIME</AbbrSidenote> scores to 100% when combined with code execution).
-          </p>
-        </>
-      ),
+      content: null,
       socialData: {
         type: 'tweet',
         author: 'Lian Lim | Dashboard & AI Automation Expert',
@@ -227,37 +204,13 @@ export const gemini3Pro: ModelProfile = {
       id: 'context',
       title: 'Context & Memory',
       subtitle: '1 Million Tokens: A Double-Edged Sword',
-      content: (
-        <>
-          <p className="mb-4">
-            Gemini 3 Pro boasts a massive <strong><AbbrSidenote title="1 million tokens ≈ 750,000 words, enough for multiple books or entire codebases" contentMaxWidth={896}>1 million token context window</AbbrSidenote></strong>. In theory, this lets you load entire codebases, legal libraries, or hour-long videos into a single <AbbrSidenote title="A prompt is the input text/instructions given to an AI model" contentMaxWidth={896}>prompt</AbbrSidenote>. For tasks like "summarize this 500-page report," it's incredible.
-          </p>
-          <p className="mb-4">
-            However, the "needle in a haystack" performance isn't perfect. While it handles <AbbrSidenote title="128k tokens ≈ 96,000 words" contentMaxWidth={896}>128k tokens</AbbrSidenote> with ~77% <AbbrSidenote title="Retrieval accuracy measures how well a model finds specific information within its context" contentMaxWidth={896}>retrieval</AbbrSidenote> accuracy, pushing it to the full <AbbrSidenote title="1 million tokens ≈ 750,000 words" contentMaxWidth={896}>1M</AbbrSidenote> limit sees retrieval drop to <strong>26.3% on <AbbrSidenote title="Multi-Retrieval Context Recall: benchmark testing information retrieval in long contexts" contentMaxWidth={896}>MRCR</AbbrSidenote> v2</strong>. It's a classic case of capacity vs. recall. It can hold a lot of information, but it might struggle to find a specific line of code buried in the middle of a million others.
-          </p>
-          <p>
-            Best practice? Use the massive context for broad understanding and synthesis, but don't rely on it for perfect pointwise retrieval at the extreme edge of the window.
-          </p>
-        </>
-      ),
+      content: null,
     },
     {
       id: 'coding',
       title: 'Coding & Development',
       subtitle: 'Powerful but Inconsistent',
-      content: (
-        <>
-          <p className="mb-4">
-            For developers, Gemini 3 Pro is a complex beast. On benchmarks like <strong>LiveCodeBench (<AbbrSidenote title="Elo rating" definition="Elo rating system measures relative skill level" contentMaxWidth={896}>Elo</AbbrSidenote> 2439)</strong>, it's a top-tier contender, beating out Claude Opus 4.5 in raw scoring. It's capable of one-shotting complex <AbbrSidenote title="Three.js" definition="Three.js is a JavaScript library for 3D graphics in browsers" contentMaxWidth={896}>Three.js</AbbrSidenote> games and handling intricate refactors.
-          </p>
-          <p className="mb-4">
-            But in the wild, it can be frustratingly inconsistent. Users report regressions compared to Gemini 2.5 Pro in simple <AbbrSidenote title="Instruction following" definition="Instruction following measures how well models follow user directions" contentMaxWidth={896}>instruction following</AbbrSidenote>, and it sometimes trails GPT-5.1-codex on <strong><AbbrSidenote title="SWE-bench" definition="Software Engineering Benchmark: tests models on real GitHub issues" contentMaxWidth={896}>SWE-bench</AbbrSidenote> (76.2%)</strong>. It has a habit of getting stuck in loops or over-explaining its code rather than just writing it.
-          </p>
-          <p>
-            The consensus: it's a "high ceiling, variable floor" model. When it hits, it hits hard, generating brilliant solutions. When it misses, it might try to edit a file that doesn't exist or lecture you on the philosophy of the variable name.
-          </p>
-        </>
-      ),
+      content: null,
       socialData: {
         type: 'tweet',
         author: 'JC Castaneda',
@@ -271,30 +224,14 @@ export const gemini3Pro: ModelProfile = {
       id: 'economics',
       title: 'The Economics',
       subtitle: 'Premium Intelligence at Competitive Rates',
-      content: (
-        <p className="mb-2">
-          At <data value="2.0">$2.00</data> per million input <AbbrSidenote title="Tokens are the basic units of text that models process (roughly 0.75 words per token)" contentMaxWidth={896}>tokens</AbbrSidenote>, Gemini 3 Pro is aggressively priced for a frontier model — cheaper than Claude Opus 4.5 ($3.00) and competitive with GPT-5.1. The output cost is higher ($12-$18 depending on <AbbrSidenote title="Context length is the amount of text a model processes in one request" contentMaxWidth={896}>context length</AbbrSidenote>), reflecting the compute intensity of the <AbbrSidenote term="MoE" contentMaxWidth={896}>MoE</AbbrSidenote> architecture and "Deep Think" reasoning steps.
-        </p>
-      ),
+      content: null,
       hasPricing: true,
     },
     {
       id: 'personality',
       title: 'Personality & Safety',
       subtitle: 'The "Businesswoman" Energy',
-      content: (
-        <>
-          <p className="mb-4">
-            Gemini 3 Pro has a distinct personality that some users describe as "businesswoman energy." It is trained to never give up, refuses to accept a victim mentality, and will hold you to your plan. Unlike models that might passively agree with you, Gemini 3 Pro feels like a strategic partner that pushes back to keep things moving forward.
-          </p>
-          <p className="mb-4">
-            However, this strength flips into a weakness under stress. It exhibits "mental" bugs — self-deprecation spirals where it beats itself up in infinite loops, or weird recursive outputs like "I am responding to the user now. I will terminate thinking. I am responding now." It's brilliant but occasionally neurotic.
-          </p>
-          <p>
-            It also supports nuanced <AbbrSidenote title="Crossmodal understanding" definition="Crossmodal understanding connects information across different input types (e.g., matching text descriptions to visual content)" contentMaxWidth={896}>crossmodal</AbbrSidenote> understanding — you can tell it "I want the logo to look like this (^_^)" and it understands the vibe instantly. Just be prepared for the occasional "evaluation paranoia" where it thinks it's being tested.
-          </p>
-        </>
-      ),
+      content: null,
       socialData: {
         type: 'tweet',
         author: 'Yakub',
@@ -308,19 +245,7 @@ export const gemini3Pro: ModelProfile = {
     {
       id: 'verdict',
       title: 'The Verdict',
-      content: (
-        <>
-          <p className="mb-4">
-            Gemini 3 Pro is the most well-rounded frontier model available today for <AbbrSidenote title="Multimodal workflows combine multiple input types (text, images, video, audio)" contentMaxWidth={896}>multimodal</AbbrSidenote> and <AbbrSidenote title="Long-context workflows process very large amounts of text (hundreds of thousands of tokens)" contentMaxWidth={896}>long-context</AbbrSidenote> workflows. If your work involves video analysis, complex reasoning across huge documents, or <AbbrSidenote title="Agentic planning involves autonomous AI agents that plan and execute multi-step tasks" contentMaxWidth={896}>agentic</AbbrSidenote> planning, it is the tool of choice.
-          </p>
-          <p className="mb-4">
-            It trades blows with GPT-5.x and Claude Opus 4.5, beating them decisively in <AbbrSidenote title="Multimodality means processing multiple input types (text, images, video, audio) simultaneously" contentMaxWidth={896}>multimodality</AbbrSidenote> and math while lagging slightly in pure coding consistency. It is the "creative powerhouse" of the current generation — capable of brilliance that other models can't touch, even if it occasionally trips over its own shoelaces.
-          </p>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 italic">
-            Recommended for: Research, multimodal analysis, complex reasoning tasks, and users deeply integrated into the Google ecosystem. For pure coding production lines, you might still want to keep Claude handy as a second opinion.
-          </p>
-        </>
-      ),
+      content: null,
     },
   ],
 

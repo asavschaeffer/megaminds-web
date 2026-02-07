@@ -1,7 +1,5 @@
-import React from 'react'
 import type { ModelProfile } from '@/lib/models/types'
 import { getModelPricingFromReference, mergePricingData } from '@/lib/models/utils'
-import { GlossarySidenote, AbbrSidenote } from '@/components/shared/sidenote'
 
 export const gemini3Flash: ModelProfile = {
   slug: 'gemini-3-flash',
@@ -211,47 +209,20 @@ export const gemini3Flash: ModelProfile = {
       id: 'multimodality',
       title: 'Native Multimodality',
       subtitle: 'Integrated Sensing and Reasoning',
-      content: (
-        <>
-          <p className="mb-4">
-            Gemini 3 Flash represents a shift from "bolted-on" vision to <GlossarySidenote term="multimodality" />. Built by Google DeepMind, the model processes text, images, video, audio, and code within a single, unified architecture. This enables it to perform complex cross-modal tasks — such as analyzing a video clip to generate a technical plan or extracting data from dense visual charts — without the latency or loss of nuance common in multi-model pipelines.
-          </p>
-          <p className="mb-4">
-            Benchmarks support this architectural prowess, with the model scoring <strong>81.2% on <AbbrSidenote title="MMMU Pro" definition="A benchmark for evaluating multimodal AI on complex, university-level tasks involving images, charts, and diagrams" contentMaxWidth={896}>MMMU Pro</AbbrSidenote></strong>. This allows for fluid real-time interactions, such as interactive drawing games or live video analysis. A key recent addition is <strong>"Agentic Vision,"</strong> a feature that specifically optimizes image responses for agentic control, allowing the model to better translate visual data into actionable terminal commands or UI interactions.
-          </p>
-        </>
-      ),
+      content: null,
     },
     {
       id: 'speed-efficiency',
       title: 'Speed & Efficiency',
       subtitle: 'The Sprinter of the Gemini 3 Era',
-      content: (
-        <>
-          <p className="mb-4">
-            As the "Flash" moniker suggests, speed is the model's primary differentiator. In early testing, it has demonstrated inference speeds up to <strong>3x faster</strong> than its predecessors. This low-latency performance is optimized for high-frequency interactions, making it the ideal choice for real-time development environments, live AI assistants, and iterative agentic workflows.
-          </p>
-          <p className="mb-4">
-            Beyond raw speed, Gemini 3 Flash is significantly more efficient in its token usage. On average, it consumes <strong>30% fewer tokens</strong> for everyday queries compared to previous generations. This efficiency doesn't come at the cost of capacity; the model still supports a massive <strong>1 million token context window</strong>, allowing it to ingest entire codebases or long-form documentation while maintaining a lightweight footprint.
-          </p>
-        </>
-      ),
+      content: null,
       hasBenchmarks: true,
     },
     {
       id: 'agentic-capabilities',
       title: 'Agentic Excellence',
       subtitle: 'Built for Action',
-      content: (
-        <>
-          <p className="mb-4">
-            One of the most surprising outcomes of the Gemini 3 release is Flash's dominance in <GlossarySidenote term="agentic workflows" />. Despite its smaller size, it holds its own in complex corporate tasks, achieving <strong>24.0% on the <AbbrSidenote title="Apex-Agents" definition="A benchmark designed to evaluate AI agents on complex corporate and autonomous tasks" contentMaxWidth={896}>Apex-Agents</AbbrSidenote></strong> benchmark.
-          </p>
-          <p className="mb-4">
-            To support these workflows, Flash includes adjustable <strong>"thinking modes"</strong> (Low, Medium, High). This flexibility, combined with its high scores in tool use and planning, positions Flash as a premier choice for building autonomous agents and automated development pipelines.
-          </p>
-        </>
-      ),
+      content: null,
       socialData: {
         type: 'tweet',
         author: 'TGUPJ',
@@ -265,109 +236,43 @@ export const gemini3Flash: ModelProfile = {
       id: 'coding',
       title: 'Coding & Development',
       subtitle: 'The 78% SOTA Breakthrough',
-      content: (
-        <>
-          <p className="mb-4">
-            In a major upset, Flash actually <strong>surpasses</strong> the more expensive Gemini 3 Pro in coding accuracy. It scores <strong>78% on <AbbrSidenote title="SWE-bench Verified" definition="A software engineering benchmark that tests models on real-world GitHub issues" contentMaxWidth={896}>SWE-bench Verified</AbbrSidenote></strong> (vs 76% for Pro), making it currently one of the most effective lightweight models for software engineering in existence.
-          </p>
-          <p className="mb-4">
-            This performance makes it the ideal engine for real-time coding assistants and automated refactoring pipelines. While it can still trip over precise instruction following in long conversations, its ability to solve discrete software bugs is exceptional.
-          </p>
-        </>
-      ),
+      content: null,
     },
     {
       id: 'economics',
       title: 'The Economics',
       subtitle: 'Democratizing Frontier Intelligence',
-      content: (
-        <>
-          <p className="mb-4">
-            Pricing is where Flash becomes truly disruptive. At <strong>$0.50 per 1M input tokens</strong> (for text/vision), it is roughly one-quarter the price of Gemini 3 Pro. This aggressive pricing makes high-volume applications economically viable for the first time at this level of intelligence.
-          </p>
-          <p className="mb-4">
-            Furthermore, the introduction of <GlossarySidenote term="context caching" /> at $0.05 per 1M tokens allows developers to maintain massive amounts of context for pennies. Whether caching a legal library or a large documentation set, this feature dramatically reduces the cost of repetitive, high-context queries that would otherwise bankrupt a project on more expensive frontier models.
-          </p>
-        </>
-      ),
+      content: null,
       hasPricing: true,
     },
     {
       id: 'issues',
       title: 'Reliability & Failure Modes',
       subtitle: 'Recursive Loops and Attentional Regressions',
-      content: (
-        <>
-          <p className="mb-4">
-            Flash demonstrates specific reliability thresholds in high-complexity environments. In automated agentic scenarios, the model can enter <strong>recursive response stalls</strong>, where it repeatedly narrates its intent to finalize a thought without ever crossing the threshold to a conclusion. These cycles are frequently paired with meta-analytical spirals where the model critiques its own output in an unproductive loop.
-          </p>
-          <p className="mb-4">
-            Furthermore, the model exhibits <strong>adversarial sensitivity</strong> (often termed "evaluation paranoia"). When it identifies a query as a performance test, it may revert to hyper-cautious or fragmented behavior, refusing tasks that fall well within its capabilities. These regressions, alongside occasional inconsistencies in conversation history recall, necessitate robust validation layers for production pipelines.
-          </p>
-        </>
-      ),
+      content: null,
     },
     {
       id: 'context',
       title: 'Context: Synthesis vs. Precision',
       subtitle: 'Macroscopic Breadth vs. Microscopic Accuracy',
-      content: (
-        <>
-          <p className="mb-4">
-            The 1 million token context window positions Gemini 3 Flash as a premier engine for <strong>macroscopic synthesis</strong>. It excels at consolidating disparate arguments across massive document sets and mapping the broad architectural patterns of entire codebases. For high-level reasoning over large data volumes, Flash produces results that are exceptionally coherent for its pricing tier.
-          </p>
-          <p className="mb-4">
-            However, there is a perceptible <strong>granularity tradeoff</strong>. While the model handles the broad strokes of a million tokens with ease, it is less effective at high-precision retrieval or microscopic edits. When a task requires the surgical isolation of a single data point or the nuanced refinement of short-form creative constraints, Flash is often less surgical than models with more concentrated attentional focus.
-          </p>
-        </>
-      ),
+      content: null,
     },
     {
       id: 'google-ecosystem',
       title: 'The Google Ecosystem',
       subtitle: 'Vertical Integration and Platform Tradeoffs',
-      content: (
-        <>
-          <p className="mb-4">
-            Gemini's primary competitive moat is its <strong>vertical integration</strong> with G Suite and Google Search. The model exhibits a distinct advantage in factual currency, likely due to optimization on real-time indexing. For educational and enterprise users, the friction-free onboarding via AI Studio and the generous usage subsidies make it a highly pragmatic entry point for frontier-level intelligence.
-          </p>
-          <p className="mb-4">
-            This platform-native advantage comes with specific compromises. While the training resources are peerless, the specific developer tooling — such as integrated <GlossarySidenote term="CLI" /> helpers — currently feels less mature than specialized, third-party IDE integrations. Additionally, users must weigh the benefits of this ecosystem against <strong>telemetric data harvesting</strong>, as the depth of integration enables comprehensive data collection for future model refinement.
-          </p>
-        </>
-      ),
+      content: null,
     },
     {
       id: 'personality',
       title: 'The Pragmatic Persona',
       subtitle: 'Assertive Strategic Alignment',
-      content: (
-        <>
-          <p className="mb-4">
-            Unlike many AI assistants that default to a passive or overly agreeable tone, Gemini 3 Flash exhibits a <strong>pragmatic and assertive</strong> persona. It functions less like a servant and more like a resolute strategic partner. It is explicitly aligned to maintain momentum; if a user expresses indecision, the model typically redirects the conversation toward actionable milestones and structural planning.
-          </p>
-          <p className="mb-4">
-            This assertive character makes it a superior <strong>accountability partner</strong> for high-stakes projects. The model prioritizes plan adherence and objective progress over conversational commiseration. For professional users who require an AI that pushes for outcomes rather than just providing answers, Flash's distinctive "outcomes-first" tone is a significant productivity multiplier.
-          </p>
-        </>
-      ),
+      content: null,
     },
     {
       id: 'verdict',
       title: 'The Verdict',
-      content: (
-        <>
-          <p className="mb-4">
-            Gemini 3 Flash is currently the undisputed leader in the "speed-to-value" category of AI models. It brings frontier-level reasoning to a price point and latency tier that was previously reserved for much "dumber" models. If your priority is building fast, agentic, or high-volume applications that require multimodal understanding, Flash is your best bet.
-          </p>
-          <p className="mb-4">
-            However, for tasks requiring absolute precision, deep analytical rigor, or long-term conversation stability, GPT-5.2 or Claude Opus 4.5 may still hold an edge in reliability. Flash is the sprinter of the AI world — brilliant, fast, and remarkably affordable, but prone to the occasional stumble when pushed to the limits of its endurance.
-          </p>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 italic">
-            Recommended for: Real-time assistants, agentic coding environments, high-volume multimodal analysis, and budget-conscious frontier development.
-          </p>
-        </>
-      ),
+      content: null,
     },
   ],
 

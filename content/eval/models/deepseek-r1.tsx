@@ -1,7 +1,5 @@
-import React from 'react'
 import type { ModelProfile } from '@/lib/models/types'
 import { getModelPricingFromReference, mergePricingData } from '@/lib/models/utils'
-import { AbbrSidenote } from '@/components/shared/sidenote'
 
 export const deepseekR1: ModelProfile = {
   slug: 'deepseek-r1',
@@ -185,32 +183,7 @@ export const deepseekR1: ModelProfile = {
       id: 'why-it-matters',
       title: 'Why It Matters',
       subtitle: 'For everyday people and power users',
-      content: (
-        <>
-          <p className="mb-4">
-            Most{' '}
-            <AbbrSidenote term="LLM" contentMaxWidth={896}>
-              LLMs
-            </AbbrSidenote>{' '}
-            give you an answer. DeepSeek-R1 shows you the work. If you've ever used ChatGPT and gotten a confident but
-            wrong answer, you'll appreciate this: R1 exposes its reasoning process in real time. You can see it
-            second-guessing itself, working through edge cases, correcting mistakes, and even having "aha moments" where
-            it pauses to re-evaluate its approach.
-          </p>
-          <p className="mb-4">
-            This matters for three reasons: <strong>trust</strong> (you can verify the logic), <strong>learning</strong>{' '}
-            (watching the model think teaches you problem-solving), and <strong>debugging</strong> (when it's wrong, you
-            know why). The transparency is especially valuable for developers building production systems — you can see
-            exactly why the model made a decision.
-          </p>
-          <p>
-            But the real story is the economics. At <data value="0.55">$0.55</data> per million tokens, R1 makes advanced
-            reasoning accessible at a scale that was previously impossible. A hedge fund skunkworks project trained this
-            for $5-6 million — proving that you don't need billions to compete at the frontier. This democratization of
-            reasoning capability is what makes R1 genuinely transformative.
-          </p>
-        </>
-      ),
+      content: null,
     },
     {
       id: 'social-proof',
@@ -233,47 +206,13 @@ export const deepseekR1: ModelProfile = {
       subtitle: 'What makes it tick',
       variant: 'technical',
       hasBenchmarks: true,
-      content: (
-        <>
-          <h3 className="text-xl font-semibold mt-6 mb-3">Visible Reasoning</h3>
-          <p className="mb-4">
-            Unlike GPT-4 or Claude, which hide their thinking, DeepSeek-R1 shows you a{' '}
-            <code className="bg-neutral-100 dark:bg-neutral-800 px-1 py-0.5 rounded text-sm">&lt;think&gt;</code> block
-            before every answer. This isn't just for show — the model genuinely uses this space to work through
-            problems, test hypotheses, and refine its approach. It's like having a study partner who talks through the
-            problem out loud.
-          </p>
-
-          <h3 className="text-xl font-semibold mt-6 mb-3">Cost Efficiency</h3>
-          <p className="mb-4">
-            At <data value="0.55">$0.55</data> per million input tokens and <data value="2.19">$2.19</data> per million
-            output tokens, R1 is roughly 20-30x cheaper than GPT-4o and 95% cheaper than o1. This isn't a budget model —
-            it's frontier performance at commodity pricing. For context, running 1,000 complex reasoning queries costs
-            about <data value="5">$5</data>.
-          </p>
-
-          <h3 className="text-xl font-semibold mt-6 mb-3">Open Weights & Distilled Models</h3>
-          <p className="mb-4">
-            The full <data value="671000000000">671B</data> parameter model is available on HuggingFace under an MIT
-            license. Yes, you can run it locally if you have the hardware (good luck). More realistically, DeepSeek
-            released six <AbbrSidenote title="Distillation trains smaller models to mimic larger models' behavior, preserving capabilities at lower cost" contentMaxWidth={896}>distilled</AbbrSidenote> versions ranging from 1.5B to 70B parameters, trained on R1's reasoning outputs. The
-            32B distilled model reportedly outperforms OpenAI o1-mini on some benchmarks, while the 8B version can run
-            on consumer hardware. These distilled models preserve much of R1's reasoning capability at a fraction of the
-            compute cost, making advanced reasoning accessible to anyone with a decent GPU or even a modern MacBook.
-          </p>
-        </>
-      ),
+      content: null,
     },
     {
       id: 'economics',
       title: 'The Economics',
       subtitle: 'API pricing and chat usage compared',
-      content: (
-        <p className="mb-2">
-          R1's most disruptive feature isn't technical — it's the price tag. Compare costs across providers for{' '}
-          <AbbrSidenote term="API" contentMaxWidth={896}>API</AbbrSidenote> usage and daily chat limits.
-        </p>
-      ),
+      content: null,
       hasPricing: true,
       socialData: {
         type: 'tweet',
@@ -294,151 +233,18 @@ export const deepseekR1: ModelProfile = {
         { label: 'Total Params', value: '671B', icon: 'cpu' },
         { label: 'Active Params', value: '37B', icon: 'zap' },
       ],
-      content: (
-        <>
-          <p className="mb-4">
-            DeepSeek trained R1 using <strong>pure <AbbrSidenote term="RL" contentMaxWidth={896}>RL</AbbrSidenote> without <AbbrSidenote term="SFT" contentMaxWidth={896}>SFT</AbbrSidenote></strong> — a
-            first for reasoning models at this scale. This is significant because it demonstrates that reasoning can
-            emerge purely through reward signals, not just by mimicking human-written examples. They used{' '}
-            <AbbrSidenote term="GRPO" contentMaxWidth={896}>GRPO</AbbrSidenote> (Group Relative Policy Optimization) with
-            verifiable rewards:
-          </p>
-          <ul className="list-disc pl-6 mb-6 space-y-2">
-            <li>
-              <strong>Verifiable rewards</strong>: For math problems, they checked answers against ground truth. For
-              code, they compiled and ran test cases. No neural reward model needed — just deterministic verification.
-            </li>
-            <li>
-              <strong>Cold-start data</strong>: They incorporated synthetic reasoning data from R1-Zero (their
-              preliminary version) to bootstrap the process and avoid endless repetition issues.
-            </li>
-            <li>
-              <strong>Rejection sampling</strong>: Generated multiple reasoning paths and kept the best ones, mixing 75%
-              reasoning problems with 25% general queries in later stages.
-            </li>
-          </ul>
-          <p className="mb-6">
-            The base model is a{' '}
-            <dfn>
-              <AbbrSidenote term="MoE" contentMaxWidth={896}>
-                MoE
-              </AbbrSidenote>
-            </dfn>{' '}
-            (Mixture of Experts) architecture with <data value="671000000000">671B</data> total parameters, but only
-            ~<data value="37000000000">37B</data> active per token. This sparse activation is how they keep inference costs
-            down — you're not running the full model for every word. During training, the model naturally learned to
-            reason in multiple languages (they had to constrain it to English), suggesting that reasoning patterns are
-            somewhat language-agnostic.
-          </p>
-        </>
-      ),
-      expandable: {
-        title: 'MoE Architecture Details',
-        preview: 'Deep dive into the mixture-of-experts routing and expert specialization patterns',
-        content: (
-          <>
-            <p className="mb-4">
-              The model uses a 2-expert-per-token routing strategy with learned gating functions. Each expert is a
-              standard feedforward block, but the router learns to send tokens to specialized experts based on task type.
-              Early analysis suggests some experts specialize in math, others in code, and others in general reasoning.
-            </p>
-            <p className="mb-4">
-              Interestingly, the routing behavior changes during the reasoning phase. When generating the{' '}
-              <code className="bg-neutral-200 dark:bg-neutral-700 px-1 rounded">&lt;think&gt;</code> block, the model
-              activates different experts than when generating the final answer. This suggests the training process
-              learned to separate "internal cognition" from "user-facing output" at the architectural level.
-            </p>
-            <p>
-              One fascinating emergent behavior is the "aha moment" — the model learned to pause and re-evaluate its
-              reasoning mid-thought. This wasn't explicitly trained but emerged during RL training, appearing around the
-              middle of the training process. You can see this in action when R1 says things like "Wait, let me
-              reconsider..." or "Actually, that doesn't seem right..." — it's genuinely backtracking and exploring
-              alternative paths.
-            </p>
-          </>
-        ),
-      },
+      content: null,
     },
     {
       id: 'issues',
       title: 'Known Issues & Quirks',
-      content: (
-        <>
-          <h3 className="text-xl font-semibold mt-6 mb-3">Verbose Reasoning</h3>
-          <p className="mb-4">
-            Sometimes R1 overthinks simple questions. Ask it <q>What is 2+2?</q> and you might get a 200-word reasoning
-            trace about the properties of addition. This is funny once and annoying by the tenth time. The reasoning
-            traces can consume 1000+ tokens even for straightforward queries, which slows down inference. You can
-            mitigate this by adjusting the system prompt to encourage brevity, but the model was trained to reason
-            extensively, so it's baked into its behavior.
-          </p>
-
-          <h3 className="text-xl font-semibold mt-6 mb-3">Tokenization Limitations</h3>
-          <p className="mb-4">
-            Like most LLMs, R1 struggles with character-level tasks due to subword tokenization. The infamous
-            "strawberry test" (counting r's in "strawberry") reveals this: the model can correctly spell the word
-            letter-by-letter in its reasoning but then doubts itself because it knows "strawberry" typically has "two
-            r's" from training data. This isn't unique to R1, but the visible reasoning makes the struggle more
-            apparent. For character manipulation tasks, you're better off asking it to write code that does the
-            counting.
-          </p>
-
-          <h3 className="text-xl font-semibold mt-6 mb-3">Limited Multimodal Support</h3>
-          <p className="mb-4">
-            R1 is text-only. If you need vision, audio, or image generation, you'll need to use a different model.
-            DeepSeek has hinted at a multimodal version, but no timeline yet.
-          </p>
-
-          <h3 className="text-xl font-semibold mt-6 mb-3">Occasional Hallucination in Reasoning</h3>
-          <p className="mb-4">
-            Because you can see the thinking, you can also see when it goes off the rails. Sometimes the model will
-            confidently reason its way to the wrong answer, complete with convincing-sounding logic. The transparency
-            helps you catch this, but it's still a risk. Interestingly, the model sometimes shows an "intrinsic
-            knowledge override" — it will correctly reason through a problem but then second-guess itself based on
-            memorized facts from training data, even when its reasoning is sound.
-          </p>
-        </>
-      ),
+      content: null,
     },
     {
       id: 'in-the-wild',
       title: 'In the Wild',
       subtitle: 'Real-world usage and community reactions',
-      content: (
-        <>
-          <p className="mb-4">
-            Within weeks of launch, developers started using R1 for use cases that were previously too expensive. The
-            Hacker News discussion hit 1,843 points with 663 comments as developers shared quantized versions, setup
-            guides, and local deployment strategies:
-          </p>
-          <ul className="list-disc pl-6 mb-6 space-y-2">
-            <li>
-              <strong>AI tutors</strong> that show students step-by-step reasoning — the visible thinking process is
-              perfect for educational applications
-            </li>
-            <li>
-              <strong>Code review agents</strong> that explain why they flagged an issue — developers can see the
-              model's logic and trust its suggestions
-            </li>
-            <li>
-              <strong>Math problem solvers</strong> for competitive programming — R1 solves Putnam-level problems that
-              stump other models
-            </li>
-            <li>
-              <strong>Research assistants</strong> that synthesize papers and show their logic — researchers can verify
-              the reasoning chain
-            </li>
-            <li>
-              <strong>Local deployment</strong> — <AbbrSidenote title="Quantization" definition="Quantization reduces model precision (e.g., 32-bit to 4-bit) to shrink file size and speed inference" contentMaxWidth={896}>quantized</AbbrSidenote> versions (as small as 1.5B) run in browsers via <AbbrSidenote title="WebGPU" definition="WebGPU enables GPU acceleration directly in web browsers without plugins" contentMaxWidth={896}>WebGPU</AbbrSidenote> or on
-              consumer hardware, making advanced reasoning accessible without cloud costs
-            </li>
-          </ul>
-          <p className="mb-4">
-            Real-world cost savings are dramatic: developers report cutting API costs by 80-95% compared to o1, with some
-            building entire products for under $20/month that would have cost hundreds before.
-          </p>
-        </>
-      ),
+      content: null,
     },
     {
       id: 'advanced',
@@ -446,90 +252,11 @@ export const deepseekR1: ModelProfile = {
       subtitle: 'Implementation details and gotchas',
       variant: 'advanced',
       content: null,
-      expandables: [
-        {
-          title: 'Fine-tuning R1',
-          preview: 'How to adapt the model for domain-specific reasoning tasks',
-          content: (
-            <>
-              <p className="mb-4">
-                Because the weights are open, you can fine-tune R1 on your own data. The most effective approach is to
-                continue the <AbbrSidenote term="RL" contentMaxWidth={896}>RL</AbbrSidenote> training with domain-specific reward models.
-                For example, if you're building a medical reasoning system, you'd:
-              </p>
-              <ol className="list-decimal pl-6 mb-4 space-y-2">
-                <li>Collect domain-specific reasoning traces (e.g., medical case studies)</li>
-                <li>Train a reward model to score medical reasoning quality</li>
-                <li>Use <AbbrSidenote term="PPO" contentMaxWidth={896}>PPO</AbbrSidenote> or <AbbrSidenote term="GRPO" contentMaxWidth={896}>GRPO</AbbrSidenote> to fine-tune R1's reasoning on your domain</li>
-              </ol>
-              <p>
-                This is expensive (requires GPUs and expertise), but the results can be dramatic for specialized tasks.
-              </p>
-            </>
-          ),
-        },
-        {
-          title: 'Inference Optimization',
-          preview: 'Making reasoning faster without sacrificing quality',
-          content: (
-            <>
-              <p className="mb-4">
-                R1's reasoning traces can get long (1000+ tokens), which slows inference. Here are strategies to speed
-                things up:
-              </p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>
-                  <strong>Use <AbbrSidenote title="Distillation trains smaller models to mimic larger models' behavior, preserving capabilities at lower cost" contentMaxWidth={896}>distilled</AbbrSidenote> models</strong>: DeepSeek already released distilled versions (1.5B, 7B, 8B,
-                  14B, 32B, 70B) that preserve much of R1's reasoning at a fraction of the compute. The 32B distilled
-                  model reportedly outperforms o1-mini on some benchmarks.
-                </li>
-                <li>
-                  <strong><AbbrSidenote title="Quantization reduces model precision (e.g., 32-bit to 4-bit) to shrink file size and speed inference" contentMaxWidth={896}>Quantization</AbbrSidenote></strong>: <AbbrSidenote title="Q4_K_M is a 4-bit quantization format that balances quality and compression" contentMaxWidth={896}>Q4_K_M</AbbrSidenote> quantizations work well for local deployment. The 8B model runs
-                  at ~20 tokens/sec on a 16GB GPU, while the 7B version works on CPU-only setups.
-                </li>
-                <li>
-                  <strong>Early stopping</strong>: Monitor the reasoning trace and stop generation once the model
-                  reaches high confidence or starts repeating itself
-                </li>
-                <li>
-                  <strong><AbbrSidenote title="WebGPU enables GPU acceleration directly in web browsers without plugins" contentMaxWidth={896}>WebGPU</AbbrSidenote> deployment</strong>: The 1.5B distilled model can run entirely in your browser using
-                  WebGPU, with no server needed
-                </li>
-              </ul>
-            </>
-          ),
-        },
-      ],
     },
     {
       id: 'verdict',
       title: 'The Verdict',
-      content: (
-        <>
-          <p className="mb-4">
-            DeepSeek-R1 isn't just a good model — it's a market-shaping event. By offering frontier reasoning at sub-$1
-            pricing (trained for $5-6M vs competitors' billions), it forced every competitor to rethink their
-            economics. The pure <AbbrSidenote term="RL" contentMaxWidth={896}>RL</AbbrSidenote> approach without <AbbrSidenote term="SFT" contentMaxWidth={896}>supervised fine-tuning</AbbrSidenote> proves that reasoning can emerge through
-            reward signals alone — a paradigm shift that will influence how future models are trained.
-          </p>
-          <p className="mb-4">
-            For developers, it's a no-brainer for any task that benefits from visible reasoning: math, code, planning,
-            research, tutoring. The MIT-licensed weights mean you can run it locally, fine-tune it, or build on top of it
-            without restrictions. The distilled models make advanced reasoning accessible to anyone with consumer
-            hardware.
-          </p>
-          <p className="mb-4">
-            It's not for everything. If you need multimodal support, lightning-fast responses, or ultra-polished UX,
-            look elsewhere. The verbose reasoning can be annoying for simple queries, and tokenization issues persist.
-            But for reasoning tasks at scale? R1 is the new baseline.
-          </p>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 italic">
-            Want to try it? Chat is free at chat.deepseek.com, and the open weights are on HuggingFace. You can also run
-            <AbbrSidenote title="Quantization reduces model precision (e.g., 32-bit to 4-bit) to shrink file size and speed inference" contentMaxWidth={896}>quantized</AbbrSidenote> versions locally via Ollama or in your browser with <AbbrSidenote title="WebGPU enables GPU acceleration directly in web browsers without plugins" contentMaxWidth={896}>WebGPU</AbbrSidenote>. Start with the chat interface to see
-            the reasoning in action.
-          </p>
-        </>
-      ),
+      content: null,
     },
   ],
   governance: {
