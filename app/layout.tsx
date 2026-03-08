@@ -13,14 +13,6 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Megaminds | AI Eval, Tools & Education',
   description: 'Match minds to models to workflows to outcomes. AI evaluation, tools, and consulting.',
-  manifest: '/manifest.json',
-  icons: {
-    icon: '/icon.png',
-  },
-}
-
-export const viewport: Viewport = {
-  themeColor: '#000000',
 }
 
 export default function RootLayout({
@@ -45,7 +37,6 @@ export default function RootLayout({
         </main>
         <Footer />
         <Analytics />
-        <script src="/register-sw.js" defer />
       </body>
     </html>
   )
