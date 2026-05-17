@@ -2,81 +2,21 @@ import Link from 'next/link'
 import { ArrowLeft, Copy, ThumbsUp } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { ModelIcon } from '@/components/ui/model-icon'
-
-// Sample data - will be replaced with MDX/database content
-const promptsByCategory: Record<string, {
-  name: string
-  prompts: {
-    slug: string
-    title: string
-    description: string
-    models: string[]
-    difficulty: 'beginner' | 'intermediate' | 'advanced'
-    successRate: number
-    prompt: string
-  }[]
-}> = {
-  finance: {
-    name: 'Finance',
-    prompts: [
-      {
-        slug: 'portfolio-analysis',
-        title: 'Portfolio Risk Assessment',
-        description: 'Analyze your investment portfolio for risk exposure and diversification.',
-        models: ['claude', 'chatgpt'],
-        difficulty: 'intermediate',
-        successRate: 92,
-        prompt: `I'd like you to analyze my investment portfolio for risk and diversification.
-
-Here's my current allocation:
-[LIST YOUR HOLDINGS]
-
-Please provide:
-1. Overall risk assessment (conservative/moderate/aggressive)
-2. Sector concentration analysis
-3. Geographic diversification
-4. Suggestions for rebalancing
-5. Potential blind spots or risks I should consider
-
-Consider my risk tolerance as [CONSERVATIVE/MODERATE/AGGRESSIVE] and my investment timeline is [X YEARS].`
-      },
-      {
-        slug: 'decade-planning',
-        title: 'Financial Planning by Decade',
-        description: 'Create a financial roadmap tailored to your current life stage.',
-        models: ['claude', 'chatgpt', 'gemini'],
-        difficulty: 'beginner',
-        successRate: 88,
-        prompt: `I'm in my [20s/30s/40s/50s/60s] and want to create an age-appropriate financial plan.
-
-My current situation:
-- Income: [AMOUNT]
-- Savings: [AMOUNT]
-- Debt: [AMOUNT]
-- Major goals: [LIST GOALS]
-
-Please create a financial roadmap that includes:
-1. Priority areas for this decade
-2. Savings rate recommendations
-3. Investment strategy appropriate for my age
-4. Key milestones to hit before the next decade
-5. Common mistakes people make at this stage`
-      },
-    ]
-  },
-  // Add more categories...
-}
+import { getPromptCategories, getPromptsByCategory, type PromptContent } from '@/lib/content'
 
 export function generateStaticParams() {
-  return Object.keys(promptsByCategory).map((category) => ({ category }))
+  return getPromptCategories().map((category) => ({ category: category.slug }))
 }
 
 export default function CategoryPage({ params }: { params: { category: string } }) {
-  const data = promptsByCategory[params.category]
+  const categories = getPromptCategories()
+  const category = categories.find((item) => item.slug === params.category)
 
-  if (!data) {
+  if (!category) {
     notFound()
   }
+
+  const prompts = getPromptsByCategory(params.category)
 
   return (
     <div className="py-16 px-6 lg:px-8">
@@ -89,11 +29,11 @@ export default function CategoryPage({ params }: { params: { category: string } 
           All Categories
         </Link>
 
-        <h1 className="text-3xl font-bold text-gray-900">{data.name} Prompts</h1>
-        <p className="mt-2 text-gray-600">{data.prompts.length} prompts in this category</p>
+        <h1 className="text-3xl font-bold text-gray-900">{category.name} Prompts</h1>
+        <p className="mt-2 text-gray-600">{prompts.length} prompts in this category</p>
 
         <div className="mt-8 space-y-6">
-          {data.prompts.map((prompt) => (
+          {prompts.map((prompt) => (
             <PromptCard key={prompt.slug} prompt={prompt} />
           ))}
         </div>
@@ -102,7 +42,13 @@ export default function CategoryPage({ params }: { params: { category: string } 
   )
 }
 
-function PromptCard({ prompt }: { prompt: typeof promptsByCategory.finance.prompts[0] }) {
+function getPromptBody(content: string): string {
+  return content.split(/\n---\n/)[0].trim()
+}
+
+function PromptCard({ prompt }: { prompt: PromptContent }) {
+  const promptBody = getPromptBody(prompt.content)
+
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden">
       <div className="p-5">
@@ -137,13 +83,13 @@ function PromptCard({ prompt }: { prompt: typeof promptsByCategory.finance.promp
       <div className="bg-gray-50 p-4 border-t border-gray-200">
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Prompt</span>
-          <button className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700">
+          <button className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700" type="button">
             <Copy className="w-3 h-3" />
             Copy
           </button>
         </div>
         <pre className="text-sm text-gray-700 whitespace-pre-wrap font-mono bg-white p-3 rounded border border-gray-200 max-h-48 overflow-y-auto">
-          {prompt.prompt}
+          {promptBody}
         </pre>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Compass, Mail, ChefHat, Image } from 'lucide-react'
+import { Compass, Mail, ChefHat, Image as ImageIcon } from 'lucide-react'
 
 export const metadata = {
   title: 'Tools | Megaminds',
@@ -36,7 +36,7 @@ export default function ToolsPage() {
             href="/tools/heard-chef"
           />
           <ToolCard
-            icon={<Image className="w-6 h-6" />}
+            icon={<ImageIcon className="w-6 h-6" />}
             title="Photo Organizer"
             description="Rename, organize, dedupe, and remove objects from your photos with AI assistance."
             href="/tools/photo-organizer"

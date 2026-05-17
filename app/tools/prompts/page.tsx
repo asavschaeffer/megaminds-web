@@ -1,51 +1,19 @@
 import Link from 'next/link'
 import { Search } from 'lucide-react'
+import { getPromptCategories } from '@/lib/content'
 
 export const metadata = {
   title: 'Prompt Library | Megaminds',
   description: 'Curated AI prompts organized by category.',
 }
 
-const categories = [
-  {
-    slug: 'finance',
-    name: 'Finance',
-    description: 'Portfolio analysis, financial planning, investing strategies',
-    count: 12,
-  },
-  {
-    slug: 'travel',
-    name: 'Travel',
-    description: 'Trip planning, travel hacks, destination research',
-    count: 8,
-  },
-  {
-    slug: 'health',
-    name: 'Health',
-    description: 'Workout planning, meal prep, supplement research',
-    count: 10,
-  },
-  {
-    slug: 'business',
-    name: 'Business',
-    description: 'Business planning, research, tools comparison',
-    count: 15,
-  },
-  {
-    slug: 'productivity',
-    name: 'Productivity',
-    description: 'Organization, time management, note-taking',
-    count: 9,
-  },
-  {
-    slug: 'education',
-    name: 'Education',
-    description: 'Study skills, homework help, research papers',
-    count: 11,
-  },
-]
+const categoryDescriptions: Record<string, string> = {
+  finance: 'Portfolio analysis, financial planning, investing strategies',
+}
 
 export default function PromptsPage() {
+  const categories = getPromptCategories()
+
   return (
     <div className="py-16 px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
@@ -85,7 +53,9 @@ export default function PromptsPage() {
                   </h2>
                   <span className="text-sm text-gray-500">{category.count} prompts</span>
                 </div>
-                <p className="mt-1 text-sm text-gray-600">{category.description}</p>
+                <p className="mt-1 text-sm text-gray-600">
+                  {categoryDescriptions[category.slug] ?? 'Curated prompts and workflows'}
+                </p>
               </div>
             </Link>
           ))}

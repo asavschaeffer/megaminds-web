@@ -16,6 +16,10 @@ export type PromptMeta = {
   submitter: 'megaminds' | 'community'
 }
 
+export type PromptContent = PromptMeta & {
+  content: string
+}
+
 export type ArticleMeta = {
   slug: string
   title: string
@@ -35,7 +39,7 @@ export type ModelMeta = {
 }
 
 // Get all prompts in a category
-export function getPromptsByCategory(category: string): PromptMeta[] {
+export function getPromptsByCategory(category: string): PromptContent[] {
   const categoryPath = path.join(contentDirectory, 'prompts', category)
 
   if (!fs.existsSync(categoryPath)) {
@@ -47,12 +51,13 @@ export function getPromptsByCategory(category: string): PromptMeta[] {
   return files.map(file => {
     const filePath = path.join(categoryPath, file)
     const fileContents = fs.readFileSync(filePath, 'utf8')
-    const { data } = matter(fileContents)
+    const { data, content } = matter(fileContents)
 
     return {
       slug: file.replace('.mdx', ''),
+      content,
       ...data,
-    } as PromptMeta
+    } as PromptContent
   }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
