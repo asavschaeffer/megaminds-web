@@ -2,25 +2,11 @@
 
 import { useState } from 'react'
 import { motion } from 'motion/react'
+import { CurriculumLessonPage } from '@/components/learn/curriculum/lesson-page'
 
 export default function HowLLMsWorkPage() {
     return (
-        <div className="py-16 px-6 lg:px-8 bg-white">
-            <div className="mx-auto max-w-4xl">
-                <div className="mb-12">
-                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                        <span>Module 0</span>
-                        <span>•</span>
-                        <span>Foundations</span>
-                    </div>
-                    <h1 className="text-4xl font-bold text-gray-900 mb-6">How LLMs Actually Work</h1>
-                    <p className="text-xl text-gray-600 leading-relaxed">
-                        Most "transformers explained" guides get lost in the math. We're going to visualize
-                        exactly how information flows through the network—end to end.
-                    </p>
-                </div>
-
-                <div className="prose prose-lg max-w-none text-gray-700">
+        <CurriculumLessonPage slug="how-llms-work" containerClassName="mx-auto max-w-4xl" proseClassName="prose prose-lg max-w-none text-gray-700" showNavigation={false}>
                     <p>
                         There are two distinct information highways in the transformer architecture:
                     </p>
@@ -115,9 +101,7 @@ export default function HowLLMsWorkPage() {
                         Whether they are <em>trained</em> to effectively leverage this for human-like introspection is a separate question,
                         but the machinery is undeniably there.
                     </p>
-                </div>
-            </div>
-        </div>
+                </CurriculumLessonPage>
     )
 }
 

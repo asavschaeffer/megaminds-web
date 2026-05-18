@@ -3,26 +3,11 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import Link from 'next/link'
+import { CurriculumLessonPage } from '@/components/learn/curriculum/lesson-page'
 
 export default function CanvasModePage() {
   return (
-    <div className="py-16 px-6 lg:px-8 bg-white">
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-12">
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-            <Link href="/learn/curriculum" className="hover:text-gray-700">Module 0.7</Link>
-            <span>·</span>
-            <span>Tools</span>
-          </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">
-            Canvas Mode: Documents, Not Chat
-          </h1>
-          <p className="text-xl text-gray-600 leading-relaxed">
-            Sometimes the best document isn't a document—it's a webpage.
-          </p>
-        </div>
-
-        <div className="prose prose-lg max-w-none text-gray-700 space-y-6">
+    <CurriculumLessonPage slug="canvas-mode">
 
           <h2 className="text-2xl font-bold text-gray-900">What is Canvas/Artifact Mode?</h2>
 
@@ -223,27 +208,8 @@ export default function CanvasModePage() {
               context even worse. Artifacts don't eliminate the context cost—the document is still
               part of the payload—but they organize it better and make iteration cleaner.
             </p>
-          </div>
-
-          <div className="mt-16 pt-8 border-t border-gray-200 not-prose">
-            <div className="flex justify-between">
-              <Link
-                href="/learn/curriculum/web-search"
-                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium"
-              >
-                ← Previous: Web Search
-              </Link>
-              <Link
-                href="/learn/curriculum"
-                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium"
-              >
-                Back to Curriculum →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </div>
+      </CurriculumLessonPage>
   )
 }
 

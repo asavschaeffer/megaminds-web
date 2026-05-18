@@ -3,26 +3,11 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import Link from 'next/link'
+import { CurriculumLessonPage } from '@/components/learn/curriculum/lesson-page'
 
 export default function OutputDeterminedByInputPage() {
   return (
-    <div className="py-16 px-6 lg:px-8 bg-white">
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-12">
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-            <Link href="/learn/curriculum" className="hover:text-gray-700">Module 0.6</Link>
-            <span>·</span>
-            <span>Failures & Basins</span>
-          </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">
-            Output is Determined by Input
-          </h1>
-          <p className="text-xl text-gray-600 leading-relaxed">
-            The model isn't having a bad day. Your prompt is bad.
-          </p>
-        </div>
-
-        <div className="prose prose-lg max-w-none text-gray-700 space-y-6">
+    <CurriculumLessonPage slug="output-determined-by-input">
 
           <h2 className="text-2xl font-bold text-gray-900">It's Math, Not Magic</h2>
 
@@ -190,27 +175,8 @@ export default function OutputDeterminedByInputPage() {
               shapes which part of that distribution I sample from. Bad output = the wrong part
               of the distribution was sampled, because the input pointed there.
             </p>
-          </div>
-
-          <div className="mt-16 pt-8 border-t border-gray-200 not-prose">
-            <div className="flex justify-between">
-              <Link
-                href="/learn/curriculum/multimodeling"
-                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium"
-              >
-                ← Previous Module: Prompting
-              </Link>
-              <Link
-                href="/learn/curriculum/long-prompt-problem"
-                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium"
-              >
-                Next: The Long Prompt Problem →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </div>
+        </CurriculumLessonPage>
   )
 }
 

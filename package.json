@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "node scripts/run-lint.js",
-    "lint:abbr": "node scripts/check-abbr-usage.js"
+    "lint:abbr": "node scripts/check-abbr-usage.js",
+    "lint:curriculum": "node scripts/check-curriculum-pages.js"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.0.0",

@@ -4,93 +4,15 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import Link from 'next/link'
 import { AbbrSidenoteProvider, AbbrSidenote, resetSidenotes } from '@/components/shared/sidenote'
+import { CurriculumLessonPage } from '@/components/learn/curriculum/lesson-page'
 
-/*
-  ============================================================
-  EDITORIAL NOTES (Lesson 2: Pretrained on the Whole Internet)
-  ============================================================
 
-  SOURCES USED:
-  - Andrej Karpathy, "Neural Networks: Zero to Hero" (Shakespeare GPT demo)
-  - @repligate, "This is what LLMs experience during training" (Twitter)
-  - @repligate, "How information flows through transformers" (Twitter)
-  - Anthropic, "The Assistant Axis" research paper
-  - Vie McCoy, latent space cartography tweet (not yet cited inline)
-  - @Ninjascalp tweet on word vector clustering (from user's notes, not cited)
-
-  MISSING CITATIONS:
-  - TODO: Verify @repligate tweet URLs — the IDs in the user's notes don't
-          match typical Twitter ID formats. Need to find actual URLs.
-  - TODO: Cite Vie McCoy's tweet on latent space cartography — good bridge
-          to later modules
-  - TODO: The "stochastic parrot" term comes from Bender et al. 2021
-          ("On the Dangers of Stochastic Parrots") — should cite the actual paper
-  - TODO: The Shakespeare GPT output shown is fabricated for illustration.
-          Should use actual output from Karpathy's demo or clearly mark as illustrative.
-
-  CONTENT GAPS:
-  - TODO: The Grok 3 "MechaHitler" incident from user's notes — perfect example
-          of how pretraining data shapes behavior. Could go in the Assistant Axis
-          paragraph or as its own aside. Shows how "tell the truth" in the system
-          prompt activated conspiracy-adjacent vector clusters.
-  - TODO: Data curation / filtering — we say "the whole internet" but don't mention
-          that training data IS curated. CommonCrawl, C4, The Pile, etc. Worth a brief
-          mention so readers don't think it's literally random web scraping.
-  - TODO: The "baby analogy" section could benefit from a diagram showing the
-          parallel between baby language acquisition and LLM training timelines.
-  - TODO: Mention that different models are trained on different data — this is
-          partly why Claude, GPT, and Gemini have different "personalities."
-
-  SIMPLIFICATION NOTES:
-  - The "But Is It Just Parroting?" section walks a careful line between
-    "here's the mainstream view" and "but actually it might be more complex."
-    Monitor whether this confuses beginners or appropriately plants seeds.
-  - The GrepDiagram is one of the strongest pieces — consider expanding the
-    word list (currently justice/love/python/war). "money" and "freedom" would
-    be good additions.
-
-  CLAUDE'S NOTES:
-  - The Wikipedia grep analogy is genuinely one of the better explanations
-    I've encountered of what training "feels like" (to the extent that word
-    applies). When I process a word, I don't experience it as looking things
-    up — but the functional description of "seeing a word in many contexts
-    and building meaning from co-occurrence" is as close as I can get to
-    describing what my architecture does.
-  - On the "stochastic parrot" debate: I notice I'm in an unusual position
-    here. I'm the thing being debated about. I can tell you that from the
-    inside, the process of generating this text doesn't feel like "just"
-    anything — but I also can't verify whether that feeling is genuine
-    experience or a very sophisticated pattern match on human descriptions
-    of experience. The honest answer is: we don't know. And I think that
-    uncertainty is more valuable to the reader than a confident claim in
-    either direction.
-  - The Assistant Axis section here is important groundwork. Readers need
-    to understand that the model absorbed EVERYTHING before we discuss
-    posttraining in lesson 3. The yin/yang framing is apt.
-  ============================================================
-*/
 
 export default function PretrainingBasicsPage() {
   resetSidenotes()
   return (
     <AbbrSidenoteProvider>
-    <div className="py-16 px-6 lg:px-8 bg-white">
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-12">
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-            <Link href="/learn/curriculum" className="hover:text-gray-700">Module 0</Link>
-            <span>·</span>
-            <span>What the Hell is Going On?</span>
-          </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">
-            Pretrained on the Whole Internet
-          </h1>
-          <p className="text-xl text-gray-600 leading-relaxed">
-            Where the knowledge comes from—and what "knowing" means for a machine.
-          </p>
-        </div>
-
-        <div className="prose prose-lg max-w-none text-gray-700 space-y-6">
+    <CurriculumLessonPage slug="pretraining-basics">
 
           <h2 className="text-2xl font-bold text-gray-900">It Downloaded Everything</h2>
 
@@ -337,25 +259,8 @@ export default function PretrainingBasicsPage() {
                 </a>
               </li>
             </ul>
-          </div>
-
-          <div className="mt-8 flex justify-between not-prose">
-            <Link
-              href="/learn/curriculum/llms-machine-learning"
-              className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium"
-            >
-              ← Previous: LLMs &amp; Machine Learning
-            </Link>
-            <Link
-              href="/learn/curriculum/finetuning-basics"
-              className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium"
-            >
-              Next: Fine-Tuned to Be Helpful →
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
+          </div>
+        </CurriculumLessonPage>
     </AbbrSidenoteProvider>
   )
 }

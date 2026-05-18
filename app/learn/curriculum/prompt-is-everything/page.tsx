@@ -3,27 +3,11 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import Link from 'next/link'
+import { CurriculumLessonPage } from '@/components/learn/curriculum/lesson-page'
 
 export default function PromptIsEverythingPage() {
   return (
-    <div className="py-16 px-6 lg:px-8 bg-white">
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-12">
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-            <Link href="/learn/curriculum" className="hover:text-gray-700">Prompting</Link>
-            <span>·</span>
-            <span>Lesson 1</span>
-          </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">
-            Your Prompt is the Entire Input
-          </h1>
-          <p className="text-xl text-gray-600 leading-relaxed">
-            Now that you know there's no memory, let's talk about what that means
-            for how you use these things.
-          </p>
-        </div>
-
-        <div className="prose prose-lg max-w-none text-gray-700 space-y-6">
+    <CurriculumLessonPage slug="prompt-is-everything">
 
           <h2 className="text-2xl font-bold text-gray-900">Quick Recap</h2>
 
@@ -141,27 +125,8 @@ export default function PromptIsEverythingPage() {
           <p>
             That's it. Tell it who to be, what to do, and what good looks like. The rest of
             this module is just variations on that idea.
-          </p>
-
-          <div className="mt-16 pt-8 border-t border-gray-200 not-prose">
-            <div className="flex justify-between">
-              <Link
-                href="/learn/curriculum/no-memory"
-                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium"
-              >
-                ← Previous: There Is No Memory
-              </Link>
-              <Link
-                href="/learn/curriculum/roleplay"
-                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium"
-              >
-                Next: Roleplay →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </p>
+        </CurriculumLessonPage>
   )
 }
 

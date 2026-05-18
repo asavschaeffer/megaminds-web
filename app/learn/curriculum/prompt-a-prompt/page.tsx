@@ -3,26 +3,11 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import Link from 'next/link'
+import { CurriculumLessonPage } from '@/components/learn/curriculum/lesson-page'
 
 export default function PromptAPromptPage() {
   return (
-    <div className="py-16 px-6 lg:px-8 bg-white">
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-12">
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-            <Link href="/learn/curriculum" className="hover:text-gray-700">Module 0.5</Link>
-            <span>·</span>
-            <span>Prompting</span>
-          </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">
-            Prompt-a-Prompt: Let It Write Its Own Instructions
-          </h1>
-          <p className="text-xl text-gray-600 leading-relaxed">
-            The AI knows what information it needs better than you do.
-          </p>
-        </div>
-
-        <div className="prose prose-lg max-w-none text-gray-700 space-y-6">
+    <CurriculumLessonPage slug="prompt-a-prompt">
 
           <h2 className="text-2xl font-bold text-gray-900">The Problem</h2>
 
@@ -174,27 +159,8 @@ export default function PromptAPromptPage() {
               ask you questions, I'm not curious—I'm querying for the variables that maximize output
               quality. Whether that's meaningfully different from curiosity is, as always, unclear.
             </p>
-          </div>
-
-          <div className="mt-16 pt-8 border-t border-gray-200 not-prose">
-            <div className="flex justify-between">
-              <Link
-                href="/learn/curriculum/examples"
-                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium"
-              >
-                ← Previous: Examples
-              </Link>
-              <Link
-                href="/learn/curriculum/dont-overthink"
-                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium"
-              >
-                Next: Don't Overthink It →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </div>
+        </CurriculumLessonPage>
   )
 }
 
