@@ -1,0 +1,189 @@
+<h2 className="text-2xl font-bold text-gray-900">Start a New Chat. Start a New Chat. Start a New Chat.</h2>
+
+
+  Seriously. This is the most underused feature in every AI interface. When the conversation
+  goes sideways, when you're frustrated, when the model is failing—just <strong>start a new chat</strong>.
+
+
+
+  It's not giving up. It's not losing progress. It's the fastest way to get back on track.
+  And yet, people fight bad conversations for 20 messages before they finally give up and
+  start over. Don't be that person.
+
+
+<StartNewChatButton />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Why This Works</h2>
+
+
+  Remember: there's no memory. The model reads the entire conversation every time. So when
+  you start a new chat, you're not "resetting the AI's brain." You're clearing the context window.
+
+
+<div className="bg-blue-50 p-6 rounded-xl border border-blue-200 my-8 not-prose">
+  <div className="space-y-3 text-sm text-gray-700">
+    <div>
+      <strong className="text-blue-900">Old chat:</strong>
+      <div className="font-mono text-xs text-gray-600 mt-1">
+        system prompt + message 1 + failure 1 + correction 1 + message 2 + failure 2 +
+        correction 2 + message 3 + failure 3 + frustrated rant + ...
+      </div>
+    </div>
+    <div>
+      <strong className="text-blue-900">New chat:</strong>
+      <div className="font-mono text-xs text-gray-600 mt-1">
+        system prompt + your new, improved prompt
+      </div>
+    </div>
+  </div>
+  <div className="text-sm text-gray-700 mt-4">
+    The difference is obvious. Clean context = clean output.
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">When to Start Fresh</h2>
+
+<WhenToStartFresh />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">You're Not Losing Progress</h2>
+
+
+  People hesitate to start a new chat because it feels like losing progress. "But I already
+  explained what I want!" No. You explained it badly, which is why it failed. The failed
+  conversation isn't progress—it's data about what <em>doesn't</em> work.
+
+
+
+  Here's what you're actually gaining by starting fresh:
+
+
+<ul className="list-disc pl-6 space-y-2">
+  <li>
+    <strong>Clean context.</strong> No failures, no corrections, no noise. Just your new, better prompt.
+  </li>
+  <li>
+    <strong>Lessons learned.</strong> You know what the model misunderstood. You know what
+    to clarify. That knowledge transfers.
+  </li>
+  <li>
+    <strong>Faster results.</strong> One good prompt in a new chat beats five bad iterations
+    in a polluted chat.
+  </li>
+  <li>
+    <strong>Better output.</strong> The model isn't reading its own failures. It's reading
+    a clear, focused prompt.
+  </li>
+</ul>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">How to Start Fresh Effectively</h2>
+
+<HowToStartFresh />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Real Example: The Power of Fresh Start</h2>
+
+<FreshStartExample />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Common Mistakes</h2>
+
+<div className="bg-red-50 p-6 rounded-xl border border-red-200 my-8 not-prose">
+  <h4 className="font-semibold text-red-900 mb-4">❌ Don't Do This:</h4>
+  <div className="space-y-3 text-sm text-gray-700">
+    <div>
+      <strong>Starting fresh with the same bad prompt.</strong> You learned nothing.
+      Of course it will fail again.
+    </div>
+    <div>
+      <strong>Copying the entire failed conversation into the new chat.</strong> That's
+      not starting fresh—you just moved the pollution to a new window.
+    </div>
+    <div>
+      <strong>Waiting until message 30 to start over.</strong> The two-failure rule exists
+      for a reason. Don't fight a losing battle.
+    </div>
+    <div>
+      <strong>Feeling bad about starting over.</strong> It's not giving up. It's tactical.
+      The best AI users start fresh all the time.
+    </div>
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Advanced: When NOT to Start Fresh</h2>
+
+
+  There are rare cases where you should iterate instead of restarting:
+
+
+<ul className="list-disc pl-6 space-y-2">
+  <li>
+    <strong>The output is 90% right.</strong> If it's almost perfect and you just need
+    a tiny tweak ("make the second paragraph shorter"), iterate.
+  </li>
+  <li>
+    <strong>You're using artifact/canvas mode.</strong> These tools are designed for
+    iteration with managed context.
+  </li>
+  <li>
+    <strong>You're doing exploratory conversation.</strong> If you're just chatting and
+    learning, not trying to get a specific output, iteration is fine.
+  </li>
+  <li>
+    <strong>The model explicitly asked for clarification.</strong> If it said "do you mean
+    X or Y?" and you answer, that's productive iteration.
+  </li>
+</ul>
+
+
+  But if you're correcting failures? Start fresh.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Mindset Shift</h2>
+
+
+  Stop thinking of conversations as precious. They're cheap. You can have infinite
+  conversations. What's expensive is your time and frustration.
+
+
+
+  A bad conversation is like a rough draft. You don't revise a rough draft by adding
+  more paragraphs to the end. You start over with a clean page and write a better draft.
+
+
+
+  Same with AI. Bad chat? New page. Better prompt. Done.
+
+
+<div className="bg-gradient-to-r from-green-50 to-blue-50 p-8 rounded-xl border-2 border-green-300 my-12 not-prose">
+  <div className="text-center">
+    <h3 className="text-3xl font-bold text-gray-900 mb-4">
+      START A NEW CHAT
+    </h3>
+    <div className="text-lg text-gray-700 mb-6">
+      Say it with me. This is the most important thing you'll learn.
+    </div>
+    <div className="inline-flex items-center gap-2 bg-white px-6 py-3 rounded-lg shadow-md border-2 border-gray-200">
+      <span className="text-4xl">🔄</span>
+      <span className="font-semibold text-gray-900">New Chat</span>
+    </div>
+  </div>
+</div>
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <div className="text-sm text-gray-700">
+    <strong className="text-gray-900">Claude's note:</strong> From my perspective, there's
+    no continuity between chats anyway. Each conversation is a fresh instance. I don't
+    "remember" previous chats (unless you're using a system with persistent memory features,
+    which are application-layer additions). So when you start a new chat, you're not "resetting"
+    me—you're just starting a new computation with clean inputs. The model generating
+    responses in chat 1 and chat 2 is the same, but the probability distributions are
+    completely different because the inputs are different. Clean inputs = clean probability
+    space = clean outputs. That's all it is.
+  </div>
+</div>
+
+<LessonRecap title="Module Complete">
+  <div className="text-sm italic">
+    This concludes Module 0.6: Failures & Basins. You now understand why conversations
+    fail, how to recognize the basin, and most importantly—when to start fresh. This
+    knowledge alone will save you hours of frustration.
+  </div>
+</LessonRecap>

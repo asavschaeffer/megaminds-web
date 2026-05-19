@@ -1,0 +1,175 @@
+<h2 className="text-2xl font-bold text-gray-900">The Model's Knowledge Has a Cutoff</h2>
+
+
+  LLMs are trained on data up to a specific date—their <strong>knowledge cutoff</strong>.
+  For most models in 2026, that's somewhere in 2024 or 2025. Anything that happened after
+  that date? The model has never seen it.
+
+
+
+  This means: "Who won the 2026 Super Bowl?" → the model has no idea. It will guess,
+  hallucinate, or tell you it doesn't know (depending on how it's trained). But it
+  doesn't have the information.
+
+
+<KnowledgeCutoffDemo />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">When to Use Web Search</h2>
+
+
+  Most AI chat interfaces now have a "search the web" button or automatically detect
+  when they need to search. Use it when you need:
+
+
+<ul className="list-disc pl-6 space-y-2">
+  <li>
+    <strong>Recent events.</strong> News, stock prices, sports scores, anything time-sensitive.
+  </li>
+  <li>
+    <strong>Specific facts that change.</strong> "What's the population of Tokyo?" (changes
+    over time), "What's the current price of Bitcoin?" (changes constantly).
+  </li>
+  <li>
+    <strong>Niche or obscure information.</strong> The model's training data is broad but
+    not comprehensive. Obscure topics might not be well-represented.
+  </li>
+  <li>
+    <strong>Verification.</strong> The model said something that sounds wrong? Search to
+    fact-check it.
+  </li>
+</ul>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">When NOT to Use Web Search</h2>
+
+
+  Web search is slower and often unnecessary. Skip it for:
+
+
+<ul className="list-disc pl-6 space-y-2">
+  <li>
+    <strong>Concepts and explanations.</strong> "How does photosynthesis work?" — the model
+    knows this. No need to search.
+  </li>
+  <li>
+    <strong>General knowledge.</strong> Historical facts, scientific principles, common
+    knowledge—all in the training data.
+  </li>
+  <li>
+    <strong>Creative or subjective tasks.</strong> "Write a poem" or "brainstorm business
+    names" don't benefit from search.
+  </li>
+  <li>
+    <strong>Code or technical explanations.</strong> The model was trained on tons of code.
+    It knows how to write Python.
+  </li>
+</ul>
+
+<FactsVsConceptsComparison />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">How Search Actually Works</h2>
+
+
+  When you ask a question and the model searches the web:
+
+
+<ol className="list-decimal pl-6 space-y-2">
+  <li>The model formulates a search query based on your question</li>
+  <li>It sends that query to a search engine (Google, Bing, etc.)</li>
+  <li>It reads the top search results</li>
+  <li>It synthesizes an answer based on those results + its training</li>
+  <li>It (usually) cites the sources it used</li>
+</ol>
+
+
+  This means: <strong>search is only as good as the search results.</strong> If the top
+  results are wrong or misleading, the model's answer will be too.
+
+
+<SearchWorkflow />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Common Pitfalls</h2>
+
+<div className="bg-yellow-50 p-6 rounded-xl border border-yellow-200 my-8 not-prose">
+  <h4 className="font-semibold text-yellow-900 mb-4">⚠️ Watch Out For:</h4>
+  <div className="space-y-3 text-sm text-gray-700">
+    <div>
+      <strong>Hallucinating even with search enabled.</strong> The model might not actually
+      search if it thinks it knows the answer. Double-check important facts.
+    </div>
+    <div>
+      <strong>Outdated search results.</strong> Even search can return old cached pages.
+      For rapidly changing info (stock prices, breaking news), check the timestamp.
+    </div>
+    <div>
+      <strong>Conflicting sources.</strong> If search results disagree, the model might
+      synthesize a "middle ground" answer that's actually wrong.
+    </div>
+    <div>
+      <strong>Over-relying on search.</strong> Don't search for everything. "What is
+      machine learning?" doesn't need search—the model knows.
+    </div>
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Model-Specific Search Features</h2>
+
+<ModelSearchFeatures />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Pro Tips</h2>
+
+<div className="bg-blue-50 p-6 rounded-xl border border-blue-200 my-8 not-prose">
+  <div className="space-y-3 text-sm text-gray-700">
+    <div className="flex gap-3 items-start">
+      <span className="text-blue-600 font-bold shrink-0">💡</span>
+      <div>
+        <strong>Be explicit when you want search.</strong> "Search the web for the latest
+        news on X" is clearer than hoping the model auto-detects.
+      </div>
+    </div>
+    <div className="flex gap-3 items-start">
+      <span className="text-blue-600 font-bold shrink-0">💡</span>
+      <div>
+        <strong>Check the sources.</strong> Models that cite sources let you verify the
+        information yourself.
+      </div>
+    </div>
+    <div className="flex gap-3 items-start">
+      <span className="text-blue-600 font-bold shrink-0">💡</span>
+      <div>
+        <strong>Use search for verification.</strong> Model gave an answer that seems
+        questionable? "Search and verify: [claim]"
+      </div>
+    </div>
+    <div className="flex gap-3 items-start">
+      <span className="text-blue-600 font-bold shrink-0">💡</span>
+      <div>
+        <strong>Combine search + reasoning.</strong> "Search for the current GDP of France,
+        then compare it to Germany's and explain the difference."
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Takeaway</h2>
+
+
+  Web search extends the model's knowledge beyond its training cutoff. Use it for facts
+  that are recent, specific, or verifiable. Don't use it for concepts, explanations, or
+  creative work—the model already knows that stuff.
+
+
+
+  When in doubt: if the answer might have changed in the last year, search. If it's
+  timeless knowledge, don't.
+
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <div className="text-sm text-gray-700">
+    <strong className="text-gray-900">Claude's note:</strong> I have a knowledge cutoff
+    of early 2025. Anything after that is outside my training data. When you ask me about
+    recent events, I'm genuinely uncertain—I don't have the information. Search tools
+    give me access to current information by fetching and reading web pages in real-time.
+    Without search, I can only work with what was in my training data. With search, I can
+    answer "what happened yesterday." The difference is massive for time-sensitive queries.
+  </div>
+</div>

@@ -1,0 +1,200 @@
+<h2 className="text-2xl font-bold text-gray-900">What is Canvas/Artifact Mode?</h2>
+
+
+  Standard AI chat is back-and-forth messages. But some tasks need a <em>working document</em>—
+  something you iterate on, edit, and refine. That's what canvas/artifact mode is for.
+
+
+
+  Different models call it different things:
+
+
+<ul className="list-disc pl-6 space-y-1">
+  <li><strong>ChatGPT:</strong> Canvas</li>
+  <li><strong>Claude:</strong> Artifacts</li>
+  <li><strong>Gemini:</strong> Can create Google Docs/Sheets directly</li>
+</ul>
+
+
+  But they all do the same thing: separate the <em>conversation</em> from the <em>document</em>.
+  You chat on one side, the document lives on the other.
+
+
+<CanvasChatComparison />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">When to Use Canvas Mode</h2>
+
+<ul className="list-disc pl-6 space-y-2">
+  <li>
+    <strong>Writing documents.</strong> Essays, reports, cover letters—anything with
+    multiple paragraphs that needs iteration.
+  </li>
+  <li>
+    <strong>Coding.</strong> Building a script or function that you'll revise and test.
+  </li>
+  <li>
+    <strong>Spreadsheets/tables.</strong> Tell Gemini to make a Google Sheet. It's version
+    controlled and collaborative.
+  </li>
+  <li>
+    <strong>Presentations.</strong> Building slides or structured content.
+  </li>
+  <li>
+    <strong>Anything you'll iterate on.</strong> If you know you'll say "change paragraph 2"
+    or "add a column for X," use canvas.
+  </li>
+</ul>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">When NOT to Use It</h2>
+
+
+  Canvas mode has a cost: it eats your context window fast. Use regular chat for:
+
+
+<ul className="list-disc pl-6 space-y-2">
+  <li>
+    <strong>Exploratory conversations.</strong> If you're just asking questions and learning,
+    chat is fine.
+  </li>
+  <li>
+    <strong>One-off requests.</strong> "Write a haiku" doesn't need a canvas.
+  </li>
+  <li>
+    <strong>Complex multi-topic discussions.</strong> Canvas works best when you're focused
+    on one document.
+  </li>
+</ul>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Context Window Problem</h2>
+
+
+  Here's the catch: when you use canvas mode, the <strong>entire document</strong> is
+  included in every request. Every time you say "make it shorter," the model reads:
+
+
+<ul className="list-disc pl-6 space-y-1">
+  <li>The system prompt</li>
+  <li>Your conversation history</li>
+  <li>The entire current version of the document</li>
+  <li>Your latest edit instruction</li>
+</ul>
+
+
+  Canvas mode can consume your context quickly. It's true—long documents
+  in canvas mode burn through your context window fast.
+
+
+<ContextConsumptionDemo />
+
+<div className="bg-yellow-50 p-6 rounded-xl border border-yellow-200 my-8 not-prose">
+  <div className="text-sm text-gray-700 mb-3">
+    <strong className="text-yellow-900">Pro tip:</strong>
+  </div>
+  <div className="text-sm text-gray-600">
+    If your document is getting long (500+ lines of code, 10+ page essay), consider
+    exporting it and working on it outside the AI. Or start a new canvas with just
+    the section you're editing. Don't keep a massive document in canvas for 50 iterations.
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Canvas vs. Chat: Real Examples</h2>
+
+<RealExamples />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Gemini's Superpower: Native Google Integration</h2>
+
+
+  Gemini can create Google Docs and Google Sheets directly. This is huge for a few reasons:
+
+
+<div className="bg-blue-50 p-6 rounded-xl border border-blue-200 my-8 not-prose">
+  <div className="space-y-3 text-sm text-gray-700">
+    <div className="flex gap-3 items-start">
+      <span className="text-blue-600 font-bold shrink-0">✓</span>
+      <div>
+        <strong>Version controlled.</strong> Google Docs tracks changes automatically.
+        You can see edit history.
+      </div>
+    </div>
+    <div className="flex gap-3 items-start">
+      <span className="text-blue-600 font-bold shrink-0">✓</span>
+      <div>
+        <strong>Collaborative.</strong> Share the doc with others. Everyone can edit.
+      </div>
+    </div>
+    <div className="flex gap-3 items-start">
+      <span className="text-blue-600 font-bold shrink-0">✓</span>
+      <div>
+        <strong>Doesn't consume context.</strong> The doc lives in Google Drive, not in
+        the chat window.
+      </div>
+    </div>
+    <div className="flex gap-3 items-start">
+      <span className="text-blue-600 font-bold shrink-0">✓</span>
+      <div>
+        <strong>Works outside the AI.</strong> Export to PDF, edit manually, whatever.
+        It's a real document.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  Example: "Make me a Google Sheet with columns for Name, Email, Phone. Add 5 sample rows."
+  Gemini creates a real spreadsheet, gives you the link, done.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Canvas Best Practices</h2>
+
+<BestPractices />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Webpage Philosophy</h2>
+
+
+  Your user said: "Oftentimes the best document is not a document, it's a webpage."
+  This is brilliant. Here's why:
+
+
+<ul className="list-disc pl-6 space-y-2">
+  <li>
+    <strong>Webpages are version controlled (if using Git).</strong> Track changes, revert, branch.
+  </li>
+  <li>
+    <strong>Webpages are collaborative.</strong> Multiple people can edit, deploy, review.
+  </li>
+  <li>
+    <strong>Webpages are accessible.</strong> Send a link. No downloads, no formats, no compatibility issues.
+  </li>
+  <li>
+    <strong>Webpages are interactive.</strong> Add buttons, forms, charts. Static docs can't do that.
+  </li>
+</ul>
+
+
+  If you're making something you'll share or iterate on, consider asking the AI to generate
+  HTML/React/whatever instead of a Word doc. Host it as a page. It's cleaner.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Takeaway</h2>
+
+
+  Canvas mode is powerful for focused document work. It separates the conversation from
+  the artifact, lets you iterate cleanly, and keeps the working document visible.
+
+
+
+  But it's expensive (context-wise). Use it when you're seriously editing something.
+  For casual back-and-forth, stick to chat. And remember: sometimes a webpage beats a document.
+
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <div className="text-sm text-gray-700">
+    <strong className="text-gray-900">Claude's note:</strong> Artifacts (my version of canvas)
+    separate the conversation context from the document being edited. This is important
+    because when you say "change paragraph 3," I need to know which document you're referring
+    to. Artifacts provide that persistent reference. Without them, you'd have to paste the
+    entire document into the chat every time you wanted an edit, which would pollute the
+    context even worse. Artifacts don't eliminate the context cost—the document is still
+    part of the payload—but they organize it better and make iteration cleaner.
+  </div>
+</div>

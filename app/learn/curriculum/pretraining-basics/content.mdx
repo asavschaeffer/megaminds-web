@@ -1,0 +1,246 @@
+<h2 className="text-2xl font-bold text-gray-900">It Downloaded Everything</h2>
+
+
+  In the{' '}
+  <Link href="/learn/curriculum/llms-machine-learning" className="text-blue-600 hover:text-blue-800">
+    previous lesson
+  </Link>
+  , we said training is "compressing the internet." Let's unpack what that actually means.
+
+
+{/* TODO: Mention that training data IS curated — CommonCrawl, C4, The Pile, etc.
+    Readers shouldn't think it's literally random web scraping. Different models
+    use different datasets, which partly explains different "personalities." */}
+
+  Researchers crawled the web—Wikipedia, Reddit, news sites, forums,
+  academic papers, books, code repositories, recipe blogs, legal documents, fan fiction,
+  government filings—basically everything humans have ever written down and
+  put online. Roughly <strong>10 terabytes</strong> of text.
+
+
+
+  Then they fed all of it through the model, one sentence at a time, asking:
+  "given everything before this word, predict the next word." Every time the
+  model got it wrong, it adjusted its parameters slightly. Trillions of
+  adjustments later, the patterns of human language are baked into those numbers.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Wikipedia Thought Experiment</h2>
+
+
+  Here's a useful way to think about what the model "experiences" during training.
+
+
+
+  Imagine you opened Wikipedia and searched for a single word—say, "justice."
+  You'd find that word appearing in articles about law, philosophy, comic books,
+  criminal justice reform, social movements, Supreme Court cases, and a hundred
+  other contexts. By looking at <em>which words tend to appear near "justice"</em> and
+  which don't, you'd start to build an intuition for what the word means—not
+  from a dictionary definition, but from usage.
+
+
+{/* TODO: Consider expanding GrepDiagram word list — "money" and "freedom"
+    would show interesting context diversity. Also consider adding a
+    "what the model learns" summary panel showing the emergent vector clusters. */}
+<GrepDiagram />
+
+
+  Now imagine doing that for <em>every word</em>, across the entire internet, simultaneously.
+  That's roughly what happens during pretraining. The model builds a massive web of
+  relationships between words—not by understanding meaning, but by mapping
+  co-occurrence patterns across billions of contexts.
+
+
+
+  But here's the thing—the internet contains <em>everything</em>. Helpful and harmful.
+  The model absorbs patterns for being a{' '}
+  <AbbrSidenote
+    title="The Assistant Axis"
+    definition={`Anthropic researchers discovered that LLMs organize personas along a spectrum from "Assistant-like" (helpful, professional) to anti-assistant (deceptive, harmful). This axis already exists in pretrained models before any fine-tuning—the model learned both archetypes from the training data. Think of it like yin and yang: you can't download everything humanity has written without getting both sides.`}
+    contentMaxWidth={320}
+  >
+    thoughtful assistant and for being its opposite
+  </AbbrSidenote>
+  . Anthropic's research calls this the{' '}
+  <a
+    href="https://www.anthropic.com/research/assistant-axis"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-blue-600 hover:text-blue-800"
+  >
+    "Assistant Axis"
+  </a>
+  —a spectrum baked into the model from pretraining, before anyone tries to make it safe.
+  We'll explore the implications of this further in{' '}
+  <Link href="/learn/curriculum/waluigi" className="text-blue-600 hover:text-blue-800">
+    The Waluigi Effect
+  </Link>
+  .
+
+
+<div className="text-sm text-gray-500 italic">
+  "This is what LLMs experience during training" —{' '}
+  <a
+    href="https://x.com/repligate/status/1945245561394790496"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-blue-600 hover:text-blue-800"
+  >
+    @repligate
+  </a>
+</div>
+
+{/* TODO: Consider adding a side-by-side diagram: baby language acquisition
+    timeline (years) vs LLM training timeline (weeks). Makes the scale tangible.
+    Also the Grok 3 "MechaHitler" incident from user's notes would fit well
+    somewhere in this lesson — shows how pretraining data shapes behavior in
+    unexpected ways when "tell the truth" activates conspiracy-adjacent clusters. */}
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Baby Analogy</h2>
+
+
+  Think about how a baby learns language. Nobody sits a one-year-old down and
+  explains grammar. The baby just listens—to the family talking, to the TV, to the
+  dog being yelled at—and eventually starts producing language that follows the rules.
+  The rules were never taught. They were <em>absorbed</em>.
+
+
+
+  LLM pretraining is like this, but instead of one family over a few years, it's
+  all of humanity over a few weeks of compute. The model "listens" to everything
+  we've ever written and absorbs the patterns.
+
+
+
+  Another way to think about it: humanity spent ~100,000 years accumulating knowledge,
+  writing it down, arguing about it, refining it. Pretraining compresses that entire
+  arc into a single artifact.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">What Comes Out: Stochastic Parrots</h2>
+
+
+  The model that comes out of pretraining is <em>not</em> an assistant. It's a
+  <strong> text predictor</strong>. You give it a sequence of words and it continues
+  the sequence in a way that's statistically plausible given everything it's read.
+
+
+{/* TODO: Cite Bender et al. 2021 "On the Dangers of Stochastic Parrots" —
+    the actual paper that coined the term. Important for academic rigor. */}
+
+  This is why researchers sometimes call pretrained models "stochastic parrots"—they
+  produce language that sounds right without (arguably) understanding what they're saying.
+  Whether that's fair is genuinely debated, but it's a useful mental model for now.
+
+
+<StochasticParrotDiagram />
+
+
+  Andrej Karpathy demonstrated this beautifully with a{' '}
+  <a
+    href="https://karpathy.ai/zero-to-hero.html"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-blue-600 hover:text-blue-800"
+  >
+    mini GPT trained on nothing but Shakespeare
+  </a>
+  . The output is clearly not Shakespeare—but it's unmistakably <em>Shakespearean</em>.
+  It picked up the rhythm, the vocabulary, the structure. It "sounds right"
+  without knowing what any of it means.
+
+
+{/* TODO: This Shakespeare output is fabricated for illustration. Should either
+    use actual output from Karpathy's char-RNN/GPT demo, or clearly mark as
+    "illustrative recreation." Current disclaimer at the bottom is good but could
+    be more prominent. */}
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <h3 className="font-semibold text-gray-900 mb-3">Shakespeare GPT output:</h3>
+  <div className="font-mono text-sm text-gray-600 leading-relaxed italic">
+    DUKE VINCENTIO:
+    Well, your wit is in the wane; and your
+    cheek is full too gentle a morsel
+    for the way of starving.
+    <div className="mt-2">LUCIO:</div>
+    I would the duke were returned again:
+    this ungenitured agent will unpeople the province.
+  </div>
+  <div className="text-xs text-gray-400 mt-4">
+    Not real Shakespeare. Generated by a tiny model trained only on Shakespeare's works.
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">But Is It Just Parroting?</h2>
+
+
+  Here's where it gets interesting. When you look at how information actually flows
+  through the transformer architecture, the picture is more complex than "fancy autocomplete."
+
+
+
+  The model doesn't just match patterns—it processes information through two distinct
+  highways (a vertical "residual stream" and a horizontal "key/value stream") with an
+  astronomically large number of possible paths between any two points. The number of
+  paths grows combinatorially—exceeding the number of atoms in the visible universe
+  for even modest-sized models.
+
+
+
+  Whether this constitutes something like understanding or experience is an open question.
+  We're agnostic about it here—but the machinery for something beyond simple pattern
+  matching is architecturally present.
+
+
+
+  For the full interactive exploration of this, see{' '}
+  <Link href="/learn/curriculum/how-llms-work" className="text-blue-600 hover:text-blue-800">
+    How Information Flows Through Transformers
+  </Link>{' '}
+  in Module 2.
+
+
+<div className="mt-16 pt-8 border-t border-gray-200 not-prose">
+  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">References</h3>
+  <ul className="space-y-2 text-sm text-gray-600">
+    <li>
+      <a
+        href="https://karpathy.ai/zero-to-hero.html"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:text-blue-800"
+      >
+        Andrej Karpathy — Neural Networks: Zero to Hero (Shakespeare GPT)
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://x.com/repligate/status/1945245561394790496"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:text-blue-800"
+      >
+        @repligate — "This is what LLMs experience during training"
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://www.anthropic.com/research/assistant-axis"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:text-blue-800"
+      >
+        Anthropic Research — The Assistant Axis
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://x.com/repligate/status/1965960676104712451"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:text-blue-800"
+      >
+        @repligate — How Information Flows Through Transformers
+      </a>
+    </li>
+  </ul>
+</div>

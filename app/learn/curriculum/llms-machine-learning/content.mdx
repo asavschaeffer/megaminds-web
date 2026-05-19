@@ -1,0 +1,200 @@
+<h2 className="text-2xl font-bold text-gray-900">It's Just Next-Word Prediction</h2>
+
+{/* TODO: Consider adding a one-line "what you'll learn" summary here */}
+
+
+  Here's the whole thing: a large language model reads a sequence of words and predicts
+  what comes next. That's it. Everything else—the conversations, the code, the poetry—emerges
+  from doing that one thing really, really well.
+
+
+<NextWordDiagram />
+{/* TODO: Make this interactive — let users type their own sentence and see predictions shift */}
+{/* TODO: Add a note about temperature — "why doesn't it always pick the highest probability?" */}
+
+
+  When you type "the cat sat on the", the model has learned from reading billions
+  of sentences that "mat" or "floor" or "couch" are likely next words. Not because
+  anyone told it what a cat is—but because it saw the pattern enough times.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">
+  Machine Learning = Learning From Examples
+</h2>
+
+
+  Traditional software is rules someone wrote: <em>if the user types X, do Y.</em> Machine
+  learning is different. You show the computer millions of examples and it figures out
+  the rules on its own. Nobody hand-wrote a dictionary of grammar rules for ChatGPT—it
+  picked up the patterns of language by seeing enough of it, the same way a baby does
+  by hearing the family talk.
+
+{/* TODO: This is where we could mention symbolic AI / expert systems from the 80s
+    as a "they tried the rules approach and it didn't scale" aside */}
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    <div>
+      <h3 className="font-semibold text-gray-900 mb-3">Traditional Software</h3>
+      <div className="text-sm text-gray-600 space-y-2">
+        Human writes rules
+        ↓
+        Computer follows rules
+        <div className="text-gray-400 mt-4 italic">if word == "hello": respond("hi")</div>
+      </div>
+    </div>
+    <div>
+      <h3 className="font-semibold text-gray-900 mb-3">Machine Learning</h3>
+      <div className="text-sm text-gray-600 space-y-2">
+        Human shows examples
+        ↓
+        Computer learns rules
+        <div className="text-gray-400 mt-4 italic">saw "hello"→"hi" 10 million times</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">
+  An LLM is Just Two Files
+</h2>
+
+
+  Andrej Karpathy (one of the founders of OpenAI) put it best: an LLM is literally two files.
+
+{/* TODO: Link directly to Karpathy's llama2.c repo — it's the actual "run in 500 lines of C" demo */}
+{/* TODO: Consider noting that Karpathy left OpenAI, co-founded it, then left again — his independence
+    makes his explanations particularly trustworthy since he's not selling anything */}
+
+<TwoFilesDiagram />
+
+
+  The <strong>parameters file</strong> is what the model learned. Every relationship between every
+  word it's ever seen, compressed into billions of numbers. Llama 2 70B has 70 billion
+  parameters—each one a decimal number that encodes some tiny fragment of how language works.
+
+
+
+  The <strong>run file</strong> is the code that reads those parameters and does the
+  next-word prediction. It's about 500 lines of code. That's it. The magic is in the
+  parameters, not the code.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">
+  Training = Compressing the Internet
+</h2>
+
+
+  To create those parameters, researchers take a massive chunk of the internet—roughly 10 terabytes
+  of text—and feed it through the model. The model reads every sentence and tries to predict
+  the next word. When it's wrong, it adjusts its parameters slightly. Do this trillions
+  of times and you get something that has internalized the patterns of human language.
+
+
+<CompressionDiagram />
+
+
+  Karpathy calls this "lossy compression." You're taking 10TB of text and squeezing it
+  down to ~140GB of parameters. Like a JPEG of the internet—you lose some detail, but
+  the structure is preserved.
+
+{/* TODO: Cite Ilya Sutskever's Dwarkesh interview — he frames this as
+    "the model is forced to understand the world in order to predict the next token"
+    which is a stronger and more interesting claim than just "compression" */}
+{/* TODO: The JPEG analogy is good but could be expanded with a visual —
+    show an actual JPEG at different compression levels alongside text "compression" */}
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">
+  How Information Flows
+</h2>
+{/* TODO: This section is a brief pointer. Consider whether to cut it entirely
+    (lesson 1 might be stronger ending on compression) or expand it.
+    Currently sits awkwardly between "teaser" and "content." */}
+
+
+  If you want to go deeper: the architecture these models use is called a <strong>Transformer</strong>.
+  The key insight (from{' '}
+  <a
+    href="https://x.com/repligate/status/1965960676104712451"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-blue-600 hover:text-blue-800"
+  >
+    @repligate
+  </a>
+  ) is that there are two highways for information:
+
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <div className="space-y-4">
+    <div className="flex gap-4 items-start">
+      <div className="font-bold text-gray-900 w-8 shrink-0">↕</div>
+      <div>
+        <strong className="text-gray-900">Residual Stream (vertical):</strong>
+        <span className="text-gray-600 ml-1">
+          Each word gets refined as it passes through layers of the network. Like revising a draft—each
+          pass makes it better.
+        </span>
+      </div>
+    </div>
+    <div className="flex gap-4 items-start">
+      <div className="font-bold text-purple-600 w-8 shrink-0">↔</div>
+      <div>
+        <strong className="text-gray-900">K/V Stream (horizontal):</strong>
+        <span className="text-gray-600 ml-1">
+          Each word looks back at all previous words to gather context. "The" means something
+          different after "cat" vs after "president."
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  The number of possible paths information can take through these two highways explodes
+  combinatorially. This is part of why these models are so capable—and so hard to fully understand.
+
+
+
+  For the interactive version of this, see{' '}
+  <Link href="/learn/curriculum/how-llms-work" className="text-blue-600 hover:text-blue-800">
+    How LLMs Actually Work
+  </Link>
+  .
+
+
+<div className="mt-16 pt-8 border-t border-gray-200 not-prose">
+  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">References</h3>
+  <ul className="space-y-2 text-sm text-gray-600">
+    <li>
+      <a
+        href="https://karpathy.ai/zero-to-hero.html"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:text-blue-800"
+      >
+        Andrej Karpathy — Neural Networks: Zero to Hero
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://x.com/repligate/status/1965960676104712451"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:text-blue-800"
+      >
+        @repligate — How Information Flows Through Transformers
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://www.youtube.com/watch?v=zjkBMFhNj_g"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:text-blue-800"
+      >
+        Andrej Karpathy — Intro to Large Language Models (1hr talk)
+      </a>
+    </li>
+  </ul>
+</div>

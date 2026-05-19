@@ -11,6 +11,7 @@ for (const dirent of fs.readdirSync(curriculumDir, { withFileTypes: true })) {
   if (!fs.existsSync(filePath)) continue
 
   const source = fs.readFileSync(filePath, 'utf8')
+  const contentPath = path.join(curriculumDir, dirent.name, 'content.mdx')
 
   if (source.includes('LessonHeader')) {
     failures.push(`${filePath}: import CurriculumLessonPage instead of rendering LessonHeader directly.`)
@@ -26,6 +27,30 @@ for (const dirent of fs.readdirSync(curriculumDir, { withFileTypes: true })) {
 
   if (/Previous:|Next:|Next Module:|Previous Module:|Back to Curriculum/.test(source)) {
     failures.push(`${filePath}: use LessonNavigation instead of page-local nav CTAs.`)
+  }
+
+  if (source.includes('<CurriculumLessonPage') && !fs.existsSync(contentPath)) {
+    failures.push(`${filePath}: add adjacent content.mdx for lesson body content.`)
+  }
+
+  if (source.includes('<CurriculumLessonPage') && !source.includes('getCurriculumMdx(')) {
+    failures.push(`${filePath}: render lesson body from MDX via getCurriculumMdx.`)
+  }
+
+  if (/^function [A-Z][A-Za-z0-9_]*\(/m.test(source)) {
+    failures.push(`${filePath}: move page-local demos to components/learn/curriculum/demos.`)
+  }
+
+  if (/^'use client'/m.test(source)) {
+    failures.push(`${filePath}: keep route wrappers server-rendered; move client behavior to demos.`)
+  }
+
+  if (fs.existsSync(contentPath)) {
+    const mdx = fs.readFileSync(contentPath, 'utf8')
+
+    if (/EDITORIAL NOTES|EDITORIAL NOTES & REFLECTIONS|POTENTIAL ADDITIONS/.test(mdx)) {
+      failures.push(`${contentPath}: move long editorial notes to docs/learn/lesson-notes.`)
+    }
   }
 }
 

@@ -1,0 +1,199 @@
+<h2 className="text-2xl font-bold text-gray-900">Perfect Is the Enemy of Done</h2>
+
+
+  Here's what most people do: they spend 10 minutes crafting the perfect prompt,
+  trying to anticipate every edge case, writing detailed instructions, setting up
+  the perfect persona. Then they hit send and it's... fine. Or wrong. And now they
+  have to rewrite the whole thing.
+
+
+
+  Here's what works better: type the laziest version of what you want. Hit send.
+  Read what comes back. Fix what's wrong. Done.
+
+
+<LazyVsPerfectDemo />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Why Lazy Works</h2>
+
+
+  You cannot predict what the model will do. You think you know, but you don't.
+  The model has been trained on trillions of tokens and has internalized patterns
+  you've never seen. Your carefully crafted prompt might trigger the wrong pattern.
+  Your lazy prompt might nail it first try.
+
+
+
+  The only way to know is to try. And trying is cheap—it takes 3 seconds to get a response.
+  So why spend 10 minutes crafting a prompt when you could spend 10 seconds, see what
+  happens, and iterate?
+
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <div className="space-y-3 text-sm text-gray-700">
+    <div className="flex gap-3 items-start">
+      <span className="text-red-600 font-bold shrink-0">❌</span>
+      <div>
+        <strong>Overthinking:</strong> Spend 10 minutes writing the perfect prompt →
+        send → output is wrong → spend another 10 minutes rewriting
+      </div>
+    </div>
+    <div className="flex gap-3 items-start">
+      <span className="text-green-600 font-bold shrink-0">✅</span>
+      <div>
+        <strong>Lazy approach:</strong> Spend 10 seconds writing a rough prompt → send →
+        output is wrong → spend 20 seconds tweaking → done
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">You Can Gaslight the AI</h2>
+
+
+  Here's the best part: the model has no memory. It reads the conversation history
+  every time, but it doesn't <em>remember</em> what "really" happened. Which means
+  you can edit your previous messages and the model will never know.
+
+
+
+  Got a bad response? Don't write a new message saying "no, I meant..." Just go back,
+  edit your original prompt to be clearer, and regenerate. The model reads the edited
+  version and responds as if that's what you said all along.
+
+
+<GaslightDemo />
+
+<div className="bg-blue-50 p-6 rounded-xl border border-blue-200 my-8 not-prose">
+  <div className="text-sm text-gray-700">
+    <strong className="text-blue-900">Why this works:</strong> Remember—there's no memory.
+    The model receives the entire conversation as one long prompt every time. If you edit
+    message #3, the model doesn't know there was ever a different version of message #3.
+    It just reads the current state of the conversation.
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Read the LLM's Thoughts</h2>
+
+
+  When the output is wrong, don't guess why. Read what the model wrote and figure out
+  what it misunderstood. The model shows you its reasoning—use it.
+
+
+<ReadingThoughtsExample />
+
+
+  At the very least, you can see how the model <em>didn't</em> read your mind. And
+  that tells you what to add to your prompt.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Lazy Workflow</h2>
+
+<WorkflowSteps />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">When Lazy Fails: Start a New Chat</h2>
+
+
+  Sometimes, the conversation gets polluted. You tried three things, the model failed
+  three times, and now the entire context is full of failures. The model is reading
+  all that garbage every time it responds.
+
+
+
+  At that point, editing won't save you. Just start a new chat. Take the best parts
+  of what you learned, write a better prompt from scratch, and try again with a clean slate.
+
+
+<div className="bg-red-50 p-6 rounded-xl border border-red-200 my-8 not-prose">
+  <div className="space-y-2 text-sm text-gray-700">
+    <div className="font-semibold text-red-900">Signs it's time to start over:</div>
+    <ul className="list-disc pl-5 space-y-1">
+      <li>The model failed 3+ times in a row</li>
+      <li>You've gone back and forth 10+ messages and it's still not right</li>
+      <li>The conversation has drifted far from your original goal</li>
+      <li>You edited your prompt 5 times and it's still confused</li>
+    </ul>
+  </div>
+</div>
+
+
+  New chat = clean slate. Don't fight a losing battle.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Examples of Lazy Wins</h2>
+
+<div className="space-y-4 not-prose">
+  <LazyWinCard
+    task="Write a Python function to reverse a string"
+    lazy='"Write a Python function to reverse a string"'
+    why="This is a common task. The model has seen it a million times. No need for examples, persona, or clarification."
+  />
+
+  <LazyWinCard
+    task="Summarize this article"
+    lazy='"Summarize this: [paste article]"'
+    why="Default summarization is usually fine. If it's too long/short, just say 'shorter' or 'more detail.'"
+  />
+
+  <LazyWinCard
+    task="Debug this error message"
+    lazy='"Why am I getting this error? [paste error]"'
+    why="The error message contains all the context the model needs. Just paste it."
+  />
+
+  <LazyWinCard
+    task="Translate to Spanish"
+    lazy='"Translate to Spanish: [text]"'
+    why="Common task, no ambiguity. Lazy wins."
+  />
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Examples That Need More</h2>
+
+
+  Not every task is lazy-friendly. Some need detail:
+
+
+<ul className="list-disc pl-6 space-y-2">
+  <li>
+    <strong>Subjective style:</strong> "Write this professionally" is vague. Show an example
+    of your version of "professional."
+  </li>
+  <li>
+    <strong>Complex transformations:</strong> "Format this data" could mean a hundred things.
+    Give an example input → output.
+  </li>
+  <li>
+    <strong>Domain-specific tasks:</strong> "Review this legal contract" needs a persona
+    (lawyer, not general assistant).
+  </li>
+</ul>
+
+
+  But even for these—start lazy. Try "write this professionally" first. See what comes back.
+  If it's wrong, <em>then</em> add detail. Don't preemptively overcomplicate.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Point</h2>
+
+
+  Prompting is not an art. It's not a science. It's trial and error. The faster you
+  iterate, the faster you get to good output. Overthinking slows you down.
+
+
+
+  Just try the lazy thing. If it works, you saved 10 minutes. If it doesn't, you learned
+  what to fix. Either way, you're ahead.
+
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <div className="text-sm text-gray-700">
+    <strong className="text-gray-900">Claude's note:</strong> I have no memory of edits.
+    When you change your previous message and regenerate, I don't experience it as "wait,
+    that's not what you said before." I experience it as reading a prompt for the first time.
+    You can gaslight me because there is no "me" that persists between requests to gaslight.
+    Each response is generated by a fresh instance that only knows what's in the current
+    payload. The idea of a "real" conversation history that you're manipulating doesn't
+    exist from my perspective.
+  </div>
+</div>

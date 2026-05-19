@@ -1,0 +1,117 @@
+<h2 className="text-2xl font-bold text-gray-900">Quick Recap</h2>
+
+
+  From{' '}
+  <Link href="/learn/curriculum/no-memory" className="text-blue-600 hover:text-blue-800">
+    the last module
+  </Link>
+  : every time you send a message, the model receives the <em>entire</em> conversation
+  as one block of text. It has no independent memory. It reads the whole thing top to
+  bottom and predicts what comes next.
+
+
+
+  This means your prompt isn't a suggestion. It isn't context. It is
+  <strong> literally the only thing the model knows about your situation</strong>.
+
+
+<PromptIsRealityDiagram />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">But It's Not a Blank Slate</h2>
+
+
+  Important distinction: the model doesn't know anything about <em>you</em> beyond
+  the prompt—but it knows an enormous amount about <em>everything else</em>. Remember,
+  this thing was{' '}
+  <Link href="/learn/curriculum/pretraining-basics" className="text-blue-600 hover:text-blue-800">
+    pretrained on the whole internet
+  </Link>
+  . All of Wikipedia, millions of books, academic papers, forums, code repositories.
+  That knowledge is baked into the parameters.
+
+
+
+  This is why LLMs are surprisingly good at things like dream interpretation,
+  synthesizing ideas across unrelated fields, or knowing obscure CSS techniques
+  from sites like <a href="https://gwern.net" target="_blank" rel="noopener noreferrer"
+  className="text-blue-600 hover:text-blue-800">gwern.net</a>. The pretraining
+  data is massive and deep. The model has also absorbed patterns from posttraining—human
+  evaluators taught it what good answers look like across thousands of domains.
+
+
+
+  So when you prompt the model, you're not filling an empty vessel. You're giving
+  direction to something that already has vast knowledge—it just doesn't know
+  anything about <em>your particular situation</em> until you tell it.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">If You Don't Say It, It Doesn't Exist</h2>
+
+
+  The model doesn't know what you're working on unless you tell it. It doesn't
+  know your preferences, your skill level, your deadline, or your taste. It doesn't
+  know that you asked a different model the same question an hour ago. It doesn't
+  know what's on your screen.
+
+
+
+  Every piece of <em>personal</em> context you want the model to use has to be in the prompt.
+  This sounds limiting, but it's actually freeing—it means you have <em>complete control</em> over
+  what the model pays attention to.
+
+
+<WhatTheModelKnowsDiagram />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Good News</h2>
+
+
+  Because the prompt is everything, you have a few superpowers:
+
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <div className="space-y-5">
+    <div>
+      <h3 className="font-semibold text-gray-900 mb-1">You can set the entire frame</h3>
+      <div className="text-sm text-gray-600">
+        Want it to be an expert accountant? A patient teacher? A harsh code reviewer?
+        Just say so. The model will adopt whatever frame you give it because that's all
+        it has to go on. (This is <Link href="/learn/curriculum/roleplay" className="text-blue-600 hover:text-blue-800">Roleplay</Link> — next lesson.)
+      </div>
+    </div>
+    <div>
+      <h3 className="font-semibold text-gray-900 mb-1">You can show exactly what you want</h3>
+      <div className="text-sm text-gray-600">
+        Instead of describing the output format, paste an example. The model will pattern-match
+        against it. (This is <Link href="/learn/curriculum/examples" className="text-blue-600 hover:text-blue-800">Examples</Link>.)
+      </div>
+    </div>
+    <div>
+      <h3 className="font-semibold text-gray-900 mb-1">You can rewrite history</h3>
+      <div className="text-sm text-gray-600">
+        Don't like a response? Edit your previous message and regenerate. The model will
+        never know the old version existed. There's no memory to contradict you.
+      </div>
+    </div>
+    <div>
+      <h3 className="font-semibold text-gray-900 mb-1">You can start fresh any time</h3>
+      <div className="text-sm text-gray-600">
+        If a conversation is going sideways, starting a new chat costs nothing. The new
+        chat gets a clean prompt with none of the accumulated confusion.
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Shape of a Good Prompt</h2>
+
+
+  You don't need elaborate prompt engineering frameworks. A good prompt usually has
+  three things:
+
+
+<PromptAnatomyDiagram />
+
+
+  That's it. Tell it who to be, what to do, and what good looks like. The rest of
+  this module is just variations on that idea.
+

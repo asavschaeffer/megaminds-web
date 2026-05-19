@@ -1,0 +1,161 @@
+<h2 className="text-2xl font-bold text-gray-900">The Context Pollution Problem</h2>
+
+
+  You ask the model to write something. It's wrong. You say "no, make it shorter."
+  Still wrong. "No, more formal." Still not right. "NO, I want it to sound like..."
+
+
+
+  After five rounds of this, you're frustrated. But here's what you might not realize:
+  the model is reading ALL of those failed attempts. Every correction. Every "no that's
+  wrong." Every confused back-and-forth. That's all part of the input now.
+
+
+<ContextPollutionDemo />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Why This Kills Output Quality</h2>
+
+
+  Remember—there's no memory. The model reads the conversation from the top, every time.
+  When your conversation looks like this:
+
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose font-mono text-xs text-gray-700 space-y-1">
+  <div><span className="text-blue-600">user:</span> Write a professional email</div>
+  <div><span className="text-purple-600">assistant:</span> [writes overly formal email]</div>
+  <div><span className="text-blue-600">user:</span> No, less formal</div>
+  <div><span className="text-purple-600">assistant:</span> [writes casual email]</div>
+  <div><span className="text-blue-600">user:</span> Too casual, more professional but warm</div>
+  <div><span className="text-purple-600">assistant:</span> [writes something in between]</div>
+  <div><span className="text-blue-600">user:</span> Still not right, like this: [example]</div>
+  <div><span className="text-purple-600">assistant:</span> [tries again]</div>
+  <div><span className="text-blue-600">user:</span> Forget it, just make it shorter</div>
+</div>
+
+
+  ...the model is trying to satisfy ALL of those constraints simultaneously. "Professional
+  but not formal. Casual but not too casual. Like the example but shorter. And don't do
+  what I said was wrong in attempts 1, 2, and 3."
+
+
+
+  You're not clarifying your request. You're adding contradictions.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Payload Grows</h2>
+
+
+  Every back-and-forth adds tokens to the payload. The model doesn't just read your
+  latest message—it re-reads the entire conversation. At message 20, it's processing:
+
+
+<ul className="list-disc pl-6 space-y-2">
+  <li>The system prompt (always there)</li>
+  <li>Your original request</li>
+  <li>9 failed attempts from the model</li>
+  <li>9 corrections from you ("no, not like that")</li>
+  <li>Your latest frustrated message</li>
+</ul>
+
+<PayloadGrowthVisualization />
+
+
+  That's a lot of noise. And the model is trying to extract signal from all of it.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Adding "Failure Data" to the Context</h2>
+
+
+  Here's the worst part: when you say "that's wrong, do it like this," you're teaching
+  the model that its previous output was a valid attempt. It's now in the training
+  context for this conversation.
+
+
+
+  The model sees: "I generated X. The user said X is bad. They want Y instead." So it
+  tries to navigate away from X toward Y. But X is still in the prompt. And so is the
+  fact that X failed.
+
+
+<div className="bg-red-50 p-6 rounded-xl border border-red-200 my-8 not-prose">
+  <div className="text-sm text-gray-700 mb-3">
+    <strong className="text-red-900">The compounding problem:</strong>
+  </div>
+  <div className="space-y-2 text-sm text-gray-600">
+    <div>Attempt 1 fails → adds failed output + your correction to context</div>
+    <div>Attempt 2 fails → adds another failed output + correction to context</div>
+    <div>Attempt 3 fails → now the context is full of failures and corrections</div>
+    <div className="text-red-700 font-semibold pt-2">
+      By attempt 4, the model is reading more failures than successes. The pattern it's
+      matching is "generate things the user corrects."
+    </div>
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">When to Recognize This Is Happening</h2>
+
+
+  Signs you're polluting the context:
+
+
+<ul className="list-disc pl-6 space-y-2">
+  <li>
+    <strong>You've gone back-and-forth 5+ times.</strong> Each correction adds noise.
+  </li>
+  <li>
+    <strong>Each attempt gets weirder.</strong> The model is trying to satisfy contradictory
+    instructions.
+  </li>
+  <li>
+    <strong>You're getting frustrated.</strong> If you're annoyed, the conversation is cooked.
+  </li>
+  <li>
+    <strong>You've used the word "no" three times.</strong> That's three failures in the context.
+  </li>
+  <li>
+    <strong>The model is being overly cautious.</strong> It's learned that its outputs get
+    corrected, so it hedges everything.
+  </li>
+</ul>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">What to Do Instead</h2>
+
+<WhatToDoInstead />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Exception: Iteration-Friendly Modes</h2>
+
+
+  Some tools are designed for iteration. Gemini's image generation mode, ChatGPT's
+  canvas mode, Claude's artifacts—these are built to handle "no, change this" workflows.
+  They manage the context differently, often by separating the working document from
+  the conversation.
+
+
+
+  But in standard chat mode? Iteration pollutes. Fast.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Takeaway</h2>
+
+
+  Every message you send becomes part of the prompt. Every failure, every correction,
+  every "no that's not what I meant"—it all accumulates. The model reads it all.
+
+
+
+  Don't fight a bad conversation. Recognize when the context is polluted and start fresh.
+  It's faster, cleaner, and you'll get better output.
+
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <div className="text-sm text-gray-700">
+    <strong className="text-gray-900">Claude's note:</strong> When you correct me five
+    times in a row, I don't experience frustration or confusion. But the mathematical
+    effect is real: each correction shifts the conditional probability distribution I'm
+    sampling from, and those shifts can interfere with each other. If correction 1 says
+    "more formal" and correction 3 says "more casual," those are opposing gradients in
+    the probability space. The result isn't "understanding nuance"—it's trying to maximize
+    likelihood given contradictory signals. That's why starting fresh works better than
+    iterating in a polluted context.
+  </div>
+</div>

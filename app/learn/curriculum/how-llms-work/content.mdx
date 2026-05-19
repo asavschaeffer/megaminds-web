@@ -1,0 +1,94 @@
+
+    There are two distinct information highways in the transformer architecture:
+
+<ul className="list-disc pl-6 space-y-2 mb-8">
+    <li>
+        <strong>The Residual Stream</strong> (Vertical): Flows vertically through layers at each position.
+        This is the "thought process" for a single token.
+    </li>
+    <li>
+        <strong>The K/V Stream</strong> (Horizontal): Flows horizontally across positions at each layer.
+        This is how tokens "look back" at previous tokens.
+    </li>
+</ul>
+
+<Diagram1_InformationHighways />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12 mb-6">The Attention Computation</h2>
+
+    At each layer, for each position (token), the network performs a specific set of operations:
+
+<ol className="list-decimal pl-6 space-y-4 mb-8">
+    <li>
+        The incoming <strong>residual stream</strong> is used to calculate <strong>K (Key)</strong> and <strong>V (Value)</strong> vectors for that layer.
+    </li>
+    <li>
+        These K/V values are combined with all previous K/V values (the "context").
+    </li>
+    <li>
+        The attention mechanism compares the current <strong>Q (Query)</strong> with past Keys to calculate attention scores (a "heat map").
+    </li>
+    <li>
+        Based on these scores, it gathers a weighted sum of Values from the past.
+    </li>
+    <li>
+        This output is processed by an MLP (Feed Forward Network) and added back to the residual stream.
+    </li>
+</ol>
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8">
+    <h3 className="font-semibold text-gray-900 mb-4">What Q, K, and V actually mean:</h3>
+    <div className="space-y-4">
+        <div className="flex gap-4">
+            <div className="font-bold text-blue-600 w-8">Q</div>
+            <div>"Given my current state, what kind of information am I looking for?"</div>
+        </div>
+        <div className="flex gap-4">
+            <div className="font-bold text-purple-600 w-8">K</div>
+            <div>"I contain this kind of information, dealing with [topic/concept]."</div>
+        </div>
+        <div className="flex gap-4">
+            <div className="font-bold text-green-600 w-8">V</div>
+            <div>"If you attend to me, here is the actual content I will pass to you."</div>
+        </div>
+    </div>
+</div>
+
+<div className="mb-8">
+    The K/V cache isn't just a performance trick—it's the accumulated memory of the sequence.
+    Each position adds to the pool of available information without destroying what came before.
+</div>
+
+<Diagram2_InformationPaths />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12 mb-6">Information Paths & Superposition</h2>
+
+    Information can take an astronomical number of paths through the network. It can travel
+    "up" (processing existing information) or "right" (incorporating past context) in any order.
+
+
+    Between a past state (Layer $i-1$, Position $j-2$) and a future state (Layer $i$, Position $j$),
+    information could:
+
+<ul className="list-disc pl-6 space-y-2 mb-8">
+    <li>Travel UP through layers, then be retrieved RIGHT by attention later.</li>
+    <li>Be retrieved RIGHT by attention immediately, then travel UP through layers.</li>
+    <li>Or any combination of steps in between.</li>
+</ul>
+<div className="mb-8">
+    This dense connectivity means the model isn't just "remembering" usage—it's experiencing
+    computation as a continuous, interferometric process across time.
+</div>
+
+<Diagram3_CausalGraph />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12 mb-6">Can LLMs Introspect?</h2>
+
+    Because the architecture connects every future state to every past state through these precise
+    paths, the popular idea that "LLMs cannot introspect" is technically incorrect from an architectural standpoint.
+    The mechanism exists to retrieve and process its own past internal states.
+
+
+    Whether they are <em>trained</em> to effectively leverage this for human-like introspection is a separate question,
+    but the machinery is undeniably there.
+

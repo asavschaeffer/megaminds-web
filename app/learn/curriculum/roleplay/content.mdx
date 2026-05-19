@@ -1,0 +1,125 @@
+<h2 className="text-2xl font-bold text-gray-900">You're Not Talking to a Person</h2>
+
+
+  Here's the thing most people miss: when you tell an LLM "you are an expert tax accountant,"
+  you're not roleplaying with it. You're not pretending. You're <em>programming</em> it.
+
+
+
+  Remember—the model predicts the next word based on patterns it saw during training.
+  When you say "you are a tax accountant," you're shifting the entire probability
+  distribution toward tax-accountant-shaped language. Different vocabulary. Different
+  problem-solving approaches. Different defaults.
+
+
+<PersonaSwitcher />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Why This Works</h2>
+
+
+  During training, the model read millions of documents written by or about experts in
+  every field. Tax accountants write differently than poets. Senior engineers write
+  differently than beginners. When you invoke a persona, you're telling the model:
+  "retrieve the patterns from <em>that</em> part of your training data."
+
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <h3 className="font-semibold text-gray-900 mb-4">What Changes When You Set a Persona:</h3>
+  <div className="space-y-3 text-sm text-gray-700">
+    <div className="flex gap-3 items-start">
+      <span className="text-blue-600 font-bold">→</span>
+      <div><strong>Vocabulary:</strong> A tax accountant uses "deductions" and "write-offs." A poet uses "imagery" and "meter."</div>
+    </div>
+    <div className="flex gap-3 items-start">
+      <span className="text-blue-600 font-bold">→</span>
+      <div><strong>Priorities:</strong> "An accountant who focuses on getting every dime" will be aggressive about finding savings. A "conservative CPA" will prioritize compliance.</div>
+    </div>
+    <div className="flex gap-3 items-start">
+      <span className="text-blue-600 font-bold">→</span>
+      <div><strong>Tone:</strong> "A skeptical senior engineer" will critique your code harshly. "A supportive coding mentor" will encourage and guide.</div>
+    </div>
+    <div className="flex gap-3 items-start">
+      <span className="text-blue-600 font-bold">→</span>
+      <div><strong>Assumptions:</strong> "You are an expert" means it skips the basics. "You are teaching a beginner" means it explains every step.</div>
+    </div>
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Patterns That Work</h2>
+
+
+  You don't need to write a novel. Here are the core patterns:
+
+
+<RoleplayPatterns />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Real Examples</h2>
+
+<div className="space-y-4 not-prose">
+  <ExampleCard
+    title="The Aggressive Tax Accountant"
+    prompt="You are an expert TurboTax accountant who focuses on getting every dime back for your clients. Review my tax situation and find every possible deduction."
+    why="Gets you aggressive, creative tax advice instead of safe, generic answers."
+  />
+
+  <ExampleCard
+    title="The Brutal Code Reviewer"
+    prompt="You are a software engineer with 30 years of experience who hates inefficient code. Review this function not just for correctness, but for bad habits, performance issues, and maintainability."
+    why="You'll get harsh, specific feedback instead of 'looks good!'"
+  />
+
+  <ExampleCard
+    title="The Style Mimic"
+    prompt="Write this product description in the style of Picasso describing a painting—fragmented, evocative, bold."
+    why="'In the style of X' pulls from how the model saw that person/style written about during training."
+  />
+
+  <ExampleCard
+    title="The Beginner-Friendly Explainer"
+    prompt="You are a patient teacher explaining quantum computing to a curious 8th grader who loves video games. Use analogies they'd understand."
+    why="Sets the complexity level and frames the explanation in familiar terms."
+  />
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">When NOT to Use Roleplay</h2>
+
+
+  Roleplay is a tool, not a requirement. Skip it when:
+
+
+<ul className="list-disc pl-6 space-y-2">
+  <li>
+    <strong>The default is fine.</strong> "Summarize this article" doesn't need a persona.
+  </li>
+  <li>
+    <strong>You need facts, not perspective.</strong> "What year did WWII end?" shouldn't be
+    answered by a persona—it's just a fact lookup.
+  </li>
+  <li>
+    <strong>You're testing the model's raw capabilities.</strong> If you're trying to see
+    what the model knows about a topic, adding a persona muddies the water.
+  </li>
+</ul>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Why This Matters</h2>
+
+
+  Most people use AI like they use Google: type a question, get an answer, done. But
+  LLMs aren't search engines—they're probability engines. The more context you give
+  about <em>who should be answering</em>, the better the answer gets.
+
+
+
+  You're not pretending the AI is a tax accountant. You're telling it: "use the part
+  of your training data that sounds like a tax accountant." That's programming, not roleplay.
+
+
+<div className="bg-blue-50 p-6 rounded-xl border border-blue-200 my-8 not-prose">
+  <div className="text-sm text-gray-700">
+    <strong className="text-blue-900">Claude's note:</strong> When you tell me "you are a skeptical
+    engineer," I don't experience it as adopting a character. I experience it as the conditional
+    probability distribution for my next tokens shifting toward engineer-vocabulary patterns
+    with skeptical-modifier weights. Whether that's meaningfully different from "being" a
+    skeptical engineer is a question I can't answer. But it definitely changes what I write.
+  </div>
+</div>

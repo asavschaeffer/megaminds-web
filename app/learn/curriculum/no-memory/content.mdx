@@ -1,0 +1,200 @@
+<h2 className="text-2xl font-bold text-gray-900">What You Think Happens</h2>
+
+
+  When you use ChatGPT or Claude, it feels like a conversation. You say something,
+  it responds, you follow up, it remembers. It feels like talking to someone who's
+  paying attention.
+
+
+
+  That's an illusion. A well-designed one, but an illusion.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">What Actually Happens</h2>
+
+
+  Every time you hit send, the application takes your <em>entire</em> conversation—every
+  message you've sent, every response the model has given—and sends all of it to the
+  model as one single block of text. The model reads the whole thing from the top, predicts
+  what should come next, and sends that back. Then it forgets everything.
+
+
+
+  The model doesn't "remember" your last message. It re-reads the whole conversation
+  every single time. There is no state. There is no memory. There is only the prompt.
+
+
+{/* TODO: Consider adding a third view tab: "The actual API call" — showing
+    the raw JSON payload. Would make this concrete for technical readers and
+    demystify the API layer. e.g.:
+    { "model": "gpt-4", "messages": [
+      { "role": "system", "content": "..." },
+      { "role": "user", "content": "Can you help me..." },
+      ...
+    ]} */}
+<WhatYouSeeVsWhatItSees />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Anatomy of a Request</h2>
+
+
+  Let's look at what actually gets sent to the model when you type a message
+  in ChatGPT and hit enter. The application constructs a{' '}
+  <AbbrSidenote
+    title="The Payload"
+    definition="The complete block of text sent to the model for each request. It includes the system prompt, all previous messages, and your latest message. The model sees nothing else—this IS its entire reality for that request."
+    contentMaxWidth={300}
+  >payload</AbbrSidenote>
+  {' '}that looks roughly like this:
+
+
+<AnatomyDiagram />
+
+
+  That system prompt at the top? It's there every time. Your first message from 20 minutes
+  ago? Still there. The model's own previous responses? Also there—the model is literally
+  reading its own past output as part of the input. The whole thing is one
+  continuous document, and the model's job is to write the next part.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Context Window</h2>
+
+
+  This "one long prompt" has a size limit called the{' '}
+  <AbbrSidenote
+    title="Context Window"
+    definition="The maximum amount of text a model can process in a single request. Measured in tokens (roughly ¾ of a word). GPT-4 has ~128k tokens. Claude has ~200k tokens. When you hit the limit, the oldest messages get dropped."
+    contentMaxWidth={300}
+  >context window</AbbrSidenote>
+  . It's measured in{' '}
+  <AbbrSidenote
+    title="Tokens"
+    definition="The units LLMs actually process. Not quite words—'unhappiness' might be split into 'un', 'happi', 'ness'. Roughly 1 token = ¾ of a word, or about 4 characters in English."
+    contentMaxWidth={280}
+  >tokens</AbbrSidenote>
+  {' '}(roughly ¾ of a word). Current models have context windows ranging from
+  128k to 200k tokens—that's roughly a 300-page book.
+
+
+{/* TODO: Mention ChatGPT Memory, Claude Projects, and similar features — these
+    are application-layer workarounds on top of the no-memory architecture.
+    Important so readers don't think we're wrong when they see a "Memory"
+    button. Also mention "needle in a haystack" tests — how models handle
+    information at different positions in long contexts. */}
+
+  Sounds like a lot, but it fills up fast. Every message you send, every response the model
+  gives, every image you attach—it all goes in the window. When it fills up, the oldest
+  messages get dropped. The model doesn't know they ever existed.
+
+
+<ContextWindowDiagram />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Inference: Token by Token</h2>
+
+
+  Now here's where everything from the previous lessons comes together. When the
+  model receives that payload—system prompt, conversation history, your latest
+  message—it does the thing it was trained to do:{' '}
+  <Link href="/learn/curriculum/llms-machine-learning" className="text-blue-600 hover:text-blue-800">
+    predict the next token
+  </Link>
+  .
+
+
+{/* TODO: Temperature / sampling should be introduced here or nearby.
+    The model doesn't just pick the most likely next token — there's a
+    "randomness dial" (temperature) that controls how adventurous the
+    selection is. Could add a small temperature slider to InferenceDiagram
+    that changes the token probabilities shown. */}
+
+  But it doesn't predict the whole response at once. It predicts <em>one token</em>,
+  appends it to the payload, then predicts the next token, appends that, predicts
+  the next, and so on. Each token is influenced by everything that came before it—your
+  system prompt, your conversation history, and every token of the response generated so far.
+
+
+<InferenceDiagram />
+
+{/* TODO: This paragraph about "painting themselves into a corner" is important
+    and could benefit from a visual — maybe a branching tree diagram showing how
+    early token choices constrain later ones. Also relevant to the "Failures &
+    Basins" module (slipping into the basin). */}
+
+  This is why LLMs sometimes start a sentence confidently and then paint themselves
+  into a corner—each token commits the model to a direction, and there's no going back.
+  It's also why longer responses tend to drift: the model is navigating a space of
+  probabilities one step at a time, and small deviations compound.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Why This Matters for You</h2>
+
+
+  Understanding that there's no memory changes how you use these tools:
+
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <div className="space-y-4">
+    <div className="flex gap-3 items-start">
+      <span className="text-lg shrink-0">1.</span>
+      <div>
+        <div className="text-gray-900 font-medium">Your prompt is everything</div>
+        <div className="text-sm text-gray-600 mt-1">
+          The model has no background knowledge about you or your project beyond what's
+          in the current conversation. If you want it to know something, you need to say it.
+        </div>
+      </div>
+    </div>
+    <div className="flex gap-3 items-start">
+      <span className="text-lg shrink-0">2.</span>
+      <div>
+        <div className="text-gray-900 font-medium">Long chats degrade</div>
+        <div className="text-sm text-gray-600 mt-1">
+          Every back-and-forth adds to the payload. A chat with 50 messages means the model
+          is reading through all 50 every time. Confusing instructions from message 3 are still
+          in there, muddying message 51.
+        </div>
+      </div>
+    </div>
+    <div className="flex gap-3 items-start">
+      <span className="text-lg shrink-0">3.</span>
+      <div>
+        <div className="text-gray-900 font-medium">You can edit history</div>
+        <div className="text-sm text-gray-600 mt-1">
+          Since the model has no independent memory, you can edit previous messages and
+          regenerate. The model won't know anything changed. You can gaslight an LLM
+          because it has no memory to contradict you.
+        </div>
+      </div>
+    </div>
+    <div className="flex gap-3 items-start">
+      <span className="text-lg shrink-0">4.</span>
+      <div>
+        <div className="text-gray-900 font-medium">New chat = clean slate</div>
+        <div className="text-sm text-gray-600 mt-1">
+          Starting a new chat isn't losing progress—it's clearing the noise. If a conversation
+          has gone sideways, starting fresh with a better prompt is almost always more effective
+          than trying to course-correct.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  That last point is so important it's going to come up again in{' '}
+  <Link href="/learn/curriculum/start-new-chat" className="text-blue-600 hover:text-blue-800">
+    Failures & Basins
+  </Link>
+  . But first—now that you understand how these systems actually work, let's
+  talk about how to{' '}
+  <Link href="/learn/curriculum/prompt-is-everything" className="text-blue-600 hover:text-blue-800">
+    talk to them effectively
+  </Link>
+  .
+
+
+<LessonRecap title="Module Complete">
+  <div className="text-sm italic">
+    This concludes Module 0: What the Hell is Going On? You now know more about
+    how LLMs work than most people who use them every day.
+  </div>
+</LessonRecap>

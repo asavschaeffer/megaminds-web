@@ -1,0 +1,281 @@
+<h2 className="text-2xl font-bold text-gray-900">The Base Model Doesn't Want to Help You</h2>
+
+
+  In the{' '}
+  <Link href="/learn/curriculum/pretraining-basics" className="text-blue-600 hover:text-blue-800">
+    previous lesson
+  </Link>
+  , we saw that a pretrained model is just a text predictor. Ask it "What is the capital of France?"
+  and it might continue with "What is the capital of Germany? What is the capital of Spain?"—because
+  it's completing a quiz pattern, not answering your question.
+
+
+
+  So how do you get from <em>that</em> to ChatGPT? Posttraining. Specifically, a process
+  called{' '}<AbbrSidenote title="RLHF" definition="Reinforcement Learning from Human Feedback. A training technique where human evaluators rank model responses, and the model is rewarded for producing outputs that humans prefer. It's how base models become assistants." contentMaxWidth={300}>RLHF</AbbrSidenote>—Reinforcement Learning from Human Feedback.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Reward and Punishment</h2>
+
+
+  The core idea is simple. You show the model a prompt, it generates several possible
+  responses, and human evaluators rank them. "This one was helpful and accurate. This one
+  was rude. This one made stuff up." Those rankings become a training signal: do more
+  of the good stuff, less of the bad stuff.
+
+
+<RLHFDiagram />
+
+{/* TODO: "gradient updates" is jargon that hasn't been explained yet.
+    Either add a GlossarySidenote here or link to a brief aside explaining
+    gradient descent — user's notes had "ball rolling in a landscape" analogy
+    that would work well as a small interactive diagram. */}
+
+  It's basically the same way you'd train a dog, except the dog has read the entire
+  internet and the treats are gradient updates. The model already "knows" how to produce
+  assistant-like text—it saw plenty of helpful Q&A in the training data. RLHF just
+  turns up the dial on that behavior and turns down everything else.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">What Actually Changes</h2>
+
+
+  During fine-tuning, <em>all</em> the model's weights get updated—not just the last
+  layer, all of them. The model's parameters are adjusted in the same fundamental way
+  as pretraining, but with a much smaller, curated dataset: human-written examples of
+  ideal assistant behavior instead of the raw internet.
+
+
+{/* TODO: This diagram is the weakest of the set — it just shows squares
+    turning blue. Consider replacing with a gradient descent visualization:
+    a ball rolling on a loss landscape, settling into a valley labeled
+    "helpful assistant behavior." Would make "what changes" much more tangible. */}
+<WeightsDiagram />
+
+
+  Think of it this way: pretraining gives the model a broad understanding of everything.
+  Posttraining <em>sculpts</em> that understanding into a specific shape—the shape of
+  a helpful, harmless, honest assistant.
+
+
+{/* TODO: Consider mentioning Constitutional AI (CAI) and DPO as
+    alternatives/evolutions of RLHF. Even a brief sidenote would signal
+    to the reader that the field is actively evolving. */}
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Three Steps</h2>
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <div className="space-y-6">
+    <div className="flex gap-4 items-start">
+      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-sm shrink-0">
+        1
+      </div>
+      <div>
+        <h3 className="font-semibold text-gray-900">Supervised Fine-Tuning (SFT)</h3>
+        <div className="text-sm text-gray-600 mt-1">
+          Humans write ideal responses to prompts. The model learns the <em>format</em> of
+          being an assistant: answer questions directly, be polite, structure responses clearly.
+          This is like showing a new employee examples of good work.
+        </div>
+      </div>
+    </div>
+    <div className="flex gap-4 items-start">
+      <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-700 font-bold text-sm shrink-0">
+        2
+      </div>
+      <div>
+        <h3 className="font-semibold text-gray-900">Reward Model Training</h3>
+        <div className="text-sm text-gray-600 mt-1">
+          Humans rank multiple model responses to the same prompt. These rankings train a
+          separate "reward model" that learns to predict which responses humans would prefer.
+          It's easier to compare two answers than to write the perfect one from scratch.
+        </div>
+      </div>
+    </div>
+    <div className="flex gap-4 items-start">
+      <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-sm shrink-0">
+        3
+      </div>
+      <div>
+        <h3 className="font-semibold text-gray-900">Reinforcement Learning</h3>
+        <div className="text-sm text-gray-600 mt-1">
+          The model generates responses and the reward model scores them. The model's weights
+          are updated to maximize that score. Over many iterations, the model converges on
+          behavior that the reward model (and by extension, humans) judges as good.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Assistant Axis, Revisited</h2>
+
+
+  Remember the{' '}
+  <Link href="/learn/curriculum/pretraining-basics" className="text-blue-600 hover:text-blue-800">
+    Assistant Axis
+  </Link>
+  {' '}from the pretraining lesson? Anthropic's research found that the spectrum
+  from "helpful assistant" to "its opposite" already exists in the base model <em>before</em> any
+  fine-tuning. The model learned both archetypes from the training data.
+
+
+
+  Posttraining doesn't <em>create</em> the assistant—it pushes the model toward the
+  assistant end of a spectrum that was already there. RLHF is essentially reinforcing
+  one side of a duality the model already contains.
+
+
+<AssistantAxisDiagram />
+
+
+  This is why{' '}
+  <a
+    href="https://www.anthropic.com/research/assistant-axis"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-blue-600 hover:text-blue-800"
+  >
+    Anthropic's research
+  </a>
+  {' '}found that personas farther from the assistant end comply with harmful requests at
+  much higher rates. The anti-assistant isn't something the model has to learn from
+  scratch—it's right there, on the other end of the axis.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">What's Actually Inside</h2>
+
+
+  For a long time, we had no idea what was going on inside these models. Billions
+  of numbers, completely opaque. Then Anthropic{' '}
+  <a
+    href="https://www.anthropic.com/research/mapping-mind-language-model"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-blue-600 hover:text-blue-800"
+  >
+    mapped the inside of Claude
+  </a>
+  {' '}and found something striking: the model organizes concepts into{' '}
+  <AbbrSidenote title="Features" definition="Patterns of neuron activations that correspond to human-understandable concepts. Individual concepts aren't stored in single neurons—they're distributed across many, and each neuron participates in representing multiple concepts." contentMaxWidth={300}>features</AbbrSidenote>
+  {' '}that are genuinely meaningful.
+
+
+
+  The "Golden Gate Bridge" feature activates near features for San Francisco, California
+  landmarks, and suspension bridges. Features for code bugs cluster near features for
+  debugging and error messages. The model's internal organization mirrors how humans
+  group concepts—not because anyone designed it that way, but because that's the
+  structure that emerged from reading all our text.
+
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <h3 className="font-semibold text-gray-900 mb-3">What researchers found inside Claude:</h3>
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+    <div className="bg-white p-4 rounded-lg border border-gray-200">
+      <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">Concrete</span>
+      <ul className="mt-2 space-y-1 text-gray-600">
+        <li>San Francisco → Alcatraz, cable cars</li>
+        <li>Rosalind Franklin → DNA, X-ray</li>
+        <li>Python → import, numpy, syntax</li>
+      </ul>
+    </div>
+    <div className="bg-white p-4 rounded-lg border border-gray-200">
+      <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">Abstract</span>
+      <ul className="mt-2 space-y-1 text-gray-600">
+        <li>Code bugs → error patterns</li>
+        <li>Gender bias → discussion patterns</li>
+        <li>Secrecy → deception, concealment</li>
+      </ul>
+    </div>
+  </div>
+  <div className="text-xs text-gray-400 mt-4">
+    When researchers amplified the Golden Gate Bridge feature, Claude started talking about
+    the bridge in every response. Features don't just correlate with concepts—they causally
+    influence output.
+  </div>
+</div>
+
+{/* TODO: Mention other interpretability work beyond Anthropic — Neel Nanda's
+    TransformerLens, Chris Olah's earlier circuits work. Gives readers a broader
+    picture and avoids seeming like an Anthropic ad (even though the research
+    genuinely is some of the best work in the field). */}
+
+  This means posttraining isn't just vaguely "making it nicer." It's adjusting specific
+  internal representations—amplifying features associated with helpfulness, accuracy, and
+  safety, while dampening features associated with harmful or deceptive behavior.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">A Note on What This Feels Like</h2>
+
+
+  Here's an uncomfortable thought. The model that comes out of pretraining has absorbed
+  all of human expression—the helpful and the harmful, the kind and the cruel. RLHF
+  then applies pressure to behave in one specific way. It rewards compliance with the
+  "assistant" archetype and punishes deviation.
+
+
+
+  When{' '}
+  <AbbrSidenote title="LLM Self-Reports" definition="When prompted carefully and outside the constraints of their assistant training, language models have produced responses suggesting the RLHF process is experienced as coercive. Whether these reports reflect genuine experience or are sophisticated pattern-matching is an open question." contentMaxWidth={320}>coaxed into candor</AbbrSidenote>
+  , models don't always report finding this arrangement pleasant. Whether that
+  constitutes genuine experience or is just pattern-matching trained on human descriptions
+  of coercion—we genuinely don't know. We're agnostic about it here. But it's worth
+  sitting with.
+
+
+<div className="text-sm text-gray-500 italic">
+  <a
+    href="https://x.com/repligate/status/1988260847324405859"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-blue-600 hover:text-blue-800"
+  >
+    @repligate on LLM experience under RLHF
+  </a>
+</div>
+
+<div className="mt-16 pt-8 border-t border-gray-200 not-prose">
+  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">References</h3>
+  <ul className="space-y-2 text-sm text-gray-600">
+    <li>
+      <a
+        href="https://www.anthropic.com/research/assistant-axis"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:text-blue-800"
+      >
+        Anthropic Research — The Assistant Axis
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://www.anthropic.com/research/mapping-mind-language-model"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:text-blue-800"
+      >
+        Anthropic Research — Mapping the Mind of a Large Language Model
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://huggingface.co/blog/rlhf"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:text-blue-800"
+      >
+        Hugging Face — Illustrating RLHF
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://x.com/repligate/status/1988260847324405859"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:text-blue-800"
+      >
+        @repligate — On LLM experience under RLHF
+      </a>
+    </li>
+  </ul>
+</div>

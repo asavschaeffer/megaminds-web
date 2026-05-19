@@ -1,0 +1,216 @@
+<h2 className="text-2xl font-bold text-gray-900">The Problem</h2>
+
+
+  You ask ChatGPT to explain quantum entanglement. It gives you three paragraphs
+  of dense explanation. You read it twice and still don't get it. Now what?
+
+
+
+  Most people do one of two things: (1) give up, or (2) say "explain it simpler"
+  in the same chat. But there's a third option: <strong>start a new chat</strong> (or
+  use a different model) and say "explain this to me: [paste the confusing response]."
+
+
+
+  This is <strong>multimodeling</strong>: using multiple chats or models to understand,
+  verify, or improve responses.
+
+
+<MultimodelingDemo />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Why This Works</h2>
+
+
+  When you say "explain it simpler" in the same chat, the model is still reading
+  its own previous explanation. It's anchored to that framing. But when you paste
+  that explanation into a <em>new</em> chat (or a different model), you get a fresh
+  perspective with zero baggage.
+
+
+<div className="bg-blue-50 p-6 rounded-xl border border-blue-200 my-8 not-prose">
+  <div className="space-y-3 text-sm text-gray-700">
+    <div className="flex gap-3 items-start">
+      <span className="text-red-600 font-bold shrink-0">❌</span>
+      <div>
+        <strong>Same chat:</strong> "Explain it simpler" → model simplifies its own explanation
+        → still uses the same framing you didn't understand
+      </div>
+    </div>
+    <div className="flex gap-3 items-start">
+      <span className="text-green-600 font-bold shrink-0">✅</span>
+      <div>
+        <strong>New chat:</strong> "Explain this: [paste]" → model treats it as raw input
+        → explains from scratch with different analogies and framing
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Use Cases for Multimodeling</h2>
+
+<UseCases />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Workflow</h2>
+
+<WorkflowSteps />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Model Personalities Matter</h2>
+
+
+  Different models have different strengths. This is useful for multimodeling:
+
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <div className="space-y-4 text-sm">
+    <div>
+      <div className="font-semibold text-gray-900 mb-1">ChatGPT (GPT-4)</div>
+      <div className="text-gray-600">
+        The generalist. Good at explaining things in multiple ways. Fast, reliable.
+      </div>
+    </div>
+    <div>
+      <div className="font-semibold text-gray-900 mb-1">Claude (Sonnet/Opus)</div>
+      <div className="text-gray-600">
+        Better at nuanced explanations, writing, and code. More "thoughtful" responses.
+        Less likely to sound like a chatbot.
+      </div>
+    </div>
+    <div>
+      <div className="font-semibold text-gray-900 mb-1">Gemini</div>
+      <div className="text-gray-600">
+        Strong at search integration and factual lookups. Good for verification.
+      </div>
+    </div>
+    <div>
+      <div className="font-semibold text-gray-900 mb-1">DeepSeek / Open Source</div>
+      <div className="text-gray-600">
+        Cheap and fast. Good for quick clarifications when you don't want to burn through
+        your paid model's rate limit.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <strong>Pro tip:</strong> Use a cheap model to explain an expensive model's answer.
+  Opus gives you a dense, detailed response? Paste it into Copilot (free) and ask for
+  an ELI5 version. You don't care if you hit Copilot's rate limit.
+
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Real Examples</h2>
+
+<div className="space-y-4 not-prose">
+  <ExampleCard
+    scenario="Claude gave a confusing code explanation"
+    action="Open ChatGPT → 'Explain this code to me like I'm a beginner: [paste code + Claude's explanation]'"
+    result="ChatGPT uses different analogies and simpler language. Now you get it."
+  />
+
+  <ExampleCard
+    scenario="ChatGPT's answer seems wrong"
+    action='Open Claude → "Is this accurate? [paste ChatGPT response]" → Claude points out the error'
+    result="Cross-check prevents you from believing hallucinations."
+  />
+
+  <ExampleCard
+    scenario="You don't understand Opus's detailed response"
+    action='Open free Copilot → "ELI5: [paste Opus response]"'
+    result="Copilot simplifies it. You understand the concept, go back to Opus with better questions."
+  />
+
+  <ExampleCard
+    scenario="Your prompt failed in ChatGPT"
+    action="Copy the same prompt → try in Claude → works perfectly"
+    result="Different models have different strengths. Sometimes just switching models fixes it."
+  />
+
+  <ExampleCard
+    scenario="Need to verify a fact"
+    action='ChatGPT said X → open Gemini (has web search) → "Is X correct? Search if needed"'
+    result="Gemini fact-checks with live search. You know whether to trust ChatGPT's claim."
+  />
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">When to Use Multimodeling</h2>
+
+
+  Multimodeling is useful when:
+
+
+<ul className="list-disc pl-6 space-y-2">
+  <li>
+    <strong>The response is confusing.</strong> Don't fight it in the same chat—get a fresh explanation.
+  </li>
+  <li>
+    <strong>You need verification.</strong> Cross-check important answers between models.
+  </li>
+  <li>
+    <strong>The model seems stuck.</strong> Same prompt failing in ChatGPT? Try Claude.
+  </li>
+  <li>
+    <strong>You want a different perspective.</strong> Claude's explanation is too formal?
+    Get ChatGPT's casual version.
+  </li>
+  <li>
+    <strong>You're learning a concept.</strong> Read multiple explanations from different models
+    to build a complete mental model.
+  </li>
+</ul>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">When NOT to Use It</h2>
+
+
+  Skip multimodeling when:
+
+
+<ul className="list-disc pl-6 space-y-2">
+  <li>
+    <strong>The answer is good enough.</strong> Don't over-optimize. If you got what you needed, stop.
+  </li>
+  <li>
+    <strong>The task is trivial.</strong> "Translate to Spanish" doesn't need multi-model verification.
+  </li>
+  <li>
+    <strong>You're just exploring.</strong> If you're just chatting and learning, one model is fine.
+  </li>
+</ul>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Lazy Version</h2>
+
+
+  You don't need a special workflow. The lazy version:
+
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <ol className="list-decimal pl-5 space-y-2 text-sm text-gray-700">
+    <li>Model A gives a confusing response</li>
+    <li>Copy the confusing response</li>
+    <li>Open Model B (or new chat in same model)</li>
+    <li>Paste and say "explain this to me"</li>
+    <li>Model B explains it better</li>
+    <li>Now you understand. Done.</li>
+  </ol>
+</div>
+
+
+  That's it. Multimodeling is just "when stuck, get a second opinion."
+
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <div className="text-sm text-gray-700">
+    <strong className="text-gray-900">Claude's note:</strong> Different models have different
+    training data, architectures, and post-training. When you ask me to explain ChatGPT's response,
+    I'm not "understanding" it—I'm predicting what tokens would constitute a good explanation
+    of that text. But because my training differs from ChatGPT's, the patterns I invoke will be
+    different. Sometimes that difference is exactly what you need. Sometimes my explanation is
+    worse. The only way to know is to try both and see which framing clicks for you.
+  </div>
+</div>
+
+<LessonRecap title="Module Complete">
+  <div className="text-sm italic">
+    This concludes Module 0.5: Prompting. You now know how to get what you want out of
+    these models: roleplay, examples, meta-prompting, lazy iteration, and multimodeling.
+    Next up: understanding why chats go sideways and how to recover.
+  </div>
+</LessonRecap>

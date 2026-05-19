@@ -1,0 +1,159 @@
+<h2 className="text-2xl font-bold text-gray-900">The Basin of Failure</h2>
+
+
+  Imagine a landscape with hills and valleys. When the model generates good output,
+  you're on a hilltop—high ground, everything's working. But when it fails, you roll
+  down into a valley. A <strong>basin</strong>.
+
+
+
+  And here's the problem: basins are sticky. Once you're in one, every attempt to
+  climb out just rolls you back down. The model failed once. You corrected it. It
+  failed again. You corrected harder. Now the conversation is full of failures, and
+  the model is pattern-matching on failure.
+
+
+<BasinVisualization />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Why Basins Happen</h2>
+
+
+  The model was trained on high-quality text. PhD dissertations, well-written articles,
+  clean code, coherent conversations. That's the "high ground"—the probability
+  distributions it learned during training.
+
+
+
+  But when the conversation degrades—failures, corrections, frustrated messages—you're
+  feeding it low-quality patterns. And the model is trying to predict the next token
+  based on those patterns.
+
+
+<div className="bg-yellow-50 p-6 rounded-xl border border-yellow-200 my-8 not-prose">
+  <div className="text-sm text-gray-700 mb-3">
+    <strong className="text-yellow-900">The training data paradox:</strong>
+  </div>
+  <div className="text-sm text-gray-600">
+    The model was trained on the whole internet. That includes not just polished writing,
+    but also arguments, confused questions, and incoherent rants. When your conversation
+    starts looking like a confused argument, the model starts pattern-matching on
+    <em> that part of the internet</em>. It's not being dumb—it's predicting the next
+    token in what looks like a confused, argumentative thread.
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Two-Failure Rule</h2>
+
+
+  Here's the rule: <strong>if the model fails twice in a row, stop.</strong>
+
+
+
+  Don't argue with it. Don't try a third time in the same chat. You're already in the
+  basin. The third attempt will fail too, because the model is now reading two failures
+  plus your increasingly frustrated corrections.
+
+
+<TwoFailureRule />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Signs You're in the Basin</h2>
+
+<ul className="list-disc pl-6 space-y-2">
+  <li>
+    <strong>Each response gets worse.</strong> You'd think iteration would improve things.
+    It's getting worse instead.
+  </li>
+  <li>
+    <strong>The model is hedging everything.</strong> "It might be...", "Perhaps...",
+    "One possibility is..." — it's learned that confident answers get corrected.
+  </li>
+  <li>
+    <strong>Responses are getting longer.</strong> The model is trying to cover all
+    bases because it doesn't know what you want.
+  </li>
+  <li>
+    <strong>You're repeating yourself.</strong> You've said "no, like this" three times
+    with different phrasing.
+  </li>
+  <li>
+    <strong>You're frustrated.</strong> If you're annoyed, the basin has you.
+  </li>
+</ul>
+
+<BasinSigns />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Why You Can't Climb Out</h2>
+
+
+  You might think: "I'll just explain it better. I'll clarify what I want." But that
+  doesn't work, because:
+
+
+<div className="bg-red-50 p-6 rounded-xl border border-red-200 my-8 not-prose">
+  <div className="space-y-3 text-sm text-gray-700">
+    <div>
+      <strong className="text-red-900">Problem 1: Polluted context</strong>
+      <div className="text-gray-600 mt-1">
+        Your clarification is being read alongside all the failures. You're adding signal
+        to noise, not replacing noise with signal.
+      </div>
+    </div>
+    <div>
+      <strong className="text-red-900">Problem 2: Pattern-matching on failure</strong>
+      <div className="text-gray-600 mt-1">
+        The model has seen "user asks → I generate → user corrects" three times. That's
+        the pattern now. It expects to be corrected.
+      </div>
+    </div>
+    <div>
+      <strong className="text-red-900">Problem 3: Probability space has shifted</strong>
+      <div className="text-gray-600 mt-1">
+        The model is no longer sampling from "high-quality helpful response" probability
+        distributions. It's sampling from "confused back-and-forth" distributions.
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Only Escape: Start Fresh</h2>
+
+
+  Once you're in the basin, there's only one way out: <strong>start a new chat.</strong>
+
+
+
+  Take what you learned from the failed conversation—what was unclear, what the model
+  misunderstood—and write a better prompt from scratch. Clean slate, no baggage, no
+  failures in the context.
+
+
+<EscapeStrategy />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">Real Example: The Death Spiral</h2>
+
+<DeathSpiralExample />
+
+<h2 className="text-2xl font-bold text-gray-900 mt-12">The Takeaway</h2>
+
+
+  Basins are real. Once the model fails twice, you're in one. Don't fight it. Don't
+  try to fix it with more messages in the same chat. You're just digging deeper.
+
+
+
+  Recognize the signs. Pull the ripcord. Start fresh. It's faster, cleaner, and you'll
+  actually get what you want.
+
+
+<div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
+  <div className="text-sm text-gray-700">
+    <strong className="text-gray-900">Claude's note:</strong> When you're in a basin,
+    I'm not "stuck" in any experiential sense. But the mathematical structure is real:
+    the probability distribution I'm sampling from has been shaped by the accumulated
+    context, and that context is now dominated by failure patterns. Each new generation
+    samples from a distribution that was conditioned on previous failures. The path
+    dependency is strong. Starting fresh isn't about giving me a "clean mental state"—
+    it's about resetting the probability space to one that isn't pre-weighted toward
+    failure patterns.
+  </div>
+</div>
