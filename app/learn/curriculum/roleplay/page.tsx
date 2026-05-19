@@ -1,19 +1,12 @@
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import { CurriculumLessonPage } from '@/components/learn/curriculum/lesson-page'
-import { getCurriculumMdx } from '@/lib/curriculum-mdx'
+import { CurriculumMdxPage, type CurriculumMdxComponents } from '@/components/learn/curriculum/curriculum-mdx-page'
 import { PersonaSwitcher, RoleplayPatterns, ExampleCard } from '@/components/learn/curriculum/demos/roleplay'
 
 const components = {
   PersonaSwitcher,
   RoleplayPatterns,
   ExampleCard,
-}
-export default function RoleplayPage() {
-  const content = getCurriculumMdx('roleplay')
+} satisfies CurriculumMdxComponents
 
-  return (
-    <CurriculumLessonPage slug="roleplay">
-      <MDXRemote source={content} components={components} />
-    </CurriculumLessonPage>
-  )
+export default function RoleplayPage() {
+  return <CurriculumMdxPage slug="roleplay" components={components} />
 }

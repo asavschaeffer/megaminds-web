@@ -1,6 +1,4 @@
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import { CurriculumLessonPage } from '@/components/learn/curriculum/lesson-page'
-import { getCurriculumMdx } from '@/lib/curriculum-mdx'
+import { CurriculumMdxPage, type CurriculumMdxComponents } from '@/components/learn/curriculum/curriculum-mdx-page'
 import { BasinVisualization, TwoFailureRule, BasinSigns, EscapeStrategy, DeathSpiralExample } from '@/components/learn/curriculum/demos/slipping-into-basin'
 
 const components = {
@@ -9,13 +7,8 @@ const components = {
   BasinSigns,
   EscapeStrategy,
   DeathSpiralExample,
-}
-export default function SlippingIntoBasinPage() {
-  const content = getCurriculumMdx('slipping-into-basin')
+} satisfies CurriculumMdxComponents
 
-  return (
-    <CurriculumLessonPage slug="slipping-into-basin">
-      <MDXRemote source={content} components={components} />
-    </CurriculumLessonPage>
-  )
+export default function SlippingIntoBasinPage() {
+  return <CurriculumMdxPage slug="slipping-into-basin" components={components} />
 }

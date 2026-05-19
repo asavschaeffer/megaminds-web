@@ -1,7 +1,5 @@
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import { CurriculumLessonPage } from '@/components/learn/curriculum/lesson-page'
-import { getCurriculumMdx } from '@/lib/curriculum-mdx'
 import Link from 'next/link'
+import { CurriculumMdxPage, type CurriculumMdxComponents } from '@/components/learn/curriculum/curriculum-mdx-page'
 import { AbbrSidenoteProvider, AbbrSidenote } from '@/components/shared/sidenote'
 import { RLHFDiagram, WeightsDiagram, AssistantAxisDiagram } from '@/components/learn/curriculum/demos/finetuning-basics'
 
@@ -11,15 +9,12 @@ const components = {
   AssistantAxisDiagram,
   Link,
   AbbrSidenote,
-}
-export default function FinetuningBasicsPage() {
-  const content = getCurriculumMdx('finetuning-basics')
+} satisfies CurriculumMdxComponents
 
+export default function FinetuningBasicsPage() {
   return (
     <AbbrSidenoteProvider>
-      <CurriculumLessonPage slug="finetuning-basics">
-        <MDXRemote source={content} components={components} />
-      </CurriculumLessonPage>
+      <CurriculumMdxPage slug="finetuning-basics" components={components} />
     </AbbrSidenoteProvider>
   )
 }

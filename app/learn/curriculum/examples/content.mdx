@@ -1,6 +1,4 @@
-<h2 className="text-2xl font-bold text-gray-900">Instructions vs. Examples</h2>
-
-          
+## Instructions vs. Examples
             Here's a question: which is clearer?
           
 
@@ -35,10 +33,7 @@
           
 
           <FewShotDemo />
-
-          <h2 className="text-2xl font-bold text-gray-900 mt-12">Why Examples Work Better</h2>
-
-          
+## Why Examples Work Better
             Remember: the model predicts the next token based on patterns. When you give examples,
             you're showing it the exact pattern you want. It's not interpreting your instructions—it's
             completing the pattern you started.
@@ -54,13 +49,9 @@
               (concrete, unambiguous). The model is much better at pattern-matching than instruction-following.
             </div>
           </div>
-
-          <h2 className="text-2xl font-bold text-gray-900 mt-12">Types of Examples</h2>
-
+## Types of Examples
           <ExampleTypes />
-
-          <h2 className="text-2xl font-bold text-gray-900 mt-12">How Many Examples Do You Need?</h2>
-
+## How Many Examples Do You Need?
           <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
             <div className="space-y-4">
               <div>
@@ -97,10 +88,7 @@
           
             Rule of thumb: start with 2-3 examples. If the output is wrong, add more examples that
             cover the edge cases it's missing.
-          
-
-          <h2 className="text-2xl font-bold text-gray-900 mt-12">Real Examples</h2>
-
+## Real Examples
           <div className="space-y-4 not-prose">
             <RealExampleCard
               title="Format Matching: Multiplication Table"
@@ -158,9 +146,7 @@ Now convert: "Please be advised that the meeting has been rescheduled."`}
               why="The model sees the pattern of transformation—what changes, what stays the same."
             />
           </div>
-
-          <h2 className="text-2xl font-bold text-gray-900 mt-12">Common Mistakes</h2>
-
+## Common Mistakes
           <div className="bg-red-50 p-6 rounded-xl border border-red-200 my-8 not-prose">
             <div className="space-y-4 text-sm">
               <div>
@@ -192,10 +178,7 @@ Now convert: "Please be advised that the meeting has been rescheduled."`}
               </div>
             </div>
           </div>
-
-          <h2 className="text-2xl font-bold text-gray-900 mt-12">When to Use Examples</h2>
-
-          
+## When to Use Examples
             Use examples when:
           
 
@@ -217,10 +200,7 @@ Now convert: "Please be advised that the meeting has been rescheduled."`}
               show an example of friendly tone.
             </li>
           </ul>
-
-          <h2 className="text-2xl font-bold text-gray-900 mt-12">The Laziest Thing That Works</h2>
-
-          
+## The Laziest Thing That Works
             Here's the secret: you don't need perfect examples. You need <em>good enough</em> examples.
             Trying to write the perfect 5-shot prompt is overthinking it. Start with 2 examples. If
             the output is wrong, add a 3rd example that shows the model what it got wrong.

@@ -1,6 +1,4 @@
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import { CurriculumLessonPage } from '@/components/learn/curriculum/lesson-page'
-import { getCurriculumMdx } from '@/lib/curriculum-mdx'
+import { CurriculumMdxPage, type CurriculumMdxComponents } from '@/components/learn/curriculum/curriculum-mdx-page'
 import { LazyVsPerfectDemo, GaslightDemo, ReadingThoughtsExample, WorkflowSteps, LazyWinCard } from '@/components/learn/curriculum/demos/dont-overthink'
 
 const components = {
@@ -9,13 +7,8 @@ const components = {
   ReadingThoughtsExample,
   WorkflowSteps,
   LazyWinCard,
-}
-export default function DontOverthinkPage() {
-  const content = getCurriculumMdx('dont-overthink')
+} satisfies CurriculumMdxComponents
 
-  return (
-    <CurriculumLessonPage slug="dont-overthink">
-      <MDXRemote source={content} components={components} />
-    </CurriculumLessonPage>
-  )
+export default function DontOverthinkPage() {
+  return <CurriculumMdxPage slug="dont-overthink" components={components} />
 }

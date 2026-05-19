@@ -1,6 +1,4 @@
-<h2 className="text-2xl font-bold text-gray-900">What You Think Happens</h2>
-
-
+## What You Think Happens
   When you use ChatGPT or Claude, it feels like a conversation. You say something,
   it responds, you follow up, it remembers. It feels like talking to someone who's
   paying attention.
@@ -8,11 +6,7 @@
 
 
   That's an illusion. A well-designed one, but an illusion.
-
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">What Actually Happens</h2>
-
-
+## What Actually Happens
   Every time you hit send, the application takes your <em>entire</em> conversation—every
   message you've sent, every response the model has given—and sends all of it to the
   model as one single block of text. The model reads the whole thing from the top, predicts
@@ -33,10 +27,7 @@
       ...
     ]} */}
 <WhatYouSeeVsWhatItSees />
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">Anatomy of a Request</h2>
-
-
+## Anatomy of a Request
   Let's look at what actually gets sent to the model when you type a message
   in ChatGPT and hit enter. The application constructs a{' '}
   <AbbrSidenote
@@ -54,11 +45,7 @@
   ago? Still there. The model's own previous responses? Also there—the model is literally
   reading its own past output as part of the input. The whole thing is one
   continuous document, and the model's job is to write the next part.
-
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">The Context Window</h2>
-
-
+## The Context Window
   This "one long prompt" has a size limit called the{' '}
   <AbbrSidenote
     title="Context Window"
@@ -87,10 +74,7 @@
 
 
 <ContextWindowDiagram />
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">Inference: Token by Token</h2>
-
-
+## Inference: Token by Token
   Now here's where everything from the previous lessons comes together. When the
   model receives that payload—system prompt, conversation history, your latest
   message—it does the thing it was trained to do:{' '}
@@ -123,11 +107,7 @@
   into a corner—each token commits the model to a direction, and there's no going back.
   It's also why longer responses tend to drift: the model is navigating a space of
   probabilities one step at a time, and small deviations compound.
-
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">Why This Matters for You</h2>
-
-
+## Why This Matters for You
   Understanding that there's no memory changes how you use these tools:
 
 

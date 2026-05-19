@@ -29,12 +29,16 @@ for (const dirent of fs.readdirSync(curriculumDir, { withFileTypes: true })) {
     failures.push(`${filePath}: use LessonNavigation instead of page-local nav CTAs.`)
   }
 
-  if (source.includes('<CurriculumLessonPage') && !fs.existsSync(contentPath)) {
-    failures.push(`${filePath}: add adjacent content.mdx for lesson body content.`)
+  if (source.includes('MDXRemote') || source.includes('getCurriculumMdx(')) {
+    failures.push(`${filePath}: use CurriculumMdxPage for the shared MDX lesson shell.`)
   }
 
-  if (source.includes('<CurriculumLessonPage') && !source.includes('getCurriculumMdx(')) {
-    failures.push(`${filePath}: render lesson body from MDX via getCurriculumMdx.`)
+  if (!source.includes('<CurriculumMdxPage')) {
+    failures.push(`${filePath}: render curriculum lessons with CurriculumMdxPage.`)
+  }
+
+  if (source.includes('<CurriculumMdxPage') && !fs.existsSync(contentPath)) {
+    failures.push(`${filePath}: add adjacent content.mdx for lesson body content.`)
   }
 
   if (/^function [A-Z][A-Za-z0-9_]*\(/m.test(source)) {

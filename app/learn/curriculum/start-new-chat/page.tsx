@@ -1,6 +1,4 @@
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import { CurriculumLessonPage } from '@/components/learn/curriculum/lesson-page'
-import { getCurriculumMdx } from '@/lib/curriculum-mdx'
+import { CurriculumMdxPage, type CurriculumMdxComponents } from '@/components/learn/curriculum/curriculum-mdx-page'
 import { LessonRecap } from '@/components/learn/curriculum/teaching-blocks'
 import { StartNewChatButton, WhenToStartFresh, HowToStartFresh, FreshStartExample } from '@/components/learn/curriculum/demos/start-new-chat'
 
@@ -10,13 +8,8 @@ const components = {
   HowToStartFresh,
   FreshStartExample,
   LessonRecap,
-}
-export default function StartNewChatPage() {
-  const content = getCurriculumMdx('start-new-chat')
+} satisfies CurriculumMdxComponents
 
-  return (
-    <CurriculumLessonPage slug="start-new-chat">
-      <MDXRemote source={content} components={components} />
-    </CurriculumLessonPage>
-  )
+export default function StartNewChatPage() {
+  return <CurriculumMdxPage slug="start-new-chat" components={components} />
 }

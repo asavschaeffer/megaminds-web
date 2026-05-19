@@ -1,6 +1,4 @@
-<h2 className="text-2xl font-bold text-gray-900">The Context Pollution Problem</h2>
-
-
+## The Context Pollution Problem
   You ask the model to write something. It's wrong. You say "no, make it shorter."
   Still wrong. "No, more formal." Still not right. "NO, I want it to sound like..."
 
@@ -12,10 +10,7 @@
 
 
 <ContextPollutionDemo />
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">Why This Kills Output Quality</h2>
-
-
+## Why This Kills Output Quality
   Remember—there's no memory. The model reads the conversation from the top, every time.
   When your conversation looks like this:
 
@@ -40,11 +35,7 @@
 
 
   You're not clarifying your request. You're adding contradictions.
-
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">The Payload Grows</h2>
-
-
+## The Payload Grows
   Every back-and-forth adds tokens to the payload. The model doesn't just read your
   latest message—it re-reads the entire conversation. At message 20, it's processing:
 
@@ -61,11 +52,7 @@
 
 
   That's a lot of noise. And the model is trying to extract signal from all of it.
-
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">Adding "Failure Data" to the Context</h2>
-
-
+## Adding "Failure Data" to the Context
   Here's the worst part: when you say "that's wrong, do it like this," you're teaching
   the model that its previous output was a valid attempt. It's now in the training
   context for this conversation.
@@ -91,10 +78,7 @@
     </div>
   </div>
 </div>
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">When to Recognize This Is Happening</h2>
-
-
+## When to Recognize This Is Happening
   Signs you're polluting the context:
 
 
@@ -117,14 +101,9 @@
     corrected, so it hedges everything.
   </li>
 </ul>
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">What to Do Instead</h2>
-
+## What to Do Instead
 <WhatToDoInstead />
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">The Exception: Iteration-Friendly Modes</h2>
-
-
+## The Exception: Iteration-Friendly Modes
   Some tools are designed for iteration. Gemini's image generation mode, ChatGPT's
   canvas mode, Claude's artifacts—these are built to handle "no, change this" workflows.
   They manage the context differently, often by separating the working document from
@@ -133,11 +112,7 @@
 
 
   But in standard chat mode? Iteration pollutes. Fast.
-
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">The Takeaway</h2>
-
-
+## The Takeaway
   Every message you send becomes part of the prompt. Every failure, every correction,
   every "no that's not what I meant"—it all accumulates. The model reads it all.
 

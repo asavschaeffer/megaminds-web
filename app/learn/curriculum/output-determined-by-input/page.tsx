@@ -1,19 +1,12 @@
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import { CurriculumLessonPage } from '@/components/learn/curriculum/lesson-page'
-import { getCurriculumMdx } from '@/lib/curriculum-mdx'
+import { CurriculumMdxPage, type CurriculumMdxComponents } from '@/components/learn/curriculum/curriculum-mdx-page'
 import { DeterministicDemo, InputVisualization, TemperatureDemo } from '@/components/learn/curriculum/demos/output-determined-by-input'
 
 const components = {
   DeterministicDemo,
   InputVisualization,
   TemperatureDemo,
-}
-export default function OutputDeterminedByInputPage() {
-  const content = getCurriculumMdx('output-determined-by-input')
+} satisfies CurriculumMdxComponents
 
-  return (
-    <CurriculumLessonPage slug="output-determined-by-input">
-      <MDXRemote source={content} components={components} />
-    </CurriculumLessonPage>
-  )
+export default function OutputDeterminedByInputPage() {
+  return <CurriculumMdxPage slug="output-determined-by-input" components={components} />
 }

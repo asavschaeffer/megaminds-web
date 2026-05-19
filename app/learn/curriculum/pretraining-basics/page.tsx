@@ -1,7 +1,5 @@
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import { CurriculumLessonPage } from '@/components/learn/curriculum/lesson-page'
-import { getCurriculumMdx } from '@/lib/curriculum-mdx'
 import Link from 'next/link'
+import { CurriculumMdxPage, type CurriculumMdxComponents } from '@/components/learn/curriculum/curriculum-mdx-page'
 import { AbbrSidenoteProvider, AbbrSidenote } from '@/components/shared/sidenote'
 import { GrepDiagram, StochasticParrotDiagram } from '@/components/learn/curriculum/demos/pretraining-basics'
 
@@ -10,15 +8,12 @@ const components = {
   StochasticParrotDiagram,
   Link,
   AbbrSidenote,
-}
-export default function PretrainingBasicsPage() {
-  const content = getCurriculumMdx('pretraining-basics')
+} satisfies CurriculumMdxComponents
 
+export default function PretrainingBasicsPage() {
   return (
     <AbbrSidenoteProvider>
-      <CurriculumLessonPage slug="pretraining-basics">
-        <MDXRemote source={content} components={components} />
-      </CurriculumLessonPage>
+      <CurriculumMdxPage slug="pretraining-basics" components={components} />
     </AbbrSidenoteProvider>
   )
 }

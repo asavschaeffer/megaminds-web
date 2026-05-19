@@ -1,6 +1,4 @@
-<h2 className="text-2xl font-bold text-gray-900">It's Math, Not Magic</h2>
-
-
+## It's Math, Not Magic
   When the model gives you a bad response, it's tempting to think: "the AI is being
   stupid today" or "it's not understanding me." But here's the truth: the model is
   a deterministic function. Given the same input, it produces essentially the same output.
@@ -14,10 +12,7 @@
 
 
 <DeterministicDemo />
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">What This Means for You</h2>
-
-
+## What This Means for You
   If the output is bad, the input is bad. Not "the AI doesn't get it"—your prompt
   (including the entire conversation history) doesn't contain what the model needs
   to give you good output.
@@ -45,11 +40,7 @@
 
   This is actually good news. It means the problem is fixable. You're not fighting
   some unpredictable AI mood—you're just debugging your input.
-
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">The Input Isn't Just Your Last Message</h2>
-
-
+## The Input Isn't Just Your Last Message
   Remember: there's no memory. The model reads the <em>entire conversation</em> every
   time. So when we say "output is determined by input," the input is:
 
@@ -67,10 +58,7 @@
 
 
 <InputVisualization />
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">Why Bad Output Happens</h2>
-
-
+## Why Bad Output Happens
   Given that the model is deterministic and reliable at pattern-matching, why do you
   sometimes get garbage? Usually one of these reasons:
 
@@ -107,10 +95,7 @@
     </div>
   </div>
 </div>
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">Temperature: The One Exception</h2>
-
-
+## Temperature: The One Exception
   There <em>is</em> one source of randomness: <strong>temperature</strong>. It controls
   how "adventurous" the model is when picking the next token. Low temperature (0.0-0.3)
   makes it pick the most likely tokens—predictable, consistent. High temperature (0.7-1.0)
@@ -122,11 +107,7 @@
 
   But even with temperature, given the same input at the same temperature, the output
   will be <em>very similar</em>. Temperature adds variety, not fundamental unpredictability.
-
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">Debugging Bad Output</h2>
-
-
+## Debugging Bad Output
   Since output is determined by input, debugging is straightforward:
 
 
@@ -139,10 +120,7 @@
     <li><strong>Try again.</strong> Same input = same output. Different input = different output.</li>
   </ol>
 </div>
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">The Takeaway</h2>
-
-
+## The Takeaway
   The model isn't unpredictable. It's not "being dumb" or "not getting it." It's
   doing exactly what it was trained to do: predict the next token based on the patterns
   in its input.

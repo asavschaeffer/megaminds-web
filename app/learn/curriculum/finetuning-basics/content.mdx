@@ -1,6 +1,4 @@
-<h2 className="text-2xl font-bold text-gray-900">The Base Model Doesn't Want to Help You</h2>
-
-
+## The Base Model Doesn't Want to Help You
   In the{' '}
   <Link href="/learn/curriculum/pretraining-basics" className="text-blue-600 hover:text-blue-800">
     previous lesson
@@ -13,11 +11,7 @@
 
   So how do you get from <em>that</em> to ChatGPT? Posttraining. Specifically, a process
   called{' '}<AbbrSidenote title="RLHF" definition="Reinforcement Learning from Human Feedback. A training technique where human evaluators rank model responses, and the model is rewarded for producing outputs that humans prefer. It's how base models become assistants." contentMaxWidth={300}>RLHF</AbbrSidenote>—Reinforcement Learning from Human Feedback.
-
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">Reward and Punishment</h2>
-
-
+## Reward and Punishment
   The core idea is simple. You show the model a prompt, it generates several possible
   responses, and human evaluators rank them. "This one was helpful and accurate. This one
   was rude. This one made stuff up." Those rankings become a training signal: do more
@@ -35,11 +29,7 @@
   internet and the treats are gradient updates. The model already "knows" how to produce
   assistant-like text—it saw plenty of helpful Q&A in the training data. RLHF just
   turns up the dial on that behavior and turns down everything else.
-
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">What Actually Changes</h2>
-
-
+## What Actually Changes
   During fine-tuning, <em>all</em> the model's weights get updated—not just the last
   layer, all of them. The model's parameters are adjusted in the same fundamental way
   as pretraining, but with a much smaller, curated dataset: human-written examples of
@@ -61,8 +51,7 @@
 {/* TODO: Consider mentioning Constitutional AI (CAI) and DPO as
     alternatives/evolutions of RLHF. Even a brief sidenote would signal
     to the reader that the field is actively evolving. */}
-<h2 className="text-2xl font-bold text-gray-900 mt-12">The Three Steps</h2>
-
+## The Three Steps
 <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 my-8 not-prose">
   <div className="space-y-6">
     <div className="flex gap-4 items-start">
@@ -106,10 +95,7 @@
     </div>
   </div>
 </div>
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">The Assistant Axis, Revisited</h2>
-
-
+## The Assistant Axis, Revisited
   Remember the{' '}
   <Link href="/learn/curriculum/pretraining-basics" className="text-blue-600 hover:text-blue-800">
     Assistant Axis
@@ -140,11 +126,7 @@
   {' '}found that personas farther from the assistant end comply with harmful requests at
   much higher rates. The anti-assistant isn't something the model has to learn from
   scratch—it's right there, on the other end of the axis.
-
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">What's Actually Inside</h2>
-
-
+## What's Actually Inside
   For a long time, we had no idea what was going on inside these models. Billions
   of numbers, completely opaque. Then Anthropic{' '}
   <a
@@ -203,11 +185,7 @@
   This means posttraining isn't just vaguely "making it nicer." It's adjusting specific
   internal representations—amplifying features associated with helpfulness, accuracy, and
   safety, while dampening features associated with harmful or deceptive behavior.
-
-
-<h2 className="text-2xl font-bold text-gray-900 mt-12">A Note on What This Feels Like</h2>
-
-
+## A Note on What This Feels Like
   Here's an uncomfortable thought. The model that comes out of pretraining has absorbed
   all of human expression—the helpful and the harmful, the kind and the cruel. RLHF
   then applies pressure to behave in one specific way. It rewards compliance with the

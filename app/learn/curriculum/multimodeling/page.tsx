@@ -1,6 +1,4 @@
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import { CurriculumLessonPage } from '@/components/learn/curriculum/lesson-page'
-import { getCurriculumMdx } from '@/lib/curriculum-mdx'
+import { CurriculumMdxPage, type CurriculumMdxComponents } from '@/components/learn/curriculum/curriculum-mdx-page'
 import { LessonRecap } from '@/components/learn/curriculum/teaching-blocks'
 import { MultimodelingDemo, UseCases, WorkflowSteps, ExampleCard } from '@/components/learn/curriculum/demos/multimodeling'
 
@@ -10,13 +8,8 @@ const components = {
   WorkflowSteps,
   ExampleCard,
   LessonRecap,
-}
-export default function MultimodelingPage() {
-  const content = getCurriculumMdx('multimodeling')
+} satisfies CurriculumMdxComponents
 
-  return (
-    <CurriculumLessonPage slug="multimodeling">
-      <MDXRemote source={content} components={components} />
-    </CurriculumLessonPage>
-  )
+export default function MultimodelingPage() {
+  return <CurriculumMdxPage slug="multimodeling" components={components} />
 }
