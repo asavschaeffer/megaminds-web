@@ -7,6 +7,7 @@ export type CurriculumLesson = {
   status: LessonStatus
   description?: string
   bullets?: string[]
+  navigation?: 'primary' | 'supplemental'
 }
 
 export type CurriculumModule = {
@@ -18,7 +19,7 @@ export type CurriculumModule = {
 
 export const curriculumModules = [
   {
-    id: 0,
+    id: 1,
     title: 'What the Hell is Going On?',
     description: 'The basics you actually need to know',
     lessons: [
@@ -46,10 +47,18 @@ export const curriculumModules = [
         status: 'available',
         description: "It's just one long prompt. Every single time.",
       },
+      {
+        title: 'How LLMs Actually Work',
+        listingTitle: 'How Information Flows Through Transformers',
+        slug: 'how-llms-work',
+        status: 'available',
+        description: 'Most transformer explainers get lost in the math. This visualizes how information flows through the network end to end.',
+        navigation: 'supplemental',
+      },
     ],
   },
   {
-    id: 0.5,
+    id: 2,
     title: 'Prompting',
     description: 'How to actually talk to these things',
     lessons: [
@@ -125,7 +134,7 @@ export const curriculumModules = [
     ],
   },
   {
-    id: 0.6,
+    id: 3,
     title: 'Failures & Basins',
     description: 'Why your chat goes off the rails and what to do about it',
     lessons: [
@@ -168,10 +177,11 @@ export const curriculumModules = [
           'start a new chat start a new chat start a new chat start a new chat',
         ],
       },
+      { title: 'The Waluigi Effect', slug: 'waluigi', status: 'coming' },
     ],
   },
   {
-    id: 0.7,
+    id: 4,
     title: 'Tools',
     description: 'Built-in capabilities beyond chat',
     lessons: [
@@ -197,36 +207,6 @@ export const curriculumModules = [
       },
       { title: 'Imagen', slug: 'imagen', status: 'coming' },
       { title: 'Deep Search', slug: 'deep-search', status: 'coming' },
-    ],
-  },
-  {
-    id: 0.8,
-    title: 'Different Models',
-    description: 'Knowing which model to use when',
-    lessons: [
-      {
-        title: 'Multimodeling v2',
-        slug: 'multimodeling-v2',
-        status: 'coming',
-        bullets: [
-          "use copilot to explain opus's answer because you don't care as much if you get rate limited on copilot",
-        ],
-      },
-      { title: 'Gemini', slug: 'gemini', status: 'coming' },
-      { title: 'ChatGPT', slug: 'chatgpt', status: 'coming' },
-      { title: 'Claude', slug: 'claude', status: 'coming' },
-      { title: 'Kimi K2.5', slug: 'kimi-k25', status: 'coming' },
-      { title: 'Grok 4.1', slug: 'grok-41', status: 'coming' },
-    ],
-  },
-  {
-    id: 0.9,
-    title: 'Web vs API vs Local',
-    description: 'Different ways to access AI',
-    lessons: [
-      { title: 'Closed vs Open Source Models', slug: 'closed-vs-open', status: 'coming' },
-      { title: 'I/O Costs', slug: 'io-costs', status: 'coming' },
-      { title: 'Chiyna Namba 1', slug: 'china-models', status: 'coming' },
       {
         title: 'Computer Use Hallelujah',
         slug: 'computer-use',
@@ -239,85 +219,68 @@ export const curriculumModules = [
           'personalized software',
         ],
       },
+      { title: 'Building AI Workflows', slug: 'workflows', status: 'coming' },
     ],
   },
   {
-    id: 1,
-    title: 'Foundations',
-    description: 'How language models actually work',
-    lessons: [
-      { title: 'What is a Language Model?', slug: 'what-is-llm', status: 'available' },
-      { title: 'Pretraining: Learning from the Internet', slug: 'pretraining', status: 'available' },
-      { title: 'Posttraining: Becoming an Assistant', slug: 'posttraining', status: 'available' },
-      { title: 'RLHF and Alignment', slug: 'rlhf', status: 'available' },
-    ],
-  },
-  {
-    id: 2,
-    title: 'The Latent Space',
-    description: 'Understanding how AI represents meaning',
-    lessons: [
-      { title: 'Tokens and Embeddings', slug: 'tokens-embeddings', status: 'available' },
-      { title: 'Vector Relationships', slug: 'vector-relationships', status: 'available' },
-      {
-        title: 'How LLMs Actually Work',
-        listingTitle: 'How Information Flows Through Transformers',
-        slug: 'how-llms-work',
-        status: 'available',
-        description: 'Most transformer explainers get lost in the math. This visualizes how information flows through the network end to end.',
-      },
-      { title: 'Latent Space Cartography', slug: 'latent-space', status: 'available' },
-      { title: 'The Waluigi Effect', slug: 'waluigi', status: 'available' },
-    ],
-  },
-  {
-    id: 3,
-    title: 'Model Landscape',
+    id: 5,
+    title: 'Choosing Models',
     description: 'Knowing which model to use when',
     lessons: [
-      { title: 'The Frontier Models (2026)', slug: 'frontier-models', status: 'available' },
-      { title: 'Model Personalities', slug: 'model-personalities', status: 'available' },
-      { title: 'Strengths and Weaknesses', slug: 'strengths-weaknesses', status: 'available' },
+      {
+        title: 'Multimodeling with Different Models',
+        slug: 'multimodeling-v2',
+        status: 'coming',
+        bullets: [
+          "use copilot to explain opus's answer because you don't care as much if you get rate limited on copilot",
+        ],
+      },
+      { title: 'The Frontier Models (2026)', slug: 'frontier-models', status: 'coming' },
+      { title: 'Model Personalities', slug: 'model-personalities', status: 'coming' },
+      { title: 'Strengths and Weaknesses', slug: 'strengths-weaknesses', status: 'coming' },
       { title: 'Cost vs Quality Tradeoffs', slug: 'cost-quality', status: 'coming' },
-    ],
-  },
-  {
-    id: 4,
-    title: 'Applied AI',
-    description: 'Using AI effectively in practice',
-    lessons: [
-      { title: 'Prompt Engineering Basics', slug: 'prompt-basics', status: 'coming' },
-      { title: 'Advanced Prompting Techniques', slug: 'advanced-prompts', status: 'coming' },
-      { title: 'Tool Use and Agents', slug: 'tool-use', status: 'coming' },
-      { title: 'Building AI Workflows', slug: 'workflows', status: 'coming' },
+      { title: 'Closed vs Open Source Models', slug: 'closed-vs-open', status: 'coming' },
+      { title: 'Gemini', slug: 'gemini', status: 'coming' },
+      { title: 'ChatGPT', slug: 'chatgpt', status: 'coming' },
+      { title: 'Claude', slug: 'claude', status: 'coming' },
+      { title: 'Kimi K2.5', slug: 'kimi-k25', status: 'coming' },
+      { title: 'Grok 4.1', slug: 'grok-41', status: 'coming' },
     ],
   },
 ] satisfies CurriculumModule[]
 
-// WARNING: This set acts as a second source of truth alongside `status: 'available'`
-// in the module definitions. If a new module 0.x lesson is added as available,
-// it MUST be added to this set. Otherwise, `getCurriculumLessonNeighbors` will throw
-// at runtime.
-// TODO: Consider replacing this set with a computed filter (e.g., a `published: true`
-// flag on the lesson type) or adding a check to `check-curriculum-pages.js`.
-const publishedCurriculumLessonSlugs = new Set([
-  'llms-machine-learning',
-  'pretraining-basics',
-  'finetuning-basics',
-  'no-memory',
-  'prompt-is-everything',
-  'roleplay',
-  'examples',
-  'prompt-a-prompt',
-  'dont-overthink',
-  'multimodeling',
-  'output-determined-by-input',
-  'long-prompt-problem',
-  'slipping-into-basin',
-  'start-new-chat',
-  'web-search',
-  'canvas-mode',
-])
+export const curriculumBacklog = [
+  {
+    title: 'Merged into the core spine',
+    description: 'Older scaffolding ideas that should inform existing lessons rather than appear as separate public lessons.',
+    lessons: [
+      { title: 'What is a Language Model?', slug: 'what-is-llm', home: 'LLMs Understand Language via Machine Learning' },
+      { title: 'Pretraining: Learning from the Internet', slug: 'pretraining', home: 'Pretrained on the Whole Internet' },
+      { title: 'Posttraining: Becoming an Assistant', slug: 'posttraining', home: 'Fine-Tuned to Be a Helpful Assistant' },
+      { title: 'RLHF and Alignment', slug: 'rlhf', home: 'Fine-Tuned to Be a Helpful Assistant' },
+      { title: 'Prompt Engineering Basics', slug: 'prompt-basics', home: 'Your Prompt is the Entire Input' },
+      { title: 'Advanced Prompting Techniques', slug: 'advanced-prompts', home: 'Roleplay / Examples / Prompt-a-Prompt' },
+      { title: 'Tool Use and Agents', slug: 'tool-use', home: 'Tools / Computer Use Hallelujah' },
+    ],
+  },
+  {
+    title: 'Advanced foundations',
+    description: 'Good deeper material, but not necessary for the beginner path.',
+    lessons: [
+      { title: 'Tokens and Embeddings', slug: 'tokens-embeddings' },
+      { title: 'Vector Relationships', slug: 'vector-relationships' },
+      { title: 'Latent Space Cartography', slug: 'latent-space' },
+    ],
+  },
+  {
+    title: 'Web, API, and local AI',
+    description: 'Access modes and economics that may become a later applied chapter.',
+    lessons: [
+      { title: 'I/O Costs', slug: 'io-costs' },
+      { title: 'China Models', slug: 'china-models' },
+    ],
+  },
+]
 
 export type CurriculumLessonWithModule = CurriculumLesson & {
   module: CurriculumModule
@@ -354,7 +317,7 @@ export function getAvailableCurriculumLessons() {
 
 export function getCurriculumLessonNeighbors(slug: string) {
   const availableLessons = getAvailableCurriculumLessons().filter((lesson) =>
-    publishedCurriculumLessonSlugs.has(lesson.slug),
+    (lesson.navigation ?? 'primary') === 'primary',
   )
   const index = availableLessons.findIndex((lesson) => lesson.slug === slug)
 
