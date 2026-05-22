@@ -20,7 +20,7 @@ export default function CurriculumPage() {
           {curriculumModules.map((module) => (
             <div key={module.id}>
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-sm font-medium text-gray-400">Module {module.id}</span>
+                <span className="text-sm font-medium text-gray-400">Chapter {module.id}</span>
               </div>
               <h2 className="text-xl font-semibold text-gray-900">{module.title}</h2>
               <p className="text-gray-600 mt-1">{module.description}</p>
@@ -69,6 +69,9 @@ function LessonRow({ lesson }: { lesson: CurriculumLesson }) {
       <div className="flex items-center gap-3">
         <Circle className="w-4 h-4 text-gray-300 group-hover:text-gray-400 flex-shrink-0" />
         <span className="text-gray-900 group-hover:text-gray-600">{title}</span>
+        {lesson.navigation === 'supplemental' && (
+          <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded ml-auto">Optional</span>
+        )}
       </div>
       {lesson.bullets && (
         <ul className="mt-2 ml-7 space-y-1 text-sm text-gray-500">

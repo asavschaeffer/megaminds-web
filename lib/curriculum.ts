@@ -295,7 +295,7 @@ export function getCurriculumLesson(slug: string): CurriculumLessonWithModule {
       return {
         ...lesson,
         module: curriculumModule,
-        moduleLabel: `Module ${curriculumModule.id}`,
+        moduleLabel: `Chapter ${curriculumModule.id}`,
       }
     }
   }
@@ -303,14 +303,14 @@ export function getCurriculumLesson(slug: string): CurriculumLessonWithModule {
   throw new Error(`Unknown curriculum lesson: ${slug}`)
 }
 
-export function getAvailableCurriculumLessons() {
+export function getAvailableCurriculumLessons(): CurriculumLessonWithModule[] {
   return curriculumModules.flatMap((curriculumModule) =>
     curriculumModule.lessons
       .filter((lesson) => lesson.status === 'available')
       .map((lesson) => ({
         ...lesson,
         module: curriculumModule,
-        moduleLabel: `Module ${curriculumModule.id}`,
+        moduleLabel: `Chapter ${curriculumModule.id}`,
       })),
   )
 }
