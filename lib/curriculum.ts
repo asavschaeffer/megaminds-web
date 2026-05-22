@@ -274,7 +274,7 @@ export const curriculumBacklog = [
   },
   {
     title: 'Web, API, and local AI',
-    description: 'Access modes and economics that may become a later applied chapter.',
+    description: 'Access modes and economics that may become a later applied module.',
     lessons: [
       { title: 'I/O Costs', slug: 'io-costs' },
       { title: 'China Models', slug: 'china-models' },
@@ -295,7 +295,7 @@ export function getCurriculumLesson(slug: string): CurriculumLessonWithModule {
       return {
         ...lesson,
         module: curriculumModule,
-        moduleLabel: `Chapter ${curriculumModule.id}`,
+        moduleLabel: `Module ${curriculumModule.id}`,
       }
     }
   }
@@ -310,7 +310,7 @@ export function getAvailableCurriculumLessons(): CurriculumLessonWithModule[] {
       .map((lesson) => ({
         ...lesson,
         module: curriculumModule,
-        moduleLabel: `Chapter ${curriculumModule.id}`,
+        moduleLabel: `Module ${curriculumModule.id}`,
       })),
   )
 }

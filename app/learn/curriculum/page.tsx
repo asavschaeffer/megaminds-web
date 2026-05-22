@@ -20,7 +20,7 @@ export default function CurriculumPage() {
           {curriculumModules.map((module) => (
             <div key={module.id}>
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-sm font-medium text-gray-400">Chapter {module.id}</span>
+                <span className="text-sm font-medium text-gray-400">Module {module.id}</span>
               </div>
               <h2 className="text-xl font-semibold text-gray-900">{module.title}</h2>
               <p className="text-gray-600 mt-1">{module.description}</p>

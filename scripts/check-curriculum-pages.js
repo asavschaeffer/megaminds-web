@@ -25,7 +25,7 @@ for (const dirent of fs.readdirSync(curriculumDir, { withFileTypes: true })) {
     failures.push(`${filePath}: move long editorial notes to docs/learn/lesson-notes.`)
   }
 
-  if (/Previous:|Next:|Next Module:|Previous Module:|Next Chapter:|Previous Chapter:|Back to Curriculum/.test(source)) {
+  if (/Previous:|Next:|Next Module:|Previous Module:|Back to Curriculum/.test(source)) {
     failures.push(`${filePath}: use LessonNavigation instead of page-local nav CTAs.`)
   }
 
