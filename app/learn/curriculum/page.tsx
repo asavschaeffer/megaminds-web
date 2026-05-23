@@ -51,7 +51,6 @@ function LessonRow({ lesson }: { lesson: CurriculumLesson }) {
           <span className="text-xs bg-gray-100 px-2 py-0.5 rounded ml-auto">Coming soon</span>
         </div>
         {lesson.description && <p className="mt-1 ml-7 text-sm text-gray-400">{lesson.description}</p>}
-        <LessonNotes bullets={lesson.bullets} muted />
       </div>
     )
   }
@@ -68,29 +67,7 @@ function LessonRow({ lesson }: { lesson: CurriculumLesson }) {
         </div>
         {lesson.description && <p className="mt-1 ml-7 text-sm text-gray-500">{lesson.description}</p>}
       </Link>
-      <LessonNotes bullets={lesson.bullets} />
     </div>
-  )
-}
-
-function LessonNotes({ bullets, muted = false }: { bullets?: string[]; muted?: boolean }) {
-  if (!bullets) {
-    return null
-  }
-
-  return (
-    <details className="group/notes px-3 pb-3 ml-7 text-sm">
-      <summary className={muted ? 'cursor-pointer text-gray-400' : 'cursor-pointer text-gray-500 hover:text-gray-700'}>
-        Examples and notes
-      </summary>
-      <ul className={muted ? 'mt-2 space-y-1 text-gray-400' : 'mt-2 space-y-1 text-gray-500'}>
-        {bullets.map((bullet) => (
-          <li key={bullet} className="list-disc ml-5">
-            {bullet}
-          </li>
-        ))}
-      </ul>
-    </details>
   )
 }
 
