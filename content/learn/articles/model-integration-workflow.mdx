@@ -30,7 +30,7 @@ The task: Create a new file, fill out the header metadata, propose section names
 The first step was creating `content/eval/models/kimi-k2-5.tsx`. This file exports a `ModelProfile` object with:
 
 ```typescript
-export const kimiK25Model: ModelProfile = {
+export const kimiK25: ModelProfile = {
   slug: 'kimi-k2-5',
   meta: {
     name: 'Kimi K2.5',
@@ -71,9 +71,9 @@ The model profile by itself is just data. To make it queryable, it needs to be a
 
 ```typescript
 // lib/models/registry.ts
-import { kimiK25Model } from '@/content/eval/models/kimi-k2-5'
+import { kimiK25 } from '@/content/eval/models/kimi-k2-5'
 
-const MODELS: ModelProfile[] = [deepseekR1, gemini3Flash, gemini3Pro, kimiK25Model]
+const MODELS: ModelProfile[] = [deepseekR1, gemini3Flash, gemini3Pro, kimiK25]
 ```
 
 This makes `getModelBySlug('kimi-k2-5')` work across the entire codebase.

@@ -21,7 +21,7 @@ const claudeSonnet45Links = (Object.keys(MODEL_LINK_TYPES) as ModelLinkTypeId[])
   {} as Record<ModelLinkTypeId, string>
 )
 
-export const claudeSonnet45Model: ModelProfile = {
+export const claudeSonnet45: ModelProfile = {
   slug: 'claude-sonnet-4-5',
   meta: {
     name: 'Claude Sonnet 4.5',

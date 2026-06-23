@@ -14,7 +14,7 @@ const kimiK25Links: Partial<Record<ModelLinkTypeId, string>> = {
     playground: 'https://kimi.moonshot.cn/',
 }
 
-export const kimiK25Model: ModelProfile = {
+export const kimiK25: ModelProfile = {
     slug: 'kimi-k2-5',
     meta: {
         name: 'Kimi K2.5',
