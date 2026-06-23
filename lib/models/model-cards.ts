@@ -93,6 +93,7 @@ export const modelCards: ModelCard[] = [
   },
   {
     key: 'claude-opus',
+    model: getModelBySlug('claude-opus-4-8'),
     href: '/eval/models/claude-opus-4-8',
     modelFamily: 'Claude',
     modelVariant: 'Opus',
@@ -108,10 +109,11 @@ export const modelCards: ModelCard[] = [
   },
   {
     key: 'claude-sonnet',
-    href: '/eval/models/claude-sonnet-4-5',
+    model: getModelBySlug('claude-sonnet-4-6'),
+    href: '/eval/models/claude-sonnet-4-6',
     modelFamily: 'Claude',
     modelVariant: 'Sonnet',
-    versionNumber: '4.5',
+    versionNumber: '4.6',
     description:
       'Text-first with best-in-class tool use, computer control, and writing; slower, pricey, and long-context precision can degrade.',
     tags: ['tool-use', 'instruction', 'writing', 'precision', 'reasoning'],
@@ -123,6 +125,7 @@ export const modelCards: ModelCard[] = [
   },
   {
     key: 'claude-haiku',
+    model: getModelBySlug('claude-haiku-4-5'),
     href: '/eval/models/claude-haiku-4-5',
     modelFamily: 'Claude',
     modelVariant: 'Haiku',
@@ -138,6 +141,7 @@ export const modelCards: ModelCard[] = [
   },
   {
     key: 'claude-fable',
+    model: getModelBySlug('claude-fable-5'),
     href: '/eval/models/claude-fable-5',
     modelFamily: 'Claude',
     modelVariant: 'Fable',
