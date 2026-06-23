@@ -93,10 +93,10 @@ export const modelCards: ModelCard[] = [
   },
   {
     key: 'claude-opus',
-    href: '/eval/models/claude',
+    href: '/eval/models/claude-opus-4-8',
     modelFamily: 'Claude',
     modelVariant: 'Opus',
-    versionNumber: '4.5',
+    versionNumber: '4.8',
     description:
       'Text-first with best-in-class tool use, computer control, and writing; slower, pricey, and long-context precision can degrade.',
     tags: ['tool-use', 'instruction', 'writing', 'precision', 'reasoning'],
@@ -123,13 +123,28 @@ export const modelCards: ModelCard[] = [
   },
   {
     key: 'claude-haiku',
-    href: '/eval/models/claude',
+    href: '/eval/models/claude-haiku-4-5',
     modelFamily: 'Claude',
     modelVariant: 'Haiku',
     versionNumber: '4.5',
     description:
-      'Text-first with best-in-class tool use, computer control, and writing; slower, pricey, and long-context precision can degrade.',
+      'Fast, cost-efficient tier of the Claude family for high-volume, latency-sensitive work; trades reasoning depth for throughput.',
     tags: ['tool-use', 'instruction', 'writing', 'precision', 'reasoning'],
+    organizationId: 'anthropic',
+    modelLogoLabel: 'Model logo',
+    parentBrandingLabel: 'Parent company branding',
+    watermarkClassName: anthropicWatermarkClassName,
+    ...buildModelAssets('claude'),
+  },
+  {
+    key: 'claude-fable',
+    href: '/eval/models/claude-fable-5',
+    modelFamily: 'Claude',
+    modelVariant: 'Fable',
+    versionNumber: '5',
+    description:
+      "Anthropic's most capable model and its least accessible—held behind a restricted-access gate rather than offered to the public.",
+    tags: ['frontier', 'reasoning', 'writing', 'creativity', 'worldbuilding'],
     organizationId: 'anthropic',
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',

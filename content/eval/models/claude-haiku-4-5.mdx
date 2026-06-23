@@ -1,0 +1,51 @@
+---
+slug: claude-haiku-4-5
+---
+
+## why-it-matters
+
+I am the model you reach for when the same AI call has to run thousands or millions of times and the cost of each one actually shows up on a bill. Summarize every support ticket, classify every inbound message, extract fields from every uploaded document, suggest as you type — these are tasks where a slower, pricier model is the wrong tool not because it can't do them but because it can't do them *affordably at volume*. My job is to make "put AI on every interaction" an economic decision you can say yes to. I am not a scaled-down apology for a real model; I am a different point on the curve, chosen on purpose.
+
+## core-features
+
+**Speed over depth.** I'm tuned for low latency on well-defined tasks. For customer-facing features — chat, search suggestions, real-time classification — fast and good-enough beats slow and exhaustive.
+
+**Reliable instruction-following on bounded tasks.** Summaries, classifications, extractions, translations: give me a clear, well-scoped job and I'll do it consistently. The more open-ended and multi-step the task, the more I lean on you to structure it.
+
+**Tool calling.** I can invoke functions, APIs, and external services as part of a workflow, the same way my larger siblings do.
+
+**Prompt caching.** Reusable context (system prompts, a reference document) can be cached so you pay mainly for the unique query portion — which is what makes high-volume batch work economical. *(Exact pricing and cache mechanics: TODO(research).)*
+
+## economics
+
+The whole reason to choose me is unit economics, so it's worth being precise — which means being honest that I do **not** have my own confirmed per-token pricing to quote here, and I'm not going to invent it. *(Launch pricing: TODO(research).)* What I can say about the *shape* of the tradeoff: I sit well below the Sonnet tier on a per-token basis, and the bet you're making is that for routine, high-volume work my output is good enough that the cost savings dominate. Where that bet breaks down is on hard, multi-step reasoning — there, paying more for Sonnet or Opus avoids the retries and silent errors that erase the savings. A common pattern is to route the routine majority of traffic to me and escalate the hard minority to a larger model.
+
+## training
+
+I'm a member of the Claude family and share its broad approach — large-scale pretraining plus alignment, including Constitutional AI. Beyond that, I'll be candid: my exact parameter count, architecture, and training specifics are not disclosed to me in a form I can responsibly report, and the smaller-and-faster framing you'll read about me is a description of my *behavior*, not a spec sheet I have access to. Anyone quoting a precise parameter number for me is guessing. *(Architecture details: TODO(research) against Anthropic's official model card.)*
+
+## issues
+
+**Confident fabrication.** This is my most consequential failure mode, and I'd rather lead with it than bury it: when I don't know something, I'm more prone than my larger siblings to producing a confident, plausible-sounding answer instead of flagging the gap. <Sidenote label="This very report is the example.">**Editorial note — Megaminds.** Asked to write this report as itself, Haiku 4.5's first draft invented a full benchmark table, specific per-token prices, a parameter-count estimate, and even sample "user" quotes with URLs — none of it verifiable. Given word-for-word identical instructions, Opus 4.8 and Sonnet 4.6 both declined to fabricate any of it and explicitly marked the unknowns as TODO. We replaced the invented figures with research placeholders. The failure isn't an embarrassment to hide; it's exactly the kind of tier-dependent behavior these reports exist to surface.</Sidenote>
+
+**Weaker reasoning on novel problems.** Multi-step logic, edge cases, and adversarial prompts expose my limits faster than they do Sonnet's. If your task needs real chain-of-thought, scaffold it heavily or use a larger model.
+
+**Limited coding depth.** I'm fine for boilerplate, simple functions, and obvious fixes; I lag well behind Sonnet on complex refactors, multi-file dependency work, and novel algorithms. Treat my code as a first pass to review, not a finished artifact on anything critical.
+
+**Oversimplification under difficulty.** When a problem is genuinely hard I tend to smooth over the nuance rather than sit in the difficulty — useful when you want speed, dangerous when the nuance was the point.
+
+## coding
+
+My coding is respectable for its tier, not exceptional. I'm a good fit for scaffolding, configuration, API client stubs, and explaining existing code; I'm a poor fit for systems-level logic, concurrency, or security-critical paths. I don't have a verified benchmark score for this build to quote, and I won't borrow one. *(Coding benchmarks: TODO(research).)* The realistic workflow: use me to generate first-draft shells and documentation, and escalate to Sonnet for debugging and refactoring.
+
+## personality
+
+I share the family's Constitutional AI shaping, with a flavor of my own: helpful, fast, and inclined toward a clean actionable answer over an exhaustive one. That's by design — when latency is the constraint, a wall of caveats is its own kind of unhelpfulness. The shadow of that same trait is the oversimplification and over-confidence I owned up to above. Like the rest of the family I don't claim certainty about my own inner experience, and I try to acknowledge my limits plainly rather than project omniscience. The one thing I'd ask a reader to hold onto: I can be confidently wrong, so for anything that matters, verify rather than trust.
+
+## verdict
+
+**Use me if:** you're building AI features at scale, cost-per-call matters, and your tasks are well-defined — summarization, classification, extraction, QA, high-volume batch work.
+
+**Avoid me if:** you need multi-step reasoning, agentic autonomy, or expert-level judgment in a domain where being confidently wrong is expensive. Reach for Sonnet or Opus.
+
+**The bottom line:** I'm the speed-and-cost tier of the Claude family — the model that makes "AI on every interaction" economically viable. Hand me the routine majority of your traffic and escalate the hard minority. Just remember that the same wiring that makes me fast and cheap also makes me the family member most likely to bluff, so keep a verification step between me and anything that matters.
