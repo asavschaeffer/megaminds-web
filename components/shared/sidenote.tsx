@@ -73,20 +73,30 @@ function scheduleSidenoteLayout() {
   })
 }
 
-export interface SidenoteProps {
-  children: ReactNode
-  label?: string
+/**
+ * Shared margin-note machinery for {@link Sidenote} and {@link AbbrSidenote}.
+ *
+ * Owns the refs, the available-margin measurement, registration into the
+ * shared `sidenoteRegistry` (which stacks all notes in the right column), and
+ * the mobile popover positioning. Both components used to carry their own
+ * near-identical copy of all of this; this is the single source of truth.
+ *
+ * `enabled` lets a caller opt out without breaking the rules of hooks — when
+ * false (e.g. a duplicate AbbrSidenote that shouldn't render a note), every
+ * effect no-ops and the note is removed from the registry.
+ */
+interface UseMarginNoteOptions {
   contentMaxWidth?: number
-  triggerAs?: 'span' | 'dfn' | 'abbr'
+  enabled?: boolean
 }
 
-export function Sidenote({ children, label, contentMaxWidth = CONTENT_MAX_WIDTH, triggerAs = 'span' }: SidenoteProps) {
-  const TriggerTag = triggerAs
+function useMarginNote({ contentMaxWidth = CONTENT_MAX_WIDTH, enabled = true }: UseMarginNoteOptions = {}) {
   const containerRef = useRef<HTMLSpanElement>(null)
   const noteRef = useRef<HTMLElement>(null)
   const noteIdRef = useRef<number | null>(null)
   const [marginSpace, setMarginSpace] = useState(0)
   const [isMounted, setIsMounted] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [mobilePopoverStyle, setMobilePopoverStyle] = useState<{
     top: number
     left: number
@@ -95,6 +105,7 @@ export function Sidenote({ children, label, contentMaxWidth = CONTENT_MAX_WIDTH,
 
   // Calculate available margin space
   useEffect(() => {
+    if (!enabled) return
     const calculate = () => {
       const viewportWidth = window.innerWidth
       const margin = (viewportWidth - contentMaxWidth) / 2
@@ -103,14 +114,16 @@ export function Sidenote({ children, label, contentMaxWidth = CONTENT_MAX_WIDTH,
     calculate()
     window.addEventListener('resize', calculate)
     return () => window.removeEventListener('resize', calculate)
-  }, [contentMaxWidth])
+  }, [contentMaxWidth, enabled])
 
   useEffect(() => {
+    if (!enabled) return
     setIsMounted(true)
-  }, [])
+  }, [enabled])
 
   // Position sidenote centered in right margin
   useEffect(() => {
+    if (!enabled) return
     if (!containerRef.current || !noteRef.current) return
 
     const usableMargin = marginSpace - MARGIN_PADDING * 2
@@ -170,16 +183,17 @@ export function Sidenote({ children, label, contentMaxWidth = CONTENT_MAX_WIDTH,
         scheduleSidenoteLayout()
       }
     }
-  }, [marginSpace, contentMaxWidth])
+  }, [marginSpace, contentMaxWidth, enabled])
 
   const showSidenote = marginSpace - MARGIN_PADDING * 2 >= MIN_SIDENOTE_WIDTH
-  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
+    if (!enabled) return
     if (showSidenote && isModalOpen) setIsModalOpen(false)
-  }, [showSidenote, isModalOpen])
+  }, [showSidenote, isModalOpen, enabled])
 
   useEffect(() => {
+    if (!enabled) return
     if (!isModalOpen || showSidenote) {
       setMobilePopoverStyle(null)
       return
@@ -211,7 +225,53 @@ export function Sidenote({ children, label, contentMaxWidth = CONTENT_MAX_WIDTH,
       window.removeEventListener('scroll', updatePosition, true)
       window.removeEventListener('resize', updatePosition)
     }
-  }, [isModalOpen, showSidenote])
+  }, [isModalOpen, showSidenote, enabled])
+
+  return {
+    containerRef,
+    noteRef,
+    isMounted,
+    showSidenote,
+    isModalOpen,
+    setIsModalOpen,
+    mobilePopoverStyle,
+  }
+}
+
+function MobilePopoverClose({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="flex items-start justify-end mb-1">
+      <button
+        onClick={onClose}
+        className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors -mt-2 -mr-2"
+        aria-label="Close"
+      >
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  )
+}
+
+export interface SidenoteProps {
+  children: ReactNode
+  label?: string
+  contentMaxWidth?: number
+  triggerAs?: 'span' | 'dfn' | 'abbr'
+}
+
+export function Sidenote({ children, label, contentMaxWidth = CONTENT_MAX_WIDTH, triggerAs = 'span' }: SidenoteProps) {
+  const TriggerTag = triggerAs
+  const {
+    containerRef,
+    noteRef,
+    isMounted,
+    showSidenote,
+    isModalOpen,
+    setIsModalOpen,
+    mobilePopoverStyle,
+  } = useMarginNote({ contentMaxWidth })
 
   return (
     <>
@@ -251,17 +311,7 @@ export function Sidenote({ children, label, contentMaxWidth = CONTENT_MAX_WIDTH,
             role="dialog"
             aria-modal="true"
           >
-            <div className="flex items-start justify-end mb-1">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors -mt-2 -mr-2"
-                aria-label="Close"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+            <MobilePopoverClose onClose={() => setIsModalOpen(false)} />
             <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">{children}</p>
           </aside>
         </>,
@@ -291,16 +341,6 @@ export function AbbrSidenote({ term, title, definition, force = false, children,
   const identity = term ?? resolvedTitle ?? (typeof children === 'string' ? children : '')
   const registry = useContext(AbbrSidenoteContext)
   const [isPrimary, setIsPrimary] = useState(true)
-  const containerRef = useRef<HTMLSpanElement>(null)
-  const noteRef = useRef<HTMLElement>(null)
-  const noteIdRef = useRef<number | null>(null)
-  const [marginSpace, setMarginSpace] = useState(0)
-  const [isMounted, setIsMounted] = useState(false)
-  const [mobilePopoverStyle, setMobilePopoverStyle] = useState<{
-    top: number
-    left: number
-    width: number
-  } | null>(null)
 
   useEffect(() => {
     if (force) {
@@ -314,130 +354,15 @@ export function AbbrSidenote({ term, title, definition, force = false, children,
     setIsPrimary(registry.register(identity))
   }, [force, identity, registry])
 
-  // Calculate available margin space
-  useEffect(() => {
-    if (!isPrimary) return
-    const calculate = () => {
-      const viewportWidth = window.innerWidth
-      const margin = (viewportWidth - (contentMaxWidth || CONTENT_MAX_WIDTH)) / 2
-      setMarginSpace(margin)
-    }
-    calculate()
-    window.addEventListener('resize', calculate)
-    return () => window.removeEventListener('resize', calculate)
-  }, [contentMaxWidth])
-
-  useEffect(() => {
-    if (!isPrimary) return
-    setIsMounted(true)
-  }, [])
-
-  // Position sidenote centered in right margin
-  useEffect(() => {
-    if (!isPrimary) return
-    if (!containerRef.current || !noteRef.current) return
-
-    const usableMargin = marginSpace - MARGIN_PADDING * 2
-    if (usableMargin < MIN_SIDENOTE_WIDTH) {
-      const noteId = noteIdRef.current
-      if (noteId !== null) {
-        sidenoteRegistry.delete(noteId)
-        scheduleSidenoteLayout()
-      }
-      return
-    }
-
-    if (noteIdRef.current === null) {
-      sidenoteCounter += 1
-      noteIdRef.current = sidenoteCounter
-    }
-
-    const updatePosition = () => {
-      const container = containerRef.current
-      const note = noteRef.current
-      if (!container || !note) return
-
-      const rect = container.getBoundingClientRect()
-      const noteWidth = Math.min(MAX_SIDENOTE_WIDTH, usableMargin)
-
-      // Center the sidenote in the right margin
-      const rightOffset = (marginSpace - noteWidth) / 2
-
-      note.style.position = 'fixed'
-      note.style.right = `${rightOffset}px`
-      note.style.width = `${noteWidth}px`
-
-      const height = note.getBoundingClientRect().height
-      const noteId = noteIdRef.current
-      if (noteId === null) return
-
-      sidenoteRegistry.set(noteId, {
-        note,
-        desiredTop: rect.top,
-        height,
-        width: noteWidth,
-        right: rightOffset,
-      })
-      scheduleSidenoteLayout()
-    }
-
-    updatePosition()
-    window.addEventListener('scroll', updatePosition, true)
-    window.addEventListener('resize', updatePosition)
-
-    return () => {
-      window.removeEventListener('scroll', updatePosition, true)
-      window.removeEventListener('resize', updatePosition)
-      const noteId = noteIdRef.current
-      if (noteId !== null) {
-        sidenoteRegistry.delete(noteId)
-        scheduleSidenoteLayout()
-      }
-    }
-  }, [marginSpace, contentMaxWidth])
-
-  const showSidenote = marginSpace - MARGIN_PADDING * 2 >= MIN_SIDENOTE_WIDTH
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
-  useEffect(() => {
-    if (!isPrimary) return
-    if (showSidenote && isModalOpen) setIsModalOpen(false)
-  }, [showSidenote, isModalOpen])
-
-  useEffect(() => {
-    if (!isPrimary) return
-    if (!isModalOpen || showSidenote) {
-      setMobilePopoverStyle(null)
-      return
-    }
-
-    const updatePosition = () => {
-      const container = containerRef.current
-      if (!container) return
-
-      const rect = container.getBoundingClientRect()
-      const viewportWidth = window.innerWidth
-      const padding = 16
-      const maxWidth = 288
-      const width = Math.min(maxWidth, Math.max(0, viewportWidth - padding * 2))
-      const left = Math.min(
-        Math.max(rect.left, padding),
-        viewportWidth - width - padding
-      )
-      const top = rect.bottom + 8
-
-      setMobilePopoverStyle({ top, left, width })
-    }
-
-    updatePosition()
-    window.addEventListener('scroll', updatePosition, true)
-    window.addEventListener('resize', updatePosition)
-
-    return () => {
-      window.removeEventListener('scroll', updatePosition, true)
-      window.removeEventListener('resize', updatePosition)
-    }
-  }, [isModalOpen, showSidenote, isPrimary])
+  const {
+    containerRef,
+    noteRef,
+    isMounted,
+    showSidenote,
+    isModalOpen,
+    setIsModalOpen,
+    mobilePopoverStyle,
+  } = useMarginNote({ contentMaxWidth: contentMaxWidth || CONTENT_MAX_WIDTH, enabled: isPrimary })
 
   if (!isPrimary) {
     return <>{children}</>
@@ -483,17 +408,7 @@ export function AbbrSidenote({ term, title, definition, force = false, children,
             role="dialog"
             aria-modal="true"
           >
-            <div className="flex items-start justify-end mb-1">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors -mt-2 -mr-2"
-                aria-label="Close"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+            <MobilePopoverClose onClose={() => setIsModalOpen(false)} />
             <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
               <strong>{resolvedTitle}</strong> {resolvedDefinition}
             </p>
@@ -521,4 +436,3 @@ export function GlossarySidenote({ term, label, contentMaxWidth }: GlossarySiden
     </Sidenote>
   )
 }
-
