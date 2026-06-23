@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { GraduationCap, FileText, Video, Library } from 'lucide-react'
+import { GraduationCap, FileText, Library } from 'lucide-react'
 
 export const metadata = {
   title: 'Learn | Megaminds',
@@ -28,12 +28,6 @@ export default function LearnPage() {
             title="Articles"
             description="Deep dives on specific topics. Model comparisons, use case analysis, and industry trends."
             href="/learn/articles"
-          />
-          <LearnCard
-            icon={<Video className="w-6 h-6" />}
-            title="Videos"
-            description="Curated video content—ours and others. Visual explanations of complex concepts."
-            href="/learn/videos"
           />
           <LearnCard
             icon={<Library className="w-6 h-6" />}

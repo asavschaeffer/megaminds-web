@@ -24,7 +24,6 @@ const footerLinks = {
     links: [
       { label: 'Curriculum', href: '/learn/curriculum' },
       { label: 'Articles', href: '/learn/articles' },
-      { label: 'Videos', href: '/learn/videos' },
       { label: 'Prompt Library', href: '/tools/prompts' },
     ]
   },

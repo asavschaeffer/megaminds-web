@@ -40,7 +40,6 @@ const navigation: Record<string, NavSection> = {
     items: [
       { label: 'Curriculum', href: '/learn/curriculum', description: 'How LLMs work, from basics to advanced' },
       { label: 'Articles', href: '/learn/articles', description: 'Deep dives and analysis' },
-      { label: 'Videos', href: '/learn/videos', description: 'Curated video content' },
       { label: 'Prompt Library', href: '/tools/prompts', description: 'Curated prompts by category' },
     ]
   },
