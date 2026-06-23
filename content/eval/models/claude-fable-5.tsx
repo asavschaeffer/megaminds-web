@@ -29,7 +29,8 @@ export const claudeFable5: ModelProfile = {
     variant: 'Fable',
     modelVersion: '5',
     organization: 'Anthropic',
-    // releaseDate omitted — "release" is contested; access is gated. TODO(research)
+    releaseDate: '2026-06-09',
+    releaseDateDisplay: 'June 9, 2026',
     identity:
       'Anthropic\'s most capable widely-discussed model — and its least accessible: a frontier system held behind a restricted-access gate rather than offered to the general public.',
     tagIds: [

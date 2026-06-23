@@ -29,7 +29,8 @@ export const claudeHaiku45: ModelProfile = {
     variant: 'Haiku',
     modelVersion: '4.5',
     organization: 'Anthropic',
-    // releaseDate omitted — no reliable date. TODO(research)
+    releaseDate: '2025-10-15',
+    releaseDateDisplay: 'October 15, 2025',
     identity:
       'The speed-and-cost tier of the Claude family: built for high-volume, latency-sensitive work where fast, cheap, and good-enough beats slow and exhaustive.',
     tagIds: [

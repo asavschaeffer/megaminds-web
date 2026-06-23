@@ -29,7 +29,8 @@ export const claudeOpus48: ModelProfile = {
     variant: 'Opus',
     modelVersion: '4.8',
     organization: 'Anthropic',
-    // releaseDate omitted — no reliable date. TODO(research)
+    releaseDate: '2026-05-28',
+    releaseDateDisplay: 'May 28, 2026',
     identity:
       'Anthropic\'s frontier reasoning model: a deliberate, self-auditing problem-solver tuned for hard, multi-step work where being right matters more than being fast.',
     tagIds: [

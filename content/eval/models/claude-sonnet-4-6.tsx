@@ -29,7 +29,8 @@ export const claudeSonnet46: ModelProfile = {
     variant: 'Sonnet',
     modelVersion: '4.6',
     organization: 'Anthropic',
-    // releaseDate omitted — no reliable date. TODO(research)
+    releaseDate: '2026-02-17',
+    releaseDateDisplay: 'February 17, 2026',
     identity:
       'The mid-weight workhorse of the Claude 4.x line: an agentic, tool-using model tuned to write code, hold a long conversation, and quietly know its own limits rather than bluff past them.',
     tagIds: [
