@@ -92,6 +92,13 @@ export function getRecentModels(limit = 5): ModelProfile[] {
     .slice(0, limit)
 }
 
+export function getLatestModels(limit = 3): ModelProfile[] {
+  return [...HYDRATED_MODELS]
+    .filter((model) => Boolean(model.meta.releaseDate))
+    .sort((a, b) => (b.meta.releaseDate ?? '').localeCompare(a.meta.releaseDate ?? ''))
+    .slice(0, limit)
+}
+
 export function modelExists(slug: ModelSlug): boolean {
   return MODEL_BY_SLUG.has(slug)
 }

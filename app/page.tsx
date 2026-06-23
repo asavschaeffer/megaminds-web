@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { ArrowRight, Cpu, BookOpen, Wrench, Users } from 'lucide-react'
 import { ModelIcon } from '@/components/ui/model-icon'
 import { BrandCard } from '@/components/ui/brand-card'
-import { getModelBySlug } from '@/lib/models/registry'
+import { getLatestModelCards } from '@/lib/models/model-cards'
 
 export default function Home() {
   return (
@@ -70,27 +70,9 @@ export default function Home() {
         <div className="mx-auto max-w-5xl">
           <h2 className="text-2xl font-bold text-gray-900 mb-8">Latest Model Evaluations</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <BrandCard
-              model={getModelBySlug('qwen3-max')}
-              modelIconSrc="/icons/qwen/qwen-color.svg"
-              modelTextLogoSrc="/icons/qwen/qwen-text.svg"
-              parentIconSrc="/icons/alibaba/alibaba-mono.svg"
-              tags={['Reasoning', 'Test-Time Scaling', '1T Params', 'Tool Use']}
-            />
-            <BrandCard
-              model={getModelBySlug('kimi-k2-5')}
-              modelIconSrc="/icons/kimi/kimi-color.svg"
-              modelTextLogoSrc="/icons/kimi/kimi-text.svg"
-              parentIconSrc="/icons/moonshot/moonshot-mono.svg"
-              tags={['Agentic Swarm', 'Open Weights', '1T Params', 'Vision']}
-            />
-            <BrandCard
-              model={getModelBySlug('deepseek-v3-2')}
-              modelIconSrc="/icons/deepseek/deepseek-color.svg"
-              modelTextLogoSrc="/icons/deepseek/deepseek-text.svg"
-              parentIconSrc="/icons/deepseek/deepseek-mono.svg"
-              tags={['Reasoning', 'Open Source', '671B Params', 'Coding']}
-            />
+            {getLatestModelCards(3).map(({ key, ...card }) => (
+              <BrandCard key={key} {...card} />
+            ))}
           </div>
         </div>
       </section>

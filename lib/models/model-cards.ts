@@ -2,7 +2,7 @@ import { getIconManifest } from '@/lib/icon-manifest'
 import type { BrandCardProps } from '@/components/ui/brand-card'
 import type { ModelTagId } from '@/lib/models/tags'
 import { getAllTagIds } from '@/lib/models/tags'
-import { getModelBySlug } from '@/lib/models/registry'
+import { getModelBySlug, getLatestModels } from '@/lib/models/registry'
 
 const iconEntries = getIconManifest().icons ?? []
 const iconBySlug = new Map(iconEntries.map((entry) => [entry.slug, entry]))
@@ -437,3 +437,23 @@ export const modelCards: ModelCard[] = [
       : []
   })(),
 ]
+
+// Cards that are backed by a registered model (so they carry release-date
+// metadata). Keyed by slug so the homepage can surface the most recent releases.
+const registryCardBySlug = new Map<string, ModelCard>(
+  modelCards
+    .filter((card): card is ModelCard & { model: { slug: string } } => Boolean(card.model))
+    .map((card) => [card.model!.slug, card])
+)
+
+/**
+ * The most recently released models, as configured BrandCards. Drives the
+ * homepage "Latest Model Evaluations" section directly from model metadata —
+ * a model surfaces here automatically once it has a `releaseDate` set.
+ */
+export function getLatestModelCards(limit = 3): ModelCard[] {
+  return getLatestModels(limit * 4)
+    .map((model) => registryCardBySlug.get(model.slug))
+    .filter((card): card is ModelCard => Boolean(card))
+    .slice(0, limit)
+}
