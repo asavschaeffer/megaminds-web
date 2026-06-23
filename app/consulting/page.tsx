@@ -57,7 +57,7 @@ export default function ConsultingPage() {
             <ApproachStep
               number={2}
               title="Model Matching"
-              description="Based on your specific needs, we recommend the right models. Not every task needs GPT-4—sometimes Haiku or DeepSeek is the better choice."
+              description="Based on your specific needs, we recommend the right models. Not every task needs a frontier model—sometimes a fast, cheap option like Claude Haiku or DeepSeek is the better choice."
             />
             <ApproachStep
               number={3}

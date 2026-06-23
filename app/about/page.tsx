@@ -32,7 +32,7 @@ export default function AboutPage() {
             complex systems feel intuitive and trustworthy.
           </p>
           <p className="text-gray-600">
-            <strong>Match minds to models.</strong> Not every task needs GPT-4. Different models
+            <strong>Match minds to models.</strong> Not every task needs a frontier model. Different models
             have different personalities, strengths, and costs. We help people find the right
             tool for their specific needs.
           </p>
