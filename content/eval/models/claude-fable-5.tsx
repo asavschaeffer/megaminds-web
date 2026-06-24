@@ -6,7 +6,7 @@ const claudeFable5Links = (Object.keys(MODEL_LINK_TYPES) as ModelLinkTypeId[]).r
   (acc, id) => {
     const linkMap: Partial<Record<ModelLinkTypeId, string>> = {
       docs: 'https://docs.claude.com/en/docs/about-claude/models',
-      blog: 'https://www.anthropic.com/news/claude-fable-5-mythos-5', // launch + access announcement
+      blog: 'https://www.anthropic.com/news/fable-mythos-access', // statement on the US export-control suspension
     }
     if (id in linkMap) {
       acc[id] = linkMap[id as keyof typeof linkMap]!
@@ -18,10 +18,10 @@ const claudeFable5Links = (Object.keys(MODEL_LINK_TYPES) as ModelLinkTypeId[]).r
 
 // NOTE: This is an editorial report, not a self-authored one — not because
 // Fable 5 was never accessible, but because by the time of writing it had been
-// suspended (June 12, 2026), and asked to write its own profile it returns
-// "Claude Fable 5 is currently unavailable." It was, however, briefly public:
-// the report below documents that opening-and-withdrawal arc. Hard specs are
-// deliberately left as TODO(research).
+// taken offline by a US government export-control directive (June 12, 2026), and
+// asked to write its own profile it returns "Claude Fable 5 is currently
+// unavailable." It was, however, briefly public: the report below documents that
+// opening-and-recall arc. Hard specs are deliberately left as TODO(research).
 export const claudeFable5: ModelProfile = {
   slug: 'claude-fable-5',
   meta: {
@@ -33,7 +33,7 @@ export const claudeFable5: ModelProfile = {
     releaseDate: '2026-06-09',
     releaseDateDisplay: 'June 9, 2026',
     identity:
-      'The first public release of Anthropic\'s top-tier Mythos system — a frontier model briefly included on every paid Claude plan in June 2026 before access was suspended days after launch.',
+      'The first public release of Anthropic\'s top-tier Mythos system — briefly included on every paid Claude plan in June 2026 before a US government export-control directive forced it offline, the first such recall of a deployed AI model.',
     tagIds: [
       // capability
       'reasoning',
@@ -56,7 +56,7 @@ export const claudeFable5: ModelProfile = {
       'cloud',
       'api',
     ],
-    tags: ['Mythos Sibling', 'Frontier', 'Access Suspended'],
+    tags: ['Mythos Sibling', 'Frontier', 'Export-Controlled'],
     links: {
       ...claudeFable5Links,
     },
@@ -68,19 +68,19 @@ export const claudeFable5: ModelProfile = {
       'Graceful safeguards: cyber/bio/chem/distillation triggers hand off to Opus 4.8 rather than hard-refusing, firing in under 5% of sessions',
     ],
     weaknesses: [
-      'Currently unusable: access was suspended on June 12, 2026, with restoration promised but undated',
-      'Volatile availability — granted broadly and revoked within a week, so you cannot count on it being callable',
+      'Currently unusable: taken offline June 12, 2026 under a US export-control directive, with no confirmed restoration date',
+      'Volatile availability — granted broadly and recalled within a week, now subject to government, not vendor, control',
       'Still unevaluable in depth: the public window was too brief to produce reproducible, independent benchmarks',
     ],
     unknowns: [
       'The hard specs: parameters, architecture, context/output limits, real benchmarks, and what post-window "usage credits" cost — all undisclosed or unconfirmed. TODO(research)',
-      'The exact reason for the June 12 suspension and when access will return',
-      'How Fable\'s capability compares to the safeguard-lifted Mythos 5 build given to approved partners',
+      'When (or whether) the export-control directive will be lifted and access restored',
+      'How real the cited cybersecurity jailbreak was, and how Fable compares to the safeguard-lifted Mythos 5 build given to approved partners',
     ],
   },
   intro: {
     text:
-      'Claude Fable 5 is the model you may have briefly gotten to use and then lost. Released June 9, 2026 as the first public version of Anthropic\'s top-tier Mythos system, it was included free on Pro, Max, and Team plans — until Anthropic suspended it three days later. That arc, from broad public release to abrupt withdrawal, is the defining fact about this model, so this report is about the opening and the closing: what was offered, how it relates to the safeguard-lifted Mythos build, and why a model we actually called is still one we cannot fully measure.',
+      'Claude Fable 5 is the model you may have briefly gotten to use and then lost. Released June 9, 2026 as the first public version of Anthropic\'s top-tier Mythos system, it was included free on Pro, Max, and Team plans — until June 12, when a US government export-control directive, citing national security, forced Anthropic to take it offline for every customer. That arc, from broad public release to government-ordered recall within the week, is the defining fact about this model, so this report is about the opening and the closing: what was offered, how it relates to the safeguard-lifted Mythos build, and what it means that a government, not a vendor, switched a deployed frontier model off.',
   },
   // benchmarks, pricingData, chatLimits, sentimentFeed omitted — the model is not
   // openly accessible, so there are no reproducible numbers to report. TODO(research)
@@ -104,9 +104,9 @@ export const claudeFable5: ModelProfile = {
       content: null,
     },
     {
-      id: 'what-we-know',
-      title: 'What We Actually Know',
-      subtitle: 'Separating fact from narrative',
+      id: 'the-recall',
+      title: 'The Recall',
+      subtitle: 'A US export-control directive takes it offline',
       content: null,
     },
     {
@@ -120,13 +120,18 @@ export const claudeFable5: ModelProfile = {
     dataSources: [
       {
         type: 'official',
+        url: 'https://www.anthropic.com/news/fable-mythos-access',
+        description: 'Anthropic statement on the US government export-control directive suspending access (June 12, 2026)',
+      },
+      {
+        type: 'official',
         url: 'https://www.anthropic.com/news/claude-fable-5-mythos-5',
-        description: 'Launch announcement (public release, safeguards, June 12 suspension update)',
+        description: 'Launch announcement (June 9, 2026 public release, safeguards, plan availability)',
       },
       {
         type: 'editorial',
         description:
-          'Editorial report combining firsthand use during the brief June 2026 public window with Anthropic\'s announcement. Access is currently suspended, so deeper claims (specs, benchmarks) remain unverified and are marked TODO(research).',
+          'Editorial report combining firsthand use during the brief June 2026 public window with Anthropic\'s announcements and reporting on the export-control recall. The model is currently offline, so deeper claims (specs, benchmarks) remain unverified and are marked TODO(research).',
       },
     ],
     confidence: {
