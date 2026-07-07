@@ -147,7 +147,7 @@ export const modelCards: ModelCard[] = [
     modelVariant: 'Fable',
     versionNumber: '5',
     description:
-      "The first public release of Anthropic's top-tier Mythos system—briefly free on every paid plan in June 2026 before a US export-control directive forced it offline, the first such recall of a deployed AI model.",
+      "The first public release of Anthropic's top-tier Mythos system—suspended by a US export-control directive three days after launch, restored three weeks later, and now the author of its own report. API-only since July 7, 2026.",
     tags: ['frontier', 'reasoning', 'writing', 'creativity', 'worldbuilding'],
     organizationId: 'anthropic',
     modelLogoLabel: 'Model logo',
