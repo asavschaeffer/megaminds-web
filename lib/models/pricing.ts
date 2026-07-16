@@ -1,5 +1,4 @@
 import type { ApiPricing, ModelProfile, PricingData } from './types'
-import { PRICING_CATALOG } from './pricing-catalog'
 
 type PricingCandidate = {
   name: string
@@ -77,23 +76,14 @@ const mergeCompetitors = (primary: PricingCandidate[], secondary: PricingCandida
   return merged
 }
 
-const getCandidatesFromCatalog = (): PricingCandidate[] =>
-  PRICING_CATALOG.map((entry) => ({
-    name: entry.name,
-    input: entry.input,
-    output: entry.output,
-    provider: entry.provider,
-  }))
-
 export const buildPricingData = (profile: ModelProfile, models: ModelProfile[]): PricingData | null => {
   const baseModel = getBaseRates(profile)
   if (!baseModel) return null
 
   const metaCandidates = getCandidatesFromMeta(models, profile.slug)
-  const catalogCandidates = getCandidatesFromCatalog()
   const selected = pickPricingNeighbors(baseModel, metaCandidates)
   const fallback = profile.pricingData?.competitors ?? []
-  const competitors = mergeCompetitors(mergeCompetitors(selected, catalogCandidates), fallback)
+  const competitors = mergeCompetitors(selected, fallback)
 
   return {
     baseModel,
