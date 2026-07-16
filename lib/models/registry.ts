@@ -1,5 +1,4 @@
 import type { ModelProfile, ModelSlug } from './types'
-import type { ModelTagId } from './tags'
 import { validateTagConflicts, validateTagCoverage, validateTagIds } from './tags'
 import { validateModelProfile } from './schemas'
 import { hydrateModelWithMdx } from './build-model'
@@ -76,48 +75,9 @@ export function getAllModels(): ModelProfile[] {
   return HYDRATED_MODELS
 }
 
-export function getModelsByTag(tagId: ModelTagId): ModelProfile[] {
-  return HYDRATED_MODELS.filter((model) => model.meta.tagIds?.includes(tagId) || false)
-}
-
-export function getModelsByOrganization(orgId: string): ModelProfile[] {
-  return HYDRATED_MODELS.filter(
-    (model) => model.meta.organizationId === orgId || model.meta.organization?.toLowerCase() === orgId.toLowerCase()
-  )
-}
-
-export function searchModels(query: string): ModelProfile[] {
-  const lowerQuery = query.toLowerCase()
-  return HYDRATED_MODELS.filter(
-    (model) =>
-      model.meta.name.toLowerCase().includes(lowerQuery) ||
-      model.meta.identity.toLowerCase().includes(lowerQuery) ||
-      model.meta.family?.toLowerCase().includes(lowerQuery)
-  )
-}
-
-export function getRecentModels(limit = 5): ModelProfile[] {
-  return [...HYDRATED_MODELS]
-    .filter((model) => model.updatedAt)
-    .sort((a, b) => {
-      const dateA = new Date(a.updatedAt || 0)
-      const dateB = new Date(b.updatedAt || 0)
-      return dateB.getTime() - dateA.getTime()
-    })
-    .slice(0, limit)
-}
-
 export function getLatestModels(limit = 3): ModelProfile[] {
   return [...HYDRATED_MODELS]
     .filter((model) => Boolean(model.meta.releaseDate))
     .sort((a, b) => (b.meta.releaseDate ?? '').localeCompare(a.meta.releaseDate ?? ''))
     .slice(0, limit)
-}
-
-export function modelExists(slug: ModelSlug): boolean {
-  return MODEL_BY_SLUG.has(slug)
-}
-
-export function getModelCount(): number {
-  return HYDRATED_MODELS.length
 }

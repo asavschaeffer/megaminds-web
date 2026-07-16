@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { getAllArticles, type ArticleMeta } from '@/lib/articles/loader'
+import { getArticles as getMdxArticles, type ArticleMeta } from '@/lib/content'
 
 export const metadata = {
   title: 'Articles | Megaminds Learn',
@@ -28,7 +28,7 @@ const legacyArticles: ArticleMeta[] = [
 
 // Combine MDX articles with legacy TSX articles
 function getArticles(): ArticleMeta[] {
-  const mdxArticles = getAllArticles()
+  const mdxArticles = getMdxArticles()
   const mdxSlugs = new Set(mdxArticles.map(a => a.slug))
 
   // Filter out legacy articles that now exist as MDX

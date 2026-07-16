@@ -29,15 +29,6 @@ export type ArticleMeta = {
   tags: string[]
 }
 
-export type ModelMeta = {
-  slug: string
-  name: string
-  tagline: string
-  strengths: string[]
-  weaknesses: string[]
-  bestFor: string[]
-}
-
 // Get all prompts in a category
 export function getPromptsByCategory(category: string): PromptContent[] {
   const categoryPath = path.join(contentDirectory, 'prompts', category)
@@ -121,26 +112,4 @@ export function getArticle(slug: string): { meta: ArticleMeta; content: string }
     meta: { slug, ...data } as ArticleMeta,
     content,
   }
-}
-
-// Get model reports
-export function getModelReports(): ModelMeta[] {
-  const modelsPath = path.join(contentDirectory, 'eval', 'models')
-
-  if (!fs.existsSync(modelsPath)) {
-    return []
-  }
-
-  const files = fs.readdirSync(modelsPath).filter(f => f.endsWith('.mdx'))
-
-  return files.map(file => {
-    const filePath = path.join(modelsPath, file)
-    const fileContents = fs.readFileSync(filePath, 'utf8')
-    const { data } = matter(fileContents)
-
-    return {
-      slug: file.replace('.mdx', ''),
-      ...data,
-    } as ModelMeta
-  })
 }

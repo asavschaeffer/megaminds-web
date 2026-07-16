@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-import { getAllArticleSlugs, getArticleBySlug } from '@/lib/articles/loader'
+import { getArticle, getArticles } from '@/lib/content'
 import { GlossarySidenote } from '@/components/shared/sidenote'
 
 // MDX components available in articles
@@ -9,12 +9,12 @@ const components = {
 }
 
 export function generateStaticParams() {
-    return getAllArticleSlugs().map(slug => ({ slug }))
+    return getArticles().map(article => ({ slug: article.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params
-    const article = getArticleBySlug(slug)
+    const article = getArticle(slug)
     if (!article) return {}
 
     return {
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params
-    const article = getArticleBySlug(slug)
+    const article = getArticle(slug)
     if (!article) notFound()
 
     return (

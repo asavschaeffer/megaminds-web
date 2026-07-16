@@ -105,13 +105,3 @@ export const MODEL_PRICING_REFERENCES: Record<string, ModelPricingReference> = {
     lastUpdated: '2025-01-20',
   },
 }
-
-export function getModelPricing(modelId: string): ModelPricingReference | undefined {
-  return MODEL_PRICING_REFERENCES[modelId]
-}
-
-export function getAllCompetitorPricing(excludeIds: string[] = []): ModelPricingReference[] {
-  return Object.values(MODEL_PRICING_REFERENCES).filter(
-    (ref) => !excludeIds.includes(ref.id)
-  )
-}

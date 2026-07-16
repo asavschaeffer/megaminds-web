@@ -2,7 +2,7 @@
  * Core type definitions for Model Report Templating
  */
 
-import type { ComponentType, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import type { ModelTagId } from './tags'
 import type { ModelLinkTypeId } from './link-types'
 import type { OrganizationId } from './organizations'
@@ -297,17 +297,6 @@ export interface ContentSectionProps {
   id?: string
   specs?: TechSpec[]
 }
-
-export type SectionRenderer = (section: ContentSection, profile: ModelProfile) => ReactNode
-
-export interface SectionRegistryEntry {
-  id: SectionId | RegExp
-  required?: boolean
-  order?: number
-  renderer?: SectionRenderer
-}
-
-export type SectionRegistry = SectionRegistryEntry[]
 
 export interface MdxExpandableBlock {
   id: string
