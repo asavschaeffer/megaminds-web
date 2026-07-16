@@ -21,8 +21,8 @@ You are about to write for a site whose differentiator is that **models write th
 Generate the complete, paste-ready deployment prompt for each research run:
 
 ```
-npm run research:brief -- --model "<Name>" --source google   # Gemini Deep Research prompt
-npm run research:brief -- --model "<Name>" --source x        # Grok / X DeepSearch prompt
+npm run research:brief -- --model "<Name>" --slug <slug> --source google   # Gemini Deep Research prompt
+npm run research:brief -- --model "<Name>" --slug <slug> --source x        # Grok / X DeepSearch prompt
 ```
 
 Each emits the source-specific researcher system prompt (`scripts/prompts/google-researcher.md` / `x-researcher.md`) followed by the requirements brief. The brief is **generated from the code** (schemas, tag taxonomy, section catalog, picker signals), so newly added picker questions automatically become research requirements. Don't hand-write briefs; tune the researcher personas by editing the prompt files.
@@ -31,6 +31,7 @@ Dispatches live in `research-reports/<slug>/` — one subdirectory per model, cr
 - `research-reports/<slug>/google.md` — the Google deep-research dispatch (Gemini)
 - `research-reports/<slug>/x.md` — the X.com deep-research dispatch (Grok)
 - `research-reports/<slug>/self-interview.md` — the subject's own testimony (Phase 1)
+- `research-reports/<slug>/scratchpad.md` — **the editor's hand-collected leads** (links, quotes, tweets, articles). Scaffold it any time with `npm run research:scratchpad -- --slug <slug>`; the editor appends items as they surface. Passing `--slug` to `research:brief`/`research:deep` embeds it into commissioned prompts as seed material, and report authors must read it, verify each item against its live source, and cite the primary URL — never the scratchpad itself.
 - other free-form dispatches (e.g. `web.md` for a general web-research pass) join the same directory
 
 **Headless (preferred when keys exist):** the same prompts can run fully unattended:

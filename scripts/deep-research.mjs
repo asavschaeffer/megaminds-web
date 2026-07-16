@@ -176,6 +176,7 @@ function composePrompt(args) {
     '--tsconfig', quote(join('scripts', 'tsconfig.json')),
     quote(join('scripts', 'generate-research-brief.ts')),
     '--model', quote(args.model),
+    '--slug', quote(args.slug),
     '--source', args.source,
   ].join(' ')
 

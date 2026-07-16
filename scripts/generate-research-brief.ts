@@ -9,14 +9,18 @@
  * automatically asks the researcher to establish it. Do not hardcode lists
  * here that already exist in lib/models/*; import them instead.
  *
- * Run with: tsx scripts/generate-research-brief.ts [--model "<display name>"] [--source google|x] [--out <path>]
+ * Run with: tsx scripts/generate-research-brief.ts [--model "<display name>"] [--slug <slug>] [--source google|x] [--out <path>]
  *
  * --source prepends the matching deployment system prompt from scripts/prompts/
  * (google-researcher.md or x-researcher.md), producing a complete paste-ready
  * prompt for that research tool. Without --source, only the brief is emitted.
+ *
+ * --slug embeds research-reports/<slug>/scratchpad.md (the editor's
+ * hand-collected leads) as seed material for the researcher to verify and
+ * extend. Silently skipped when no scratchpad exists.
  */
 
-import { readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -30,12 +34,16 @@ type ResearchSource = (typeof RESEARCH_SOURCES)[number]
 
 function parseArgs(argv: string[]) {
   let model = '[MODEL NAME]'
+  let slug: string | undefined
   let out: string | undefined
   let source: ResearchSource | undefined
 
   for (let i = 0; i < argv.length; i++) {
     if (argv[i] === '--model') {
       model = argv[i + 1] ?? model
+      i++
+    } else if (argv[i] === '--slug') {
+      slug = argv[i + 1]
       i++
     } else if (argv[i] === '--out') {
       out = argv[i + 1]
@@ -51,7 +59,31 @@ function parseArgs(argv: string[]) {
     }
   }
 
-  return { model, out, source }
+  return { model, slug, out, source }
+}
+
+/**
+ * The editor's hand-collected leads for this model, if any. Frontmatter is
+ * stripped; the body (including its own "leads, not facts" guidance) is
+ * embedded verbatim.
+ */
+function loadScratchpad(slug: string): string | null {
+  const path = join(process.cwd(), 'research-reports', slug, 'scratchpad.md')
+  if (!existsSync(path)) return null
+  const body = readFileSync(path, 'utf8').replace(/^---[\s\S]*?---\s*/, '').trim()
+  return body || null
+}
+
+function renderSeedSection(scratchpad: string): string {
+  return `
+---
+
+## Seed material from the editor
+
+The site's editor hand-collected the material below while following this model. Treat every item as a lead, not a fact: open each link, verify the claim against the live source, upgrade it to a primary citation where possible, and note anything that has since changed or cannot be confirmed. Cover all of it — then go beyond it. The seed list is a floor, not the scope.
+
+${scratchpad}
+`
 }
 
 function loadSourcePrompt(source: ResearchSource): string {
@@ -176,19 +208,21 @@ function renderSectionCoverageSection(): string {
   return lines.join('\n') + '\n'
 }
 
-function buildBrief(model: string): string {
+function buildBrief(model: string, scratchpad: string | null): string {
   return (
     renderHeader(model) +
     renderStructuredDataSection() +
     renderTagSection() +
     renderPickerSignalSection() +
-    renderSectionCoverageSection()
+    renderSectionCoverageSection() +
+    (scratchpad ? renderSeedSection(scratchpad) : '')
   )
 }
 
 function main() {
-  const { model, out, source } = parseArgs(process.argv.slice(2))
-  const brief = (source ? loadSourcePrompt(source) : '') + buildBrief(model)
+  const { model, slug, out, source } = parseArgs(process.argv.slice(2))
+  const scratchpad = slug ? loadScratchpad(slug) : null
+  const brief = (source ? loadSourcePrompt(source) : '') + buildBrief(model, scratchpad)
 
   process.stdout.write(brief)
 

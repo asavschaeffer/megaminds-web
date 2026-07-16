@@ -111,9 +111,9 @@ export const PICKER_SIGNALS: PickerSignal[] = [
     provenance: {
       kind: 'computed',
       field: 'priceBand',
-      source: 'Blended $/Mtok from meta.apiRates or pricingData.baseModel; tag fallback (see lib/models/picker.ts)',
+      source: 'Blended $/Mtok from meta.apiRates; tag fallback (see lib/models/picker.ts)',
     },
-    evidence: 'apiRates or pricingData populated with sourced numbers (pricingSources)',
+    evidence: 'meta.apiRates populated with sourced numbers (pricingSources)',
   },
   {
     id: 'free-access',
