@@ -1,23 +1,40 @@
+/**
+ * Model cards, derived entirely from the registry.
+ *
+ * Every card is computed from a `ModelProfile` — name, description, chips, and
+ * link all come from the profile, and icons resolve through the icon manifest
+ * (model icon from the family, parent watermark from the manifest's parent
+ * relation). There is no hand-maintained card list: a model appears here by
+ * being registered, and its card can never disagree with its report.
+ *
+ * The only native content in this file is presentation: how each
+ * organization's watermark sits inside the card.
+ */
+
 import { getIconManifest } from '@/lib/icon-manifest'
 import type { BrandCardProps } from '@/components/ui/brand-card'
-import type { ModelTagId } from '@/lib/models/tags'
-import { getAllTagIds } from '@/lib/models/tags'
-import { getModelBySlug, getLatestModels } from '@/lib/models/registry'
-
-const iconEntries = getIconManifest().icons ?? []
-const iconBySlug = new Map(iconEntries.map((entry) => [entry.slug, entry]))
-const assetVariants = ['mono', 'color', 'text', 'combine', 'combine-color', 'avatar'] as const
-type IconVariant = (typeof assetVariants)[number] | 'brand-color'
+import type { ModelTagId } from './tags'
+import { getAllTagIds, getTag } from './tags'
+import type { ModelMeta, ModelProfile } from './types'
+import type { OrganizationId } from './organizations'
+import { getAllModels, getLatestModels } from './registry'
 
 export const MODEL_TAGS = getAllTagIds()
 
-const getVariant = (slug: string | undefined, variant: IconVariant) => {
-  if (!slug) return undefined
-  return iconBySlug.get(slug)?.variants[variant]
+export type ModelCard = BrandCardProps & {
+  key: string
+  /** Typed registry tags, for filtering. Display chips live in `tags`. */
+  tagIds: ModelTagId[]
 }
 
+// ——— icon resolution (manifest-driven) ———
+
+const iconBySlug = new Map((getIconManifest().icons ?? []).map((entry) => [entry.slug, entry]))
+
+const getVariant = (slug: string, variant: string) => iconBySlug.get(slug)?.variants[variant]
+
 const getModelIcon = (slug: string) =>
-  getVariant(slug, 'avatar') ?? getVariant(slug, 'color') ?? getVariant(slug, 'mono')
+  getVariant(slug, 'color') ?? getVariant(slug, 'avatar') ?? getVariant(slug, 'mono')
 
 const getModelWordmark = (slug: string) =>
   getVariant(slug, 'text') ?? getVariant(slug, 'combine') ?? getVariant(slug, 'mono')
@@ -30,434 +47,59 @@ const getParentWatermark = (slug: string) =>
   getVariant(slug, 'combine-color') ??
   getVariant(slug, 'combine')
 
-const buildBrandAssets = (modelSlug: string, parentSlug?: string) => {
-  const parent = parentSlug ?? iconBySlug.get(modelSlug)?.parent ?? modelSlug
-  return {
-    modelIconSrc: getModelIcon(modelSlug),
-    modelTextLogoSrc: getModelWordmark(modelSlug),
-    parentIconSrc: parent ? getParentWatermark(parent) : undefined,
-  }
-}
+/** Family name usually IS the icon slug ("Claude" → claude); meta.iconSlug overrides. */
+const resolveIconSlug = (meta: ModelMeta): string | undefined =>
+  [meta.iconSlug, meta.family?.toLowerCase(), meta.name.split(/[\s/-]/)[0]?.toLowerCase()].find(
+    (candidate): candidate is string => Boolean(candidate && iconBySlug.has(candidate))
+  )
 
-const getModelsIcon = (slug: string) => {
-  if (slug === 'grok' || slug === 'openai') {
-    return getVariant(slug, 'mono') ?? getVariant(slug, 'color') ?? getVariant(slug, 'avatar')
-  }
-  return getVariant(slug, 'color') ?? getVariant(slug, 'avatar') ?? getVariant(slug, 'mono')
-}
+// ——— presentation: per-organization watermark placement ———
 
-const buildModelAssets = (modelSlug: string, parentSlug?: string) => ({
-  ...buildBrandAssets(modelSlug, parentSlug),
-  modelIconSrc: getModelsIcon(modelSlug),
-})
-
-const buildOpenAiAssets = () => ({
-  ...buildModelAssets('openai', 'openai'),
-  parentIconSrc: getVariant('openai', 'color') ?? getVariant('openai', 'mono'),
-  watermarkAlign: 'left' as const,
-})
-
-const wideWatermarkClassName =
+const DEFAULT_WATERMARK_CLASSNAME =
   'absolute -right-1 top-1/2 h-[155%] w-auto -translate-y-1/2 translate-x-[4%] rotate-[9deg] opacity-[0.12] sm:-right-2 sm:h-[165%] sm:translate-x-[6%] lg:-right-4 lg:h-[175%] lg:translate-x-[8%]'
-const anthropicWatermarkClassName =
-  'absolute -right-1 top-[56%] h-[135%] w-auto -translate-y-1/2 translate-x-[4%] rotate-[9deg] opacity-[0.12] sm:-right-2 sm:h-[145%] sm:translate-x-[6%] lg:-right-4 lg:h-[155%] lg:translate-x-[8%]'
-const xaiWatermarkClassName =
-  'absolute -right-1 top-[48%] h-[135%] w-auto -translate-y-1/2 translate-x-[0%] rotate-[9deg] opacity-[0.12] sm:-right-2 sm:h-[145%] sm:translate-x-[2%] lg:-right-4 lg:h-[155%] lg:translate-x-[4%]'
-const openAiWatermarkClassName =
-  'absolute -right-2 top-1/2 h-[170%] w-auto -translate-y-1/2 translate-x-[10%] rotate-[9deg] opacity-[0.12] sm:-right-3 sm:h-[180%] sm:translate-x-[12%] lg:-right-4 lg:h-[190%] lg:translate-x-[14%]'
-const alibabaWatermarkClassName =
-  'absolute -right-3 top-1/2 h-[190%] w-auto -translate-y-1/2 translate-x-[26%] rotate-[9deg] opacity-[0.12] sm:-right-4 sm:h-[205%] sm:translate-x-[28%] lg:-right-6 lg:h-[220%] lg:translate-x-[30%]'
 
-type ModelCard = BrandCardProps & {
-  key: string
-  tags: ModelTagId[]
+const WATERMARK_CLASSNAMES: Partial<Record<OrganizationId, string>> = {
+  anthropic:
+    'absolute -right-1 top-[56%] h-[135%] w-auto -translate-y-1/2 translate-x-[4%] rotate-[9deg] opacity-[0.12] sm:-right-2 sm:h-[145%] sm:translate-x-[6%] lg:-right-4 lg:h-[155%] lg:translate-x-[8%]',
+  xai: 'absolute -right-1 top-[48%] h-[135%] w-auto -translate-y-1/2 translate-x-[0%] rotate-[9deg] opacity-[0.12] sm:-right-2 sm:h-[145%] sm:translate-x-[2%] lg:-right-4 lg:h-[155%] lg:translate-x-[4%]',
+  openai:
+    'absolute -right-2 top-1/2 h-[170%] w-auto -translate-y-1/2 translate-x-[10%] rotate-[9deg] opacity-[0.12] sm:-right-3 sm:h-[180%] sm:translate-x-[12%] lg:-right-4 lg:h-[190%] lg:translate-x-[14%]',
+  alibaba:
+    'absolute -right-3 top-1/2 h-[190%] w-auto -translate-y-1/2 translate-x-[26%] rotate-[9deg] opacity-[0.12] sm:-right-4 sm:h-[205%] sm:translate-x-[28%] lg:-right-6 lg:h-[220%] lg:translate-x-[30%]',
 }
 
-export const modelCards: ModelCard[] = [
-  {
-    key: 'chatgpt',
-    href: '/eval/models/chatgpt',
-    modelFamily: 'ChatGPT',
-    modelVariant: '5.2',
-    versionNumber: '',
-    description:
-      'Multimodal with top-tier coding and math; Codex tones down the worst 5.2 personality quirks, but cost and sycophancy remain concerns.',
-    tags: ['multimodal', 'coding', 'math', 'reasoning', 'ideation'],
-    organizationId: 'openai',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    modelFamilyClassName: 'text-2xl font-medium tracking-tight',
-    watermarkClassName: openAiWatermarkClassName,
-    ...buildOpenAiAssets(),
-    modelTextLogoSrc: undefined,
-  },
-  {
-    key: 'claude-opus',
-    model: getModelBySlug('claude-opus-4-8'),
-    href: '/eval/models/claude-opus-4-8',
-    modelFamily: 'Claude',
-    modelVariant: 'Opus',
-    versionNumber: '4.8',
-    description:
-      'Text-first with best-in-class tool use, computer control, and writing; slower, pricey, and long-context precision can degrade.',
-    tags: ['tool-use', 'instruction', 'writing', 'precision', 'reasoning'],
-    organizationId: 'anthropic',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: anthropicWatermarkClassName,
-    ...buildModelAssets('claude'),
-  },
-  {
-    key: 'claude-sonnet',
-    model: getModelBySlug('claude-sonnet-4-6'),
-    href: '/eval/models/claude-sonnet-4-6',
-    modelFamily: 'Claude',
-    modelVariant: 'Sonnet',
-    versionNumber: '4.6',
-    description:
-      'Text-first with best-in-class tool use, computer control, and writing; slower, pricey, and long-context precision can degrade.',
-    tags: ['tool-use', 'instruction', 'writing', 'precision', 'reasoning'],
-    organizationId: 'anthropic',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: anthropicWatermarkClassName,
-    ...buildModelAssets('claude'),
-  },
-  {
-    key: 'claude-haiku',
-    model: getModelBySlug('claude-haiku-4-5'),
-    href: '/eval/models/claude-haiku-4-5',
-    modelFamily: 'Claude',
-    modelVariant: 'Haiku',
-    versionNumber: '4.5',
-    description:
-      'Fast, cost-efficient tier of the Claude family for high-volume, latency-sensitive work; trades reasoning depth for throughput.',
-    tags: ['tool-use', 'instruction', 'writing', 'precision', 'reasoning'],
-    organizationId: 'anthropic',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: anthropicWatermarkClassName,
-    ...buildModelAssets('claude'),
-  },
-  {
-    key: 'claude-fable',
-    model: getModelBySlug('claude-fable-5'),
-    href: '/eval/models/claude-fable-5',
-    modelFamily: 'Claude',
-    modelVariant: 'Fable',
-    versionNumber: '5',
-    description:
-      "The first public release of Anthropic's top-tier Mythos system—suspended by a US export-control directive three days after launch, restored three weeks later, and now the author of its own report. API-only since July 7, 2026.",
-    tags: ['frontier', 'reasoning', 'writing', 'creativity', 'worldbuilding'],
-    organizationId: 'anthropic',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: anthropicWatermarkClassName,
-    ...buildModelAssets('claude'),
-  },
-  {
-    key: 'llama',
-    href: '/eval/models/llama',
-    modelFamily: 'Llama',
-    modelVariant: '4',
-    description: 'Paragraph element',
-    tags: ['open-source', 'generalist', 'reasoning', 'coding', 'frontier'],
-    organizationId: 'meta',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildModelAssets('metaai', 'meta'),
-    modelTextLogoSrc: undefined,
-  },
-  {
-    key: 'mistral',
-    href: '/eval/models/mistral',
-    modelFamily: 'Mistral',
-    modelVariant: '3',
-    versionNumber: '',
-    description: 'Paragraph element',
-    tags: ['open-source', 'speed', 'coding', 'generalist', 'cost-efficient'],
-    organizationId: 'mistral',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildModelAssets('mistral'),
-    modelTextLogoSrc: undefined,
-  },
+// ——— derivation ———
 
-  {
-    key: 'deepseek-r1',
-    href: '/eval/models/deepseek-r1',
-    modelFamily: 'DeepSeek',
-    modelVariant: 'R1',
-    versionNumber: '',
-    description:
-      'The cheapest reasoning frontier model with transparent chain-of-thought. DeepSeek-R1 brings o1-level performance at a fraction of the cost, with full visibility into its thinking process.',
-    tags: ['reasoning', 'open-source', 'cost-efficient', 'frontier', 'coding', 'math'],
-    organizationId: 'deepseek',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildModelAssets('deepseek'),
-  },
-  ...(() => {
-    const deepseekV3_2Model = getModelBySlug('deepseek-v3-2')
-    return deepseekV3_2Model
-      ? [
-        {
-          key: 'deepseek-v3-2',
-          model: deepseekV3_2Model,
-          tags: (deepseekV3_2Model?.meta.tagIds ?? []) as ModelTagId[],
-          organizationId: 'deepseek',
-          modelLogoLabel: 'Model logo',
-          parentBrandingLabel: 'Parent company branding',
-          watermarkClassName: wideWatermarkClassName,
-          ...buildModelAssets('deepseek'),
-        },
-      ]
-      : []
-  })(),
-  {
-    key: 'aya',
-    href: '/eval/models/cohere',
-    modelFamily: 'Aya',
-    modelVariant: '',
-    versionNumber: '',
-    variantLayout: 'stacked' as const,
-    description: 'Paragraph element',
-    tags: ['translation', 'writing', 'reasoning', 'generalist'],
-    organizationId: 'cohere',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildModelAssets('aya', 'cohere'),
-    sublineLogoSrc: getVariant('cohere', 'text'),
-    sublineLogoLabel: 'Cohere',
-  },
-  {
-    key: 'sonar',
-    href: '/eval/models/perplexity',
-    modelFamily: 'Sonar',
-    modelVariant: '',
-    versionNumber: 'Perplexity',
-    variantLayout: 'stacked' as const,
-    description: 'Paragraph element',
-    tags: ['search', 'reasoning', 'speed', 'tool-use'],
-    organizationId: 'perplexity',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildModelAssets('sonar', 'perplexity'),
-    modelIconSrc: getModelIcon('perplexity'),
-  },
-  {
-    key: 'nemotron',
-    href: '/eval/models/nvidia',
-    modelFamily: 'Nemotron',
-    modelVariant: '',
-    versionNumber: '',
-    variantLayout: 'stacked' as const,
-    description: 'Paragraph element',
-    tags: ['enterprise', 'reasoning', 'coding', 'generalist'],
-    organizationId: 'nvidia',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildModelAssets('nvidia', 'nvidia'),
-    modelTextLogoSrc: undefined,
-    sublineLogoSrc: getVariant('nvidia', 'text'),
-    sublineLogoLabel: 'Nvidia',
-    modelFamilyClassName: 'text-xl',
-  },
+function buildModelCard(profile: ModelProfile): ModelCard {
+  const iconSlug = resolveIconSlug(profile.meta)
+  const parentSlug = iconSlug ? iconBySlug.get(iconSlug)?.parent ?? iconSlug : undefined
+  const tagIds = profile.meta.tagIds ?? []
 
-  {
-    key: 'manus',
-    href: '/eval/models/manus',
-    modelFamily: 'Manus',
-    modelVariant: '',
-    versionNumber: '',
-    description: 'Paragraph element',
-    tags: ['tool-use', 'generalist', 'reasoning', 'instruction'],
+  return {
+    key: profile.slug,
+    model: profile,
+    tagIds,
+    tags: [...tagIds.map((id) => getTag(id).label), ...(profile.meta.specChips ?? [])],
+    organizationId: profile.meta.organizationId,
     modelLogoLabel: 'Model logo',
     parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildModelAssets('manus'),
-    modelIconSrc: getVariant('manus', 'mono'),
-  },
-  {
-    key: 'gemma',
-    href: '/eval/models/gemma',
-    modelFamily: 'Gemma',
-    modelVariant: '3',
-    versionNumber: '',
-    description: 'Paragraph element',
-    tags: ['open-source', 'efficiency', 'generalist', 'reasoning'],
-    organizationId: 'google',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildModelAssets('gemma', 'google'),
-  },
-  {
-    key: 'hermes',
-    href: '/eval/models/nous',
-    modelFamily: 'Hermes',
-    modelVariant: '3',
-    versionNumber: '',
-    description: 'Open-source model tuned for roleplay and long-term context; not a frontier SOTA model.',
-    tags: ['long', 'roleplay', 'open-source', 'worldbuilding', 'instruction'],
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildModelAssets('nousresearch'),
-    modelTextLogoSrc: undefined,
-  },
-  ...(() => {
-    const kimiK25 = getModelBySlug('kimi-k2-5')
-    return kimiK25
-      ? [
-        {
-          key: 'kimi-k2-5',
-          model: kimiK25,
-          tags: (kimiK25?.meta.tagIds ?? []) as ModelTagId[],
-          organizationId: 'moonshot',
-          modelLogoLabel: 'Model logo',
-          parentBrandingLabel: 'Parent company branding',
-          watermarkClassName: wideWatermarkClassName,
-          ...buildModelAssets('kimi', 'moonshot'),
-        },
-      ]
-      : []
-  })(),
-  ...(() => {
-    const geminiPro = getModelBySlug('gemini-3-pro')
-    const geminiFlash = getModelBySlug('gemini-3-flash')
-    return [
-      {
-        key: 'gemini-pro',
-        model: geminiPro,
-        tags: (geminiPro?.meta.tagIds ?? []) as ModelTagId[],
-        modelLogoLabel: 'Model logo',
-        parentBrandingLabel: 'Parent company branding',
-        watermarkClassName: wideWatermarkClassName,
-        ...buildModelAssets('gemini'),
-      },
-      {
-        key: 'gemini-flash',
-        model: geminiFlash,
-        tags: (geminiFlash?.meta.tagIds ?? []) as ModelTagId[],
-        modelLogoLabel: 'Model logo',
-        parentBrandingLabel: 'Parent company branding',
-        watermarkClassName: wideWatermarkClassName,
-        ...buildModelAssets('gemini'),
-      },
-    ]
-  })(),
-  {
-    key: 'grok',
-    href: '/eval/models/grok',
-    modelFamily: 'Grok',
-    modelVariant: '',
-    versionNumber: '4',
-    description: 'Uncensored, multimodal model with strong search and large context; safety issues and uneven free access.',
-    tags: ['multimodal', 'image-gen', 'video-gen', 'audio', 'search', 'long'],
-    organizationId: 'xai',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: xaiWatermarkClassName,
-    ...buildModelAssets('grok'),
-  },
-  {
-    key: 'copilot',
-    href: '/eval/models/copilot',
-    modelFamily: 'Copilot',
-    modelVariant: '',
-    versionNumber: 'ChatGPT',
-    variantLayout: 'stacked' as const,
-    description: 'Paragraph element',
-    tags: ['coding', 'tool-use', 'instruction'],
-    organizationId: 'microsoft',
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildModelAssets('copilot', 'microsoft'),
-  },
-  {
-    key: 'ernie',
-    href: '/eval/models/ernie',
-    modelFamily: 'Ernie',
-    modelVariant: '',
-    versionNumber: '5.2',
-    description: 'Paragraph element',
-    tags: ['multimodal', 'search', 'reasoning'],
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildModelAssets('wenxin', 'baidu'),
-    modelTextLogoSrc: undefined,
-  },
-  {
-    key: 'glm',
-    href: '/eval/models/glm',
-    modelFamily: 'GLM',
-    modelVariant: '',
-    versionNumber: '4.7',
-    description: 'Paragraph element',
-    tags: ['generalist', 'reasoning', 'translation', 'open-source'],
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildModelAssets('chatglm', 'zai'),
-  },
-  {
-    key: 'minimax',
-    href: '/eval/models/minimax',
-    modelFamily: 'Minimax',
-    modelVariant: 'M2.1',
-    versionNumber: 'Preview',
-    variantLayout: 'stacked' as const,
-    description: 'Paragraph element',
-    tags: ['multimodal', 'video-gen', 'speed', 'creativity'],
-    modelLogoLabel: 'Model logo',
-    parentBrandingLabel: 'Parent company branding',
-    watermarkClassName: wideWatermarkClassName,
-    ...buildModelAssets('minimax'),
-  },
-  ...(() => {
-    const qwen3MaxModel = getModelBySlug('qwen3-max')
-    return qwen3MaxModel
-      ? [
-        {
-          key: 'qwen3-max',
-          model: qwen3MaxModel,
-          tags: (qwen3MaxModel?.meta.tagIds ?? []) as ModelTagId[],
-          organizationId: 'alibaba',
-          modelLogoLabel: 'Model logo',
-          parentBrandingLabel: 'Parent company branding',
-          watermarkClassName: alibabaWatermarkClassName,
-          ...buildModelAssets('qwen', 'alibaba'),
-        },
-      ]
-      : []
-  })(),
-]
+    watermarkClassName:
+      (profile.meta.organizationId && WATERMARK_CLASSNAMES[profile.meta.organizationId]) ||
+      DEFAULT_WATERMARK_CLASSNAME,
+    modelIconSrc: iconSlug ? getModelIcon(iconSlug) : undefined,
+    modelTextLogoSrc: iconSlug ? getModelWordmark(iconSlug) : undefined,
+    parentIconSrc: parentSlug ? getParentWatermark(parentSlug) : undefined,
+  }
+}
 
-// Cards that are backed by a registered model (so they carry release-date
-// metadata). Keyed by slug so the homepage can surface the most recent releases.
-const registryCardBySlug = new Map<string, ModelCard>(
-  modelCards
-    .filter((card): card is ModelCard & { model: { slug: string } } => Boolean(card.model))
-    .map((card) => [card.model!.slug, card])
-)
+/** One card per registered model, in registry order. */
+export const modelCards: ModelCard[] = getAllModels().map(buildModelCard)
 
 /**
- * The most recently released models, as configured BrandCards. Drives the
- * homepage "Latest Model Evaluations" section directly from model metadata —
- * a model surfaces here automatically once it has a `releaseDate` set.
+ * The most recently released models, as cards. Drives the homepage
+ * "Latest Model Evaluations" section — a model surfaces here automatically
+ * once its profile has a `releaseDate`.
  */
 export function getLatestModelCards(limit = 3): ModelCard[] {
-  return getLatestModels(limit * 4)
-    .map((model) => registryCardBySlug.get(model.slug))
-    .filter((card): card is ModelCard => Boolean(card))
-    .slice(0, limit)
+  return getLatestModels(limit).map(buildModelCard)
 }

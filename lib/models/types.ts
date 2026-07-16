@@ -1,63 +1,79 @@
 /**
- * Core type definitions for Model Report Templating
+ * Model system types.
+ *
+ * Data shapes are inferred from the canonical Zod schemas in ./schemas.ts —
+ * nothing here redefines a persisted shape. What lives natively in this file
+ * is only what Zod has no business knowing about: view models computed at
+ * render time, the MDX loader's intermediate shapes, and component props.
  */
 
 import type { ReactNode } from 'react'
+import type { z } from 'zod'
 import type { ModelTagId } from './tags'
-import type { ModelLinkTypeId } from './link-types'
-import type { OrganizationId } from './organizations'
-import type { BrandStyle } from './branding'
+import type {
+  AnalysisItemSchema,
+  ApiPricingSchema,
+  BenchmarkScoreSchema,
+  ChatProviderSchema,
+  ChatTierSchema,
+  ContentSectionSchema,
+  DataSourceSchema,
+  DefinitionSchema,
+  EditorialSchema,
+  EditorialStatusSchema,
+  ExpandableBlockSchema,
+  GlossarySchema,
+  GovernanceSchema,
+  ModelAnalysisSchema,
+  ModelLinksSchema,
+  ModelMetaSchema,
+  ModelProfileSchema,
+  NameOrderSchema,
+  SectionVariantSchema,
+  SentimentItemSchema,
+  SentimentSchema,
+  SocialEmbedDataSchema,
+  TechSpecSchema,
+} from './schemas'
 
-export type NameOrder = 'family-version-variant' | 'family-variant-version'
+// ——— inferred from the canonical schemas ———
 
-export type ModelSlug = string
+export type Sentiment = z.infer<typeof SentimentSchema>
+export type SectionVariant = z.infer<typeof SectionVariantSchema>
+export type NameOrder = z.infer<typeof NameOrderSchema>
+export type EditorialStatus = z.infer<typeof EditorialStatusSchema>
 
-export type SectionId =
-  | 'why-it-matters'
-  | 'social-proof'
-  | 'core-features'
-  | 'economics'
-  | 'training'
-  | 'issues'
-  | 'in-the-wild'
-  | 'advanced'
-  | 'verdict'
-  | string
+export type AnalysisItem = z.infer<typeof AnalysisItemSchema>
+export type ModelAnalysis = z.infer<typeof ModelAnalysisSchema>
+export type ApiPricing = z.infer<typeof ApiPricingSchema>
+export type ChatTier = z.infer<typeof ChatTierSchema>
+export type ChatProvider = z.infer<typeof ChatProviderSchema>
+export type BenchmarkScore = z.infer<typeof BenchmarkScoreSchema>
+export type SentimentItem = z.infer<typeof SentimentItemSchema>
+export type SocialEmbedData = z.infer<typeof SocialEmbedDataSchema>
+export type ExpandableBlock = z.infer<typeof ExpandableBlockSchema>
+export type TechSpec = z.infer<typeof TechSpecSchema>
+export type ContentSection = z.infer<typeof ContentSectionSchema>
+export type Definition = z.infer<typeof DefinitionSchema>
+export type Glossary = z.infer<typeof GlossarySchema>
+export type DataSource = z.infer<typeof DataSourceSchema>
+export type Governance = z.infer<typeof GovernanceSchema>
+export type Editorial = z.infer<typeof EditorialSchema>
+export type ModelLinks = z.infer<typeof ModelLinksSchema>
+export type ModelMeta = z.infer<typeof ModelMetaSchema>
+export type ModelProfile = z.infer<typeof ModelProfileSchema>
 
-export type SectionVariant = 'default' | 'technical' | 'advanced' | 'social'
+export type ModelSlug = ModelProfile['slug']
 
-export interface AnalysisItem {
-  text: string
-  detail?: string
-  source?: string
-}
+/** Open vocabulary — every id in use is cataloged in ./section-catalog.ts */
+export type SectionId = ContentSection['id']
 
-export interface ModelAnalysis {
-  strengths: (string | AnalysisItem)[]
-  weaknesses: (string | AnalysisItem)[]
-  unknowns?: (string | AnalysisItem)[]
-}
+// ——— view models (computed at render time, never persisted) ———
 
-export interface ApiPricing {
-  input: number
-  output: number
-  cachedInput?: number
-  currency?: string
-  unit?: string
-  provider?: string
-}
-
-export interface ChatTier {
-  label: string
-  maxMsgs: number
-  price: string
-}
-
-export interface ChatProvider {
-  name: string
-  tiers: ChatTier[]
-}
-
+/**
+ * The pricing-comparison widget's data: the model's own rates as baseModel,
+ * competitors computed from registry neighbors by buildPricingData.
+ */
 export interface PricingData {
   baseModel: {
     name: string
@@ -73,164 +89,21 @@ export interface PricingData {
   }[]
 }
 
-export interface BenchmarkScore {
-  name: string
-  score: number
-  maxScore: number
-  comparison?: string
-  source?: string
-}
+// ——— MDX loader intermediates ———
 
-export type Sentiment = 'positive' | 'neutral' | 'critical'
-
-export interface SentimentItem {
-  author: string
-  handle?: string
-  content: string
-  sentiment: Sentiment
-  url?: string
-  date?: string
-  dateDisplay?: string
-}
-
-export interface SocialEmbedData {
-  type: 'tweet' | 'quote'
-  author: string
-  handle?: string
-  content: string
-  date?: string
-  dateDisplay?: string
-  url?: string
-}
-
-export interface ExpandableBlock {
+export interface MdxExpandableBlock {
+  id: string
   title: string
   preview: string
-  content: string | ReactNode
-  contentSource?: 'mdx' | 'inline'
+  content: string
 }
 
-export interface TechSpec {
-  label: string
-  value: string
-  icon?: string
-}
+export type MdxSectionMap = Record<string, {
+  content: string
+  expandables: MdxExpandableBlock[]
+}>
 
-export interface ContentSection {
-  id: SectionId
-  title?: string
-  subtitle?: ReactNode
-  variant?: SectionVariant
-  content: string | ReactNode | null
-  contentSource?: 'mdx' | 'inline'
-  specs?: TechSpec[]
-  hasBenchmarks?: boolean
-  hasPricing?: boolean
-  expandable?: ExpandableBlock
-  expandables?: ExpandableBlock[]
-  socialData?: SocialEmbedData
-}
-
-export interface Definition {
-  term: string
-  definition: string
-  furtherReading?: {
-    label: string
-    href: string
-  }[]
-}
-
-export type Glossary = Record<string, Definition>
-
-export interface DataSource {
-  type: string
-  url?: string
-  description?: string
-}
-
-export interface ConfidenceScores {
-  overall?: number
-  pricing?: number
-  benchmarks?: number
-  features?: number
-}
-
-export interface Governance {
-  lastUpdated?: string
-  dataSources?: DataSource[]
-  confidence?: ConfidenceScores
-}
-
-export type EditorialStatus = 'current' | 'flagged-for-rewrite'
-
-export interface Editorial {
-  status: EditorialStatus
-  reason?: string
-  flaggedAt?: string
-}
-
-export interface ModelLinks {
-  chat?: string
-  playground?: string
-  api?: string
-  docs?: string
-  paper?: string
-  weights?: string
-  github?: string
-  community?: string
-  [key: string]: string | undefined
-}
-
-export interface ModelMeta {
-  name: string
-  family?: string
-  variant?: string
-  modelVersion?: string
-  nameOrder?: NameOrder
-  organizationId?: OrganizationId
-  organization?: string
-  releaseDate?: string
-  releaseDateDisplay?: string
-  identity: string
-  tagIds?: ModelTagId[]
-  tags?: string[]
-  links: ModelLinks
-  subscriptionPlans?: string[]
-  apiRates?: ApiPricing
-  branding?: BrandStyle
-  pricingSources?: Array<{
-    label: string
-    href: string
-    provider?: string
-  }>
-  chatLimits?: {
-    free?: number
-    plans?: Array<{
-      name: string
-      messages: number
-      price: string
-    }>
-  }
-}
-
-export interface ModelProfile {
-  slug: ModelSlug
-  meta: ModelMeta
-  analysis: ModelAnalysis
-  intro: {
-    text: string
-  }
-  pricingData?: PricingData
-  chatLimits?: ChatProvider[]
-  benchmarks?: BenchmarkScore[]
-  sentimentFeed?: SentimentItem[]
-  sections: ContentSection[]
-  glossary?: Glossary
-  updatedAt?: string
-  author?: string
-  governance?: Governance
-  editorial?: Editorial
-}
+// ——— component props ———
 
 export interface ModelHeaderProps {
   name: string
@@ -243,18 +116,8 @@ export interface ModelHeaderProps {
   releaseDateDisplay?: string
   identity?: string
   tagIds?: ModelTagId[]
-  tags?: string[]
+  specChips?: string[]
   links?: ModelLinks
-  subscriptionPlans?: string[]
-  apiRates?: ApiPricing
-  chatLimits?: {
-    free?: number
-    plans?: Array<{
-      name: string
-      messages: number
-      price: string
-    }>
-  }
 }
 
 export interface StrengthsWeaknessesProps {
@@ -270,11 +133,7 @@ export interface BenchmarkChartProps {
 export interface PricingCalculatorProps {
   apiData: PricingData
   chatData: ChatProvider[]
-  pricingSources?: Array<{
-    label: string
-    href: string
-    provider?: string
-  }>
+  pricingSources?: ModelMeta['pricingSources']
 }
 
 export interface SentimentMarqueeProps {
@@ -297,15 +156,3 @@ export interface ContentSectionProps {
   id?: string
   specs?: TechSpec[]
 }
-
-export interface MdxExpandableBlock {
-  id: string
-  title: string
-  preview: string
-  content: string
-}
-
-export type MdxSectionMap = Record<string, {
-  content: string
-  expandables: MdxExpandableBlock[]
-}>

@@ -1,5 +1,4 @@
 import type { ModelProfile } from '@/lib/models/types'
-import { getModelPricingFromReference, mergePricingData } from '@/lib/models/utils'
 
 export const gemini3Flash: ModelProfile = {
   slug: 'gemini-3-flash',
@@ -30,7 +29,7 @@ export const gemini3Flash: ModelProfile = {
       'api',
       'efficiency',
     ],
-    tags: ['1M Context', 'Speed Optimized'],
+    specChips: ['1M Context', 'Speed Optimized'],
     links: {
       chat: 'https://gemini.google.com',
       docs: 'https://ai.google.dev/docs',
@@ -167,10 +166,6 @@ export const gemini3Flash: ModelProfile = {
       url: 'https://x.com/0xFridgee/status/2016653693924626687',
     },
   ],
-  pricingData: mergePricingData(
-    getModelPricingFromReference('gemini-3-flash'),
-    ['gpt-5-2', 'claude-opus-4-5', 'gemini-3-pro']
-  ),
   chatLimits: [
     {
       name: 'Gemini',

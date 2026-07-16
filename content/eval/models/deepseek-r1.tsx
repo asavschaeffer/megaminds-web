@@ -1,5 +1,4 @@
 import type { ModelProfile } from '@/lib/models/types'
-import { getModelPricingFromReference, mergePricingData } from '@/lib/models/utils'
 
 export const deepseekR1: ModelProfile = {
   slug: 'deepseek-r1',
@@ -25,7 +24,7 @@ export const deepseekR1: ModelProfile = {
       'long',
       'api',
     ],
-    tags: ['670B Parameters', '128K Context'],
+    specChips: ['670B Parameters', '128K Context'],
     links: {
       chat: 'https://chat.deepseek.com',
       docs: 'https://api-docs.deepseek.com',
@@ -70,10 +69,6 @@ export const deepseekR1: ModelProfile = {
     text:
       "DeepSeek-R1 landed on January 20, 2025 like a pricing nuke. While OpenAI's o1 dominated reasoning tasks at $15/million tokens, DeepSeek offered comparable performance for $0.55. That's not a typo. What makes this more remarkable: DeepSeek is a hedge fund skunkworks project that trained R1 for roughly $5-6 million — a fraction of what competitors spend. The model uses pure reinforcement learning (no supervised fine-tuning) to generate visible chain-of-thought reasoning, meaning you can actually watch it think. For developers building agents, math tutors, or code assistants, R1 became the obvious choice overnight. It's not perfect — the reasoning can get chatty, and it lacks vision — but it fundamentally reset expectations for what \"expensive\" means in AI.",
   },
-  pricingData: mergePricingData(
-    getModelPricingFromReference('deepseek-r1'),
-    ['gpt-4-o', 'claude-3-5-sonnet']
-  ),
   chatLimits: [
     {
       name: 'DeepSeek',

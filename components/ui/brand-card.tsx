@@ -52,7 +52,7 @@ export function BrandCard({
   const modelVariant = modelVariantProp ?? model?.meta.variant ?? ''
   const versionNumber = versionNumberProp ?? model?.meta.modelVersion ?? ''
   const description = descriptionProp ?? model?.meta.identity ?? 'Paragraph element'
-  const tags = tagsProp ?? model?.meta.tags ?? ['tag1', 'tag2', 'tag3']
+  const tags = tagsProp ?? model?.meta.specChips ?? []
   const nameOrder = model?.meta.nameOrder
 
   // Determine the order of variant and version based on nameOrder

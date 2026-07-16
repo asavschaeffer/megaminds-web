@@ -58,7 +58,7 @@ export const claudeFable5: ModelProfile = {
       'cloud',
       'api',
     ],
-    tags: ['Mythos Sibling', 'Frontier', 'Suspended & Restored'],
+    specChips: ['Mythos Sibling', 'Frontier', 'Suspended & Restored'],
     links: {
       ...claudeFable5Links,
     },

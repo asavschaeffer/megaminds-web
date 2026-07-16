@@ -27,7 +27,7 @@ export const ModelHeader = ({
   releaseDateDisplay,
   identity,
   tagIds = [],
-  tags = [],
+  specChips = [],
   links = {},
 }: ModelHeaderProps) => {
   const displayName = composeModelName({ name, family, variant, modelVersion, nameOrder })
@@ -38,7 +38,7 @@ export const ModelHeader = ({
   const tertiaryLinks = typedLinks.filter((link) => !link.primary && link.category !== 'build')
   const iconMatchName = organization || name
   const safeTagIds = tagIds.filter(isValidTagId)
-  const hasTags = safeTagIds.length > 0 || tags.length > 0
+  const hasTags = safeTagIds.length > 0 || specChips.length > 0
 
   return (
     <header className="space-y-6">
@@ -76,9 +76,9 @@ export const ModelHeader = ({
               </a>
             </li>
           ))}
-          {tags.map((tag) => (
-            <li key={tag}>
-              <Tag>{tag}</Tag>
+          {specChips.map((chip) => (
+            <li key={chip}>
+              <Tag>{chip}</Tag>
             </li>
           ))}
         </ul>

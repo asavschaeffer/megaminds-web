@@ -112,9 +112,7 @@ function auditCompleteness(models: ModelProfile[]): CompletenessRow[] {
   return models.map((model) => {
     const flags: string[] = []
 
-    const hasApiRates = model.meta.apiRates != null
-    const hasPricingData = model.pricingData != null
-    if (!hasApiRates && !hasPricingData) flags.push('no-pricing(apiRates+pricingData)')
+    if (model.meta.apiRates == null) flags.push('no-apiRates')
 
     if (!model.chatLimits || model.chatLimits.length === 0) flags.push('no-chatLimits')
 

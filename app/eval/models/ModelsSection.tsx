@@ -9,7 +9,8 @@ import { getTag, isValidTagId } from '@/lib/models/tags'
 type BrandCardProps = Parameters<typeof BrandCard>[0]
 type ModelCard = BrandCardProps & {
   key: string
-  tags: ModelTagId[]
+  /** Typed registry tags, for filtering. Display chips arrive in `tags`. */
+  tagIds: ModelTagId[]
 }
 
 type ModelsSectionProps = {
@@ -31,7 +32,7 @@ export default function ModelsSection({ cards, tags }: ModelsSectionProps) {
 
   const filteredCards = useMemo(() => {
     if (!activeTag) return cards
-    return cards.filter((card) => card.tags.includes(activeTag as ModelTagId))
+    return cards.filter((card) => card.tagIds.includes(activeTag as ModelTagId))
   }, [activeTag, cards])
 
   const [displayedCards, setDisplayedCards] = useState(filteredCards)
@@ -151,17 +152,11 @@ export default function ModelsSection({ cards, tags }: ModelsSectionProps) {
         <h2 id="models-list-title" className="text-xl font-semibold text-gray-900">Models</h2>
         {displayedCards.length ? (
           <ul className={`mt-6 flex flex-col gap-6 transition-opacity duration-200 ${isFading ? 'opacity-0' : 'opacity-100'}`}>
-            {displayedCards.map(({ key, tags: cardTags, ...cardProps }) => {
-              const standardTags = (cardTags ?? []).filter(isValidTagId).map((tag) => getTag(tag).label)
-              const customTags = cardProps.model?.meta?.tags ?? []
-              const allTags = [...standardTags, ...customTags]
-
-              return (
-                <li key={key}>
-                  <BrandCard tags={allTags} {...cardProps} />
-                </li>
-              )
-            })}
+            {displayedCards.map(({ key, tagIds: _tagIds, ...cardProps }) => (
+              <li key={key}>
+                <BrandCard {...cardProps} />
+              </li>
+            ))}
           </ul>
         ) : (
           <div className="mt-6 rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center text-sm text-slate-500">

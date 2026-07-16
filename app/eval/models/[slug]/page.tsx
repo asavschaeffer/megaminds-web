@@ -72,10 +72,9 @@ export default async function ModelPage({ params }: { params: { slug: string } }
   }
 
   const pricingData = buildPricingData(model, getAllModels()) ?? undefined
-  const profileWithPricing = { ...model, pricingData }
 
   // Compile MDX content strings to ReactNode
-  const compiled = await compileModelMdx(profileWithPricing)
+  const compiled = await compileModelMdx(model)
 
-  return <ModelPageTemplate profile={compiled} />
+  return <ModelPageTemplate profile={compiled} pricingData={pricingData} />
 }

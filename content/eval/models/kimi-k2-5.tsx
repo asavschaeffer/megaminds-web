@@ -2,7 +2,6 @@ import React from 'react'
 import type { ModelLinkTypeId } from '@/lib/models/link-types'
 import type { ModelProfile } from '@/lib/models/types'
 import { MODEL_LINK_TYPES } from '@/lib/models/link-types'
-import { getModelPricingFromReference, mergePricingData } from '@/lib/models/utils'
 import { AbbrSidenote } from '@/components/shared/sidenote'
 
 const kimiK25Links: Partial<Record<ModelLinkTypeId, string>> = {
@@ -52,7 +51,9 @@ export const kimiK25: ModelProfile = {
             // Output
             'output-8k',
         ],
-        tags: ['1T Parameters', '32B Active', '256K Context'],
+        specChips: ['1T Parameters', '32B Active', '256K Context'],
+        // Rates as of 2026-01-15 (cache-hit input); pricingSources TODO(research)
+        apiRates: { input: 0.15, output: 3.0, cachedInput: 0.15, provider: 'Moonshot AI' },
         links: {
             ...kimiK25Links,
         },
@@ -80,10 +81,6 @@ export const kimiK25: ModelProfile = {
     intro: {
         text: 'Kimi K2.5 represents a fundamental shift in how we think about AI capabilities. While the industry has been fixated on raw intelligence benchmarks, Moonshot AI has built something different: a model designed from the ground up for autonomous execution. With its trillion-parameter Mixture-of-Experts architecture, Kimi can spawn up to 100 parallel sub-agents to tackle complex tasks simultaneously—reducing end-to-end latency by 4.5x compared to traditional single-agent approaches. What makes this truly disruptive is the economics: at $0.15 per million tokens (cache hit), Kimi undercuts Western frontier models by an order of magnitude while delivering competitive performance on real-world agentic benchmarks like Humanity\'s Last Exam. This is not just another large language model; it is a blueprint for the next era of autonomous systems.',
     },
-    pricingData: mergePricingData(
-        getModelPricingFromReference('kimi-k2-5'),
-        ['claude-opus-4-5', 'gpt-5-2', 'gemini-3-pro']
-    ),
     chatLimits: [
         {
             name: 'Kimi K2.5 API',

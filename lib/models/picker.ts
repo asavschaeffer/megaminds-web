@@ -31,16 +31,13 @@ const analysisText = (item: string | AnalysisItem): string =>
 /**
  * Blended $/M-token price using a 3:1 input:output weighting, which better
  * reflects typical chat/agent usage (input tokens dominate) than a flat mean.
- * Prefers live `apiRates`, falls back to `pricingData.baseModel`. Returns
- * `undefined` when a profile carries no structured pricing at all.
+ * Reads the profile's own sourced `meta.apiRates`; returns `undefined` when a
+ * profile carries no structured pricing at all.
  */
 function blendedPrice(profile: ModelProfile): number | undefined {
   const rates = profile.meta.apiRates
-  const base = profile.pricingData?.baseModel
-  const input = rates?.input ?? base?.input
-  const output = rates?.output ?? base?.output
-  if (input == null || output == null) return undefined
-  return (input * 3 + output) / 4
+  if (!rates) return undefined
+  return (rates.input * 3 + rates.output) / 4
 }
 
 /**

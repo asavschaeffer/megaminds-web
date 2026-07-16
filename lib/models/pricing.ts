@@ -1,4 +1,12 @@
-import type { ApiPricing, ModelProfile, PricingData } from './types'
+/**
+ * Render-time pricing comparison, derived entirely from the registry.
+ *
+ * A profile's own sourced `meta.apiRates` is the base; competitors are the
+ * registry's nearest price neighbors (one below, one near, one above), so
+ * every number shown traces back to a profile that cites its pricing.
+ */
+
+import type { ModelProfile, PricingData } from './types'
 
 type PricingCandidate = {
   name: string
@@ -7,43 +15,23 @@ type PricingCandidate = {
   provider?: string
 }
 
-const resolveApiRates = (meta: ModelProfile['meta']): ApiPricing | null => meta.apiRates ?? null
-
 const getBaseRates = (profile: ModelProfile): PricingCandidate | null => {
-  const apiRates = resolveApiRates(profile.meta)
-  if (apiRates) {
-    return {
-      name: profile.meta.name,
-      input: apiRates.input,
-      output: apiRates.output,
-      provider: apiRates.provider,
-    }
+  const apiRates = profile.meta.apiRates
+  if (!apiRates) return null
+  return {
+    name: profile.meta.name,
+    input: apiRates.input,
+    output: apiRates.output,
+    provider: apiRates.provider,
   }
-
-  if (profile.pricingData?.baseModel) {
-    return {
-      name: profile.meta.name,
-      input: profile.pricingData.baseModel.input,
-      output: profile.pricingData.baseModel.output,
-      provider: profile.pricingData.baseModel.provider,
-    }
-  }
-
-  return null
 }
 
-const getCandidatesFromMeta = (models: ModelProfile[], baseSlug: string): PricingCandidate[] =>
+const getCandidatesFromRegistry = (models: ModelProfile[], baseSlug: string): PricingCandidate[] =>
   models
     .filter((model) => model.slug !== baseSlug)
-    .flatMap((model): PricingCandidate[] => {
-      const apiRates = resolveApiRates(model.meta)
-      if (!apiRates) return []
-      return [{
-        name: model.meta.name,
-        input: apiRates.input,
-        output: apiRates.output,
-        ...(apiRates.provider && { provider: apiRates.provider }),
-      }]
+    .flatMap((model) => {
+      const candidate = getBaseRates(model)
+      return candidate ? [candidate] : []
     })
 
 type PricingCandidateWithTotal = PricingCandidate & { total: number }
@@ -63,30 +51,15 @@ const pickPricingNeighbors = (base: PricingCandidate, candidates: PricingCandida
 
   return [below, near, above]
     .filter((candidate): candidate is PricingCandidateWithTotal => Boolean(candidate))
-    .map(({ name, input, output }) => ({ name, input, output }))
-}
-
-const mergeCompetitors = (primary: PricingCandidate[], secondary: PricingCandidate[]) => {
-  const merged = [...primary]
-  for (const candidate of secondary) {
-    if (!merged.some((item) => item.name === candidate.name)) {
-      merged.push(candidate)
-    }
-  }
-  return merged
+    .map(({ name, input, output, provider }) => ({ name, input, output, provider }))
 }
 
 export const buildPricingData = (profile: ModelProfile, models: ModelProfile[]): PricingData | null => {
   const baseModel = getBaseRates(profile)
   if (!baseModel) return null
 
-  const metaCandidates = getCandidatesFromMeta(models, profile.slug)
-  const selected = pickPricingNeighbors(baseModel, metaCandidates)
-  const fallback = profile.pricingData?.competitors ?? []
-  const competitors = mergeCompetitors(selected, fallback)
-
   return {
     baseModel,
-    competitors,
+    competitors: pickPricingNeighbors(baseModel, getCandidatesFromRegistry(models, profile.slug)),
   }
 }

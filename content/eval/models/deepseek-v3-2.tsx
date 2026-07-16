@@ -1,7 +1,6 @@
 import type { ModelLinkTypeId } from '@/lib/models/link-types'
 import type { ModelProfile } from '@/lib/models/types'
 import { MODEL_LINK_TYPES } from '@/lib/models/link-types'
-import { mergePricingData, getModelPricingFromReference } from '@/lib/models/utils'
 
 const deepseekLinks: Record<ModelLinkTypeId, string> = {
     chat: 'https://chat.deepseek.com',
@@ -37,7 +36,9 @@ export const deepseekV3_2: ModelProfile = {
             'cloud',
             'cost-efficient',
         ],
-        tags: ['671B Parameters', '128k Context'],
+        specChips: ['671B Parameters', '128k Context'],
+        // Rates as of 2025-12-01; pricingSources TODO(research)
+        apiRates: { input: 0.14, output: 0.28, provider: 'DeepSeek' },
         links: deepseekLinks,
     },
     analysis: {
@@ -58,10 +59,6 @@ export const deepseekV3_2: ModelProfile = {
     intro: {
         text: 'DeepSeek V3.2 is a landmark open\u2011source model that delivers GPT\u20115\u2011level reasoning at a fraction of the cost. Built on a sophisticated Mixture\u2011of\u2011Experts architecture, it activates only 37B of its 671B parameters per token, achieving exceptional efficiency without sacrificing performance. The model excels in mathematics, coding, and agentic tasks, backed by a dedicated community that celebrates its disruptive potential\u2014even as debates continue about its true frontier status and practical deployment hurdles.',
     },
-    pricingData: mergePricingData(
-        getModelPricingFromReference('deepseek-v3-2'),
-        ['gemini-3-flash', 'gpt-5-1', 'claude-opus-4-5']
-    ),
     benchmarks: [
         { name: 'MathArena', score: 88, maxScore: 100, comparison: 'GPT-5-mini: 87' },
         { name: 'ABC-Bench', score: 50, maxScore: 100, comparison: 'Claude 3.5 Sonnet: 63' },

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import type { ContentSection, ModelProfile } from '@/lib/models/types'
+import type { ContentSection, ModelProfile, PricingData } from '@/lib/models/types'
 import { getOrganization, getOrganizationIconId } from '@/lib/models/organizations'
 import { sortSectionsByOrder } from '@/lib/models/sections'
 import { BenchmarkChart } from './widgets/benchmark-chart'
@@ -20,6 +20,8 @@ import { AbbrSidenoteProvider } from '@/components/shared/sidenote'
 
 export interface ModelPageTemplateProps {
   profile: ModelProfile
+  /** Computed by buildPricingData from the registry; absent when the profile has no apiRates. */
+  pricingData?: PricingData
   footer?: React.ReactNode
   className?: string
 }
@@ -35,8 +37,8 @@ const resolveSectionContent = (section: ContentSection) => {
   return section.content
 }
 
-export const ModelPageTemplate = ({ profile, footer, className = '' }: ModelPageTemplateProps) => {
-  const { meta, analysis, intro, sections, pricingData, chatLimits, sentimentFeed, benchmarks } = profile
+export const ModelPageTemplate = ({ profile, pricingData, footer, className = '' }: ModelPageTemplateProps) => {
+  const { meta, analysis, intro, sections, chatLimits, sentimentFeed, benchmarks } = profile
   const orderedSections = sortSectionsByOrder(sections)
   const sectionIds = orderedSections.map((section) => section.id).filter(Boolean) as string[]
   const activeSection = useActiveSection(sectionIds)
@@ -126,7 +128,7 @@ export const ModelPageTemplate = ({ profile, footer, className = '' }: ModelPage
                 releaseDateDisplay={meta.releaseDateDisplay}
                 identity={meta.identity}
                 tagIds={meta.tagIds}
-                tags={meta.tags}
+                specChips={meta.specChips}
                 links={meta.links}
               />
             </div>

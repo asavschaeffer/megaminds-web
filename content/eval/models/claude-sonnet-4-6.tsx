@@ -49,7 +49,7 @@ export const claudeSonnet46: ModelProfile = {
       'api',
       'output-64k',
     ],
-    tags: ['200k+ Context', '64k Output', 'Extended Thinking', 'Agentic Tool Use'],
+    specChips: ['200k+ Context', '64k Output', 'Extended Thinking', 'Agentic Tool Use'],
     links: {
       ...claudeSonnet46Links,
     },

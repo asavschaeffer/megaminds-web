@@ -1,5 +1,4 @@
 import type { ModelProfile } from '@/lib/models/types'
-import { getModelPricingFromReference, mergePricingData } from '@/lib/models/utils'
 
 export const gemini3Pro: ModelProfile = {
   slug: 'gemini-3-pro',
@@ -30,7 +29,7 @@ export const gemini3Pro: ModelProfile = {
       'ultra',
       'moe',
     ],
-    tags: ['1M Context'],
+    specChips: ['1M Context'],
     links: {
       chat: 'https://gemini.google.com',
       docs: 'https://ai.google.dev/docs',
@@ -140,10 +139,6 @@ export const gemini3Pro: ModelProfile = {
       url: 'https://x.com/Ontoscape/status/2016581381405724697?referrer=grok-com',
     },
   ],
-  pricingData: mergePricingData(
-    getModelPricingFromReference('gemini-3-pro'),
-    ['gemini-3-flash', 'gpt-5-1', 'claude-opus-4-5']
-  ),
   chatLimits: [
     {
       name: 'Gemini',

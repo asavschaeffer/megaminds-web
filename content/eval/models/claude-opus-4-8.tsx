@@ -61,7 +61,7 @@ export const claudeOpus48: ModelProfile = {
       'cloud',
       'api',
     ],
-    tags: ['Frontier Reasoning', 'Extended Thinking', 'Agentic Coding', 'Vision'],
+    specChips: ['Frontier Reasoning', 'Extended Thinking', 'Agentic Coding', 'Vision'],
     links: {
       ...claudeOpus48Links,
     },

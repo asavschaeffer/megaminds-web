@@ -2,7 +2,6 @@ import type { ModelLinkTypeId } from '@/lib/models/link-types'
 import type { ModelProfile } from '@/lib/models/types'
 import { MODEL_LINK_TYPES } from '@/lib/models/link-types'
 import { AbbrSidenote } from '@/components/shared/sidenote'
-import { getModelPricingFromReference, mergePricingData } from '@/lib/models/utils'
 
 const templateLinks = (Object.keys(MODEL_LINK_TYPES) as ModelLinkTypeId[]).reduce(
   (acc, id) => {
@@ -32,10 +31,16 @@ export const templateModel: ModelProfile = {
       'api',
       'output-8k',
     ],
-    tags: ['X Parameters', 'Y Context'],
+    specChips: ['X Parameters', 'Y Context'],
     links: {
       ...templateLinks,
     },
+    // The model's own sourced rates. Competitor comparisons are computed from
+    // the registry at render time — never hand-pick rivals here.
+    apiRates: { input: 1.0, output: 3.0, provider: 'Provider Name' },
+    pricingSources: [
+      { label: 'Vendor pricing page', href: 'https://example.com/pricing', provider: 'Provider Name' },
+    ],
   },
   analysis: {
     strengths: [
@@ -56,10 +61,6 @@ export const templateModel: ModelProfile = {
     text:
       'Use this intro to set the scene: launch context, why it is notable, and what makes it different.',
   },
-  pricingData: mergePricingData(
-    { name: 'Model Name', input: 1.0, output: 3.0 },
-    ['gemini-3-pro', 'gpt-5-1', 'claude-opus-4-5']
-  ),
   chatLimits: [
     {
       name: 'Model Chat',

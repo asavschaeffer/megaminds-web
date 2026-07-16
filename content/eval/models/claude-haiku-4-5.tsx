@@ -57,7 +57,7 @@ export const claudeHaiku45: ModelProfile = {
       'cloud',
       'api',
     ],
-    tags: ['Fast', 'Cost-Efficient', 'High-Volume'],
+    specChips: ['Fast', 'Cost-Efficient', 'High-Volume'],
     links: {
       ...claudeHaiku45Links,
     },

@@ -2,7 +2,6 @@ import type { ModelLinkTypeId } from '@/lib/models/link-types'
 import type { ModelProfile } from '@/lib/models/types'
 import { MODEL_LINK_TYPES } from '@/lib/models/link-types'
 import { AbbrSidenote } from '@/components/shared/sidenote'
-import { getModelPricingFromReference, mergePricingData } from '@/lib/models/utils'
 
 const claudeSonnet45Links = (Object.keys(MODEL_LINK_TYPES) as ModelLinkTypeId[]).reduce(
   (acc, id) => {
@@ -45,7 +44,8 @@ export const claudeSonnet45: ModelProfile = {
       'function-calling',
       'structured-output',
     ],
-    tags: ['200k Context (1M Beta)', '64k Output', 'Computer Use', 'Extended Thinking'],
+    specChips: ['200k Context (1M Beta)', '64k Output', 'Computer Use', 'Extended Thinking'],
+    apiRates: { input: 3.0, output: 15.0, provider: 'Anthropic' },
     links: {
       ...claudeSonnet45Links,
     },
@@ -78,10 +78,6 @@ export const claudeSonnet45: ModelProfile = {
     text:
       'Claude Sonnet 4.5 represents the definitive shift from chatbot to agent. Released September 29, 2025, it is the first model specifically engineered for autonomous operation—not just generating code snippets, but navigating operating systems, managing terminals, and executing multi-hour workflows. With state-of-the-art performance in coding (82% on SWE-bench) and the introduction of native "Computer Use," Sonnet 4.5 established itself as the workhorse model for the agentic coding revolution, displacing GPT-4 in IDEs like Cursor and VS Code.',
   },
-  pricingData: mergePricingData(
-    { name: 'Claude Sonnet 4.5', input: 3.0, output: 15.0 },
-    ['gpt-5-2', 'gemini-2-5-pro', 'claude-opus-4-5', 'claude-haiku-4-5']
-  ),
   chatLimits: [
     {
       name: 'Claude Free',

@@ -1,6 +1,5 @@
 import type { ModelLinkTypeId } from '@/lib/models/link-types'
 import type { ModelProfile } from '@/lib/models/types'
-import { getModelPricingFromReference, mergePricingData } from '@/lib/models/utils'
 
 const qwen3MaxLinks: Partial<Record<ModelLinkTypeId, string>> = {
     chat: 'https://chat.qwen.ai/',
@@ -50,7 +49,9 @@ export const qwen3Max: ModelProfile = {
             // Output
             'output-8k',
         ],
-        tags: ['1T+ Parameters', '36T Training Tokens', '128K Context'],
+        specChips: ['1T+ Parameters', '36T Training Tokens', '128K Context'],
+        // Rates as of 2026-01-25; pricingSources TODO(research)
+        apiRates: { input: 0.861, output: 3.441, provider: 'Alibaba Cloud' },
         links: {
             ...qwen3MaxLinks,
         },
@@ -78,10 +79,6 @@ export const qwen3Max: ModelProfile = {
     intro: {
         text: 'Qwen 3 Max Thinking represents a strategic departure from the conventional paradigm of achieving capability through brute-force scaling. While its base model exceeds one trillion parameters trained on 36 trillion tokens, its distinction lies in Test-Time Scaling (TTS)—a breakthrough that shifts computational burden from pre-training to inference, enabling dynamic resource allocation for complex tasks. This transforms the model from a static entity into an adaptive problem-solver. The "thinking budget" mechanism allows controlled trade-offs between latency and accuracy, achieving perfect scores on AIME 25 and HMMT through its synergistic combination of TTS and integrated code interpretation. Enterprise validation comes from Hamilton\'s deployment for accounting automation and widespread adoption across finance, healthcare, and manufacturing. For developers, OpenAI SDK compatibility means switching requires changing two variables, while tiered pricing with batch discounts and context caching makes premium reasoning economically accessible. The result: a model that embodies a new frontier in LLM development, prioritizing adaptive intelligence over sheer static scale.',
     },
-    pricingData: mergePricingData(
-        getModelPricingFromReference('qwen-3-max'),
-        ['gpt-5-2', 'claude-opus-4-5', 'gemini-3-pro']
-    ),
     chatLimits: [
         {
             name: 'Qwen Chat (chat.qwen.ai)',
