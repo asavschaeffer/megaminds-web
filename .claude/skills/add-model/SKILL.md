@@ -63,7 +63,7 @@ Writes `research-reports/<slug>/self-interview.md` with full provenance (provide
 Copy structure from `template.tsx`. Fill **every** module or mark it honestly:
 - `meta` — name/family/variant/nameOrder, organizationId, releaseDate, identity, links (valid keys per `lib/models/link-types.ts`)
 - `tagIds` — full category coverage (validated at build). For tags that back picker signals (see `lib/models/picker-signals.ts`), meet the **evidence bar** declared there before granting the tag, and record the evidence in `analysis` or the prose. Absence of a tag means "not established", so grant positives you can prove.
-- `apiRates` / `pricingData` / `chatLimits` — with `pricingSources`
+- `apiRates` — the model's own sourced rates, with `pricingSources`; competitor comparisons are computed from the registry at render time (never hand-pick rivals). `chatLimits` for chat-plan tiers
 - `benchmarks` — each score with `source`
 - `sentimentFeed` — real quotes with URLs and dates
 - `analysis` — strengths / weaknesses / unknowns (put genuine unknowns here; the picker coverage report reads absence as unknown, and this is where you say why)
@@ -80,7 +80,7 @@ The full authoring system prompt lives at `scripts/prompts/report-writer.md` —
 ## Phase 4 — Integrate
 
 1. Register in `lib/models/registry.ts` (import + MODELS array)
-2. `lib/models/model-cards.ts` via `getModelBySlug()` + `buildModelAssets()`
+2. Cards derive automatically from the registry (`lib/models/model-cards.ts`) — no card to write. The icon resolves from `meta.family` lowercased; set `meta.iconSlug` if the family name isn't the manifest slug
 3. Icons in `public/icons/<slug>/` (mono/color/text variants; parent org too) — if unavailable, note it; cards degrade to placeholders
 4. Homepage card in `app/page.tsx` if it belongs in "Latest Model Evaluations"
 
