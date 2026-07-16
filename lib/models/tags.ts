@@ -36,6 +36,8 @@ export type ModelTagId =
   | 'worldbuilding'
   | 'frontier'
   | 'agentic-swarm'
+  | 'visible-reasoning'
+  | 'structured-output'
   | 'design'
   | 'text'
   | 'vision'
@@ -208,6 +210,18 @@ export const MODEL_TAGS: Record<ModelTagId, ModelTag> = {
     label: 'Agentic Swarm',
     category: 'capability',
     description: 'Spawns parallel sub-agents for autonomous task execution',
+  },
+  'visible-reasoning': {
+    id: 'visible-reasoning',
+    label: 'Visible Reasoning',
+    category: 'capability',
+    description: 'Exposes raw reasoning traces to the user',
+  },
+  'structured-output': {
+    id: 'structured-output',
+    label: 'Structured Output',
+    category: 'capability',
+    description: 'Reliable JSON/schema-constrained output for programmatic use',
   },
   text: {
     id: 'text',

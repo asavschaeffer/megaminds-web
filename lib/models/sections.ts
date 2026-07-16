@@ -1,5 +1,12 @@
 import type { SectionId, SectionRegistry, SectionRegistryEntry } from './types'
 
+/**
+ * Section ids every model report is expected to contain.
+ * Enforcement is WARN-by-default (see scripts/validate-models.ts) because some
+ * existing reports use bespoke section ids and are pending content fixes.
+ */
+export const REQUIRED_SECTION_IDS = ['why-it-matters', 'economics', 'issues', 'verdict'] as const
+
 export const SECTION_ORDER: Record<string, number> = {
   'test-time-scaling': 5,
   'why-it-matters': 10,

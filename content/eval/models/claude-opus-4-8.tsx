@@ -41,6 +41,7 @@ export const claudeOpus48: ModelProfile = {
       'instruction',
       'tool-use',
       'function-calling',
+      'structured-output',
       'frontier',
       'agentic-swarm',
       // modality
@@ -120,6 +121,12 @@ export const claudeOpus48: ModelProfile = {
       content: null,
     },
     {
+      id: 'economics',
+      title: 'The Economics',
+      subtitle: 'What the premium buys, and when it does not',
+      content: null,
+    },
+    {
       id: 'issues',
       title: 'Known Issues & Quirks',
       content: null,
@@ -148,6 +155,11 @@ export const claudeOpus48: ModelProfile = {
       content: null,
     },
   ],
+  editorial: {
+    status: 'flagged-for-rewrite',
+    reason: 'Pre-pipeline report: 7 uncited sections, no structured pricing/chatLimits/benchmarks, no governance.lastUpdated, no author/updatedAt',
+    flaggedAt: '2026-07-14',
+  },
   governance: {
     // lastUpdated omitted — TODO(research): set on publish
     dataSources: [

@@ -2,6 +2,12 @@
 slug: gemini-3-flash
 ---
 
+## why-it-matters
+
+Gemini 3 Flash matters because it breaks the assumed link between capability and cost. The standing rule of the model market is that you pick two of three: intelligence, speed, price. Flash's pitch is all three — SWE-bench Verified performance that edges out its own bigger sibling (78% vs. 76% for Pro), inference up to 3x faster than its predecessors, and a headline rate of $0.50 per million input tokens ([Google AI pricing](https://ai.google.dev/pricing)), roughly a quarter of Pro's.
+
+The practical consequence is a change in defaults. Most production workloads — support triage, extraction, routine coding assistance, high-volume document processing — never needed frontier-tier depth; they needed "good enough, instantly, at scale." Flash moves the good-enough line high enough that the expensive model becomes the exception you escalate to rather than the default you start from ([Gemini 3 Flash announcement](https://blog.google/products-and-platforms/products/gemini/gemini-3-flash)). And because its 1M-token context and native multimodality are inherited from the Gemini 3 architecture rather than cut down from it, choosing the cheap tier no longer means giving up the headline features. That is what disruption looks like in this market: not a smarter model — a repriced one.
+
 ## multimodality
 
 Gemini 3 Flash represents a shift from "bolted-on" vision to <GlossarySidenote term="multimodality" />. Built by Google DeepMind, the model processes text, images, video, audio, and code within a single, unified architecture. This enables it to perform complex cross-modal tasks — such as analyzing a video clip to generate a technical plan or extracting data from dense visual charts — without the latency or loss of nuance common in multi-model pipelines.

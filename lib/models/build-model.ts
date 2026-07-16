@@ -14,6 +14,16 @@ export function hydrateModelWithMdx(profile: ModelProfile): ModelProfile {
 
   const { sections: mdxSections } = mdxData
 
+  // Cross-check: every MDX section id must map to a TSX section in the profile.
+  // An orphan MDX heading would silently never render, so fail loudly instead.
+  const profileSectionIds = new Set(profile.sections.map((section) => section.id))
+  const orphanIds = Object.keys(mdxSections).filter((id) => !profileSectionIds.has(id))
+  if (orphanIds.length > 0) {
+    throw new Error(
+      `Model "${profile.slug}" has MDX section id(s) with no matching TSX section: ${orphanIds.join(', ')}`
+    )
+  }
+
   const hydratedSections: ContentSection[] = profile.sections.map((section) => {
     const mdxSection = mdxSections[section.id]
 

@@ -124,7 +124,7 @@ const ModelLinksSchema = z.object({
 
 const PricingSourceSchema = z.object({
   label: z.string(),
-  href: z.string().url(),
+  href: z.url(),
   provider: z.string().optional(),
 })
 
@@ -133,7 +133,7 @@ const GovernanceSchema = z.object({
   dataSources: z.array(
     z.object({
       type: z.string(),
-      url: z.string().url().optional(),
+      url: z.url().optional(),
       description: z.string().optional(),
     })
   ).optional(),
@@ -191,6 +191,15 @@ const PricingDataSchema = z.object({
   ).optional(),
 })
 
+const EditorialStatusEnum = z.enum(['current', 'flagged-for-rewrite'])
+export type EditorialStatus = z.infer<typeof EditorialStatusEnum>
+
+const EditorialSchema = z.object({
+  status: EditorialStatusEnum,
+  reason: z.string().optional(),
+  flaggedAt: z.string().optional(),
+})
+
 const ModelProfileSchema = z.object({
   slug: z.string(),
   meta: ModelMetaSchema,
@@ -207,6 +216,7 @@ const ModelProfileSchema = z.object({
   updatedAt: z.string().optional(),
   author: z.string().optional(),
   governance: GovernanceSchema.optional(),
+  editorial: EditorialSchema.optional(),
 })
 
 export function validateModelProfile(data: unknown) {

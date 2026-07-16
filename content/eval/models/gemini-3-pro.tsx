@@ -179,6 +179,12 @@ export const gemini3Pro: ModelProfile = {
   ],
   sections: [
     {
+      id: 'why-it-matters',
+      title: 'Why It Matters',
+      subtitle: 'The Generalist Bet at the Frontier',
+      content: null,
+    },
+    {
       id: 'multimodality',
       title: 'Native Multimodality',
       subtitle: 'Seeing, Hearing, and Speaking All at Once',
@@ -243,12 +249,23 @@ export const gemini3Pro: ModelProfile = {
       },
     },
     {
+      id: 'issues',
+      title: 'Known Issues & Quirks',
+      subtitle: 'High Ceiling, Variable Floor',
+      content: null,
+    },
+    {
       id: 'verdict',
       title: 'The Verdict',
       content: null,
     },
   ],
 
+  editorial: {
+    status: 'flagged-for-rewrite',
+    reason: 'Pre-pipeline report: 6 uncited sections, 6 benchmark entries lack per-entry sources, 2 sentiment items lack source URLs, no author/updatedAt',
+    flaggedAt: '2026-07-14',
+  },
   governance: {
     lastUpdated: '2025-12-10',
     dataSources: [

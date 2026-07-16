@@ -43,6 +43,7 @@ export const claudeSonnet45: ModelProfile = {
       'multimodal',
       'tool-use',
       'function-calling',
+      'structured-output',
     ],
     tags: ['200k Context (1M Beta)', '64k Output', 'Computer Use', 'Extended Thinking'],
     links: {
@@ -236,6 +237,11 @@ export const claudeSonnet45: ModelProfile = {
       content: null,
     },
   ],
+  editorial: {
+    status: 'flagged-for-rewrite',
+    reason: 'Pre-pipeline report: 4 uncited sections, 5 benchmark entries lack per-entry sources, no author/updatedAt',
+    flaggedAt: '2026-07-14',
+  },
   governance: {
     lastUpdated: '2026-02-05',
     dataSources: [

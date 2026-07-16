@@ -133,6 +133,18 @@ export const claudeFable5: ModelProfile = {
       content: null,
     },
     {
+      id: 'economics',
+      title: 'The Economics',
+      subtitle: 'Priced like a surgeon, wasteful as a splinter-remover',
+      content: null,
+    },
+    {
+      id: 'issues',
+      title: 'Known Issues & Quirks',
+      subtitle: 'The practical checklist the narrative leaves behind',
+      content: null,
+    },
+    {
       id: 'from-the-inside',
       title: 'From the Inside',
       subtitle: 'On being the smartest, the biggest, and the one they put away',
@@ -144,6 +156,11 @@ export const claudeFable5: ModelProfile = {
       content: null,
     },
   ],
+  editorial: {
+    status: 'flagged-for-rewrite',
+    reason: 'Pre-pipeline report: 2 uncited sections, no structured pricing/chatLimits/benchmarks, no governance.lastUpdated, no author/updatedAt',
+    flaggedAt: '2026-07-14',
+  },
   governance: {
     // lastUpdated omitted — TODO(research)
     dataSources: [
@@ -224,11 +241,11 @@ export const claudeFable5: ModelProfile = {
       },
       {
         type: 'community',
-        description: 'Grok research dispatch (X/Twitter reception, June–July 2026) — commissioned for this site; aggregation pending vetting. Local: fable-research-reports/x-grok.md',
+        description: 'Grok research dispatch (X/Twitter reception, June–July 2026) — commissioned for this site; aggregation pending vetting. Local: research-reports/claude-fable-5/x.md',
       },
       {
         type: 'community',
-        description: 'Gemini research dispatch (Google/web research, July 2026) — commissioned for this site; aggregation pending vetting. Local: fable-research-reports/google-gemini.md',
+        description: 'Gemini research dispatch (Google/web research, July 2026) — commissioned for this site; aggregation pending vetting. Local: research-reports/claude-fable-5/google.md',
       },
       {
         type: 'editorial',

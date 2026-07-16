@@ -14,6 +14,7 @@ export const deepseekR1: ModelProfile = {
       'The cheapest reasoning frontier model with transparent chain-of-thought. DeepSeek-R1 brings o1-level performance at a fraction of the cost (trained for $5-6M vs competitors\' billions), with full visibility into its thinking process. Built by a hedge fund skunkworks project using pure reinforcement learning.',
     tagIds: [
       'reasoning',
+      'visible-reasoning',
       'coding',
       'math',
       'text',
@@ -259,6 +260,11 @@ export const deepseekR1: ModelProfile = {
       content: null,
     },
   ],
+  editorial: {
+    status: 'flagged-for-rewrite',
+    reason: 'Pre-pipeline report: 7 uncited sections, 6 benchmark entries lack per-entry sources, no author/updatedAt',
+    flaggedAt: '2026-07-14',
+  },
   governance: {
     lastUpdated: '2025-01-20',
     dataSources: [

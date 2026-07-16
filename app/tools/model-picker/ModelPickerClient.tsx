@@ -1,14 +1,32 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowRight, ArrowLeft, RotateCcw, Check, FileText, Image as ImageIcon, Video, Globe, Search, Code, Calculator, PenTool, Lightbulb, BookOpen, Microscope, Bot, Zap, DollarSign, Award, ScrollText, Lock, Eye, X } from 'lucide-react'
+import {
+  ArrowRight, ArrowLeft, RotateCcw, Check, FileText, Image as ImageIcon, Video, Globe,
+  Search, Code, Calculator, PenTool, Lightbulb, BookOpen, Microscope, Bot, Zap, DollarSign,
+  Award, ScrollText, Lock, Eye, X, Ban, Coins, Gem, Braces, FileCode, Boxes,
+} from 'lucide-react'
 import { ModelIconClient } from '@/components/ui/model-icon-client'
+import type { ModelTagId } from '@/lib/models/tags'
+import type { PickerModel } from '@/lib/models/picker'
+
+// ── Question model ──────────────────────────────────────────────────────────
+// Options that map to model capabilities carry typed `tags: ModelTagId[]`.
+// Constraint questions (pay, code usage, structured output) carry no tags; their
+// selected `value` is read directly to drive the hard-constraint eliminations.
+
+type QuestionOption = {
+  label: string
+  value: string
+  icon?: React.ReactNode
+  tags?: ModelTagId[]
+}
 
 type Question = {
   id: string
   question: string
   subtitle?: string
-  options: { label: string; value: string; icon?: React.ReactNode; tags: string[] }[]
+  options: QuestionOption[]
   maxSelections?: number
 }
 
@@ -23,7 +41,7 @@ const questions: Question[] = [
       { label: 'Generate Video', value: 'video-gen', icon: <Video className="w-5 h-5" />, tags: ['video-gen', 'multimodal'] },
       { label: 'Search the Web', value: 'search', icon: <Globe className="w-5 h-5" />, tags: ['search'] },
       { label: 'Analyze Images/Docs', value: 'vision', icon: <Search className="w-5 h-5" />, tags: ['vision', 'multimodal'] },
-    ]
+    ],
   },
   {
     id: 'task',
@@ -37,7 +55,17 @@ const questions: Question[] = [
       { label: 'Fiction / Worldbuilding', value: 'worldbuilding', icon: <BookOpen className="w-5 h-5" />, tags: ['worldbuilding', 'roleplay'] },
       { label: 'Research / Analysis', value: 'analysis', icon: <Microscope className="w-5 h-5" />, tags: ['analysis', 'research'] },
       { label: 'Autonomous Tasks', value: 'agentic', icon: <Bot className="w-5 h-5" />, tags: ['tool-use', 'agentic-swarm'] },
-    ]
+    ],
+  },
+  {
+    id: 'code-usage',
+    question: 'How will you use it for code?',
+    subtitle: 'Only matters if you picked a coding task',
+    maxSelections: 1,
+    options: [
+      { label: 'Single file / script', value: 'script', icon: <FileCode className="w-5 h-5" /> },
+      { label: 'Agentic project (multi-file, tools)', value: 'agentic-code', icon: <Boxes className="w-5 h-5" /> },
+    ],
   },
   {
     id: 'priorities',
@@ -48,7 +76,28 @@ const questions: Question[] = [
       { label: 'Speed', value: 'speed', icon: <Zap className="w-5 h-5" />, tags: ['speed'] },
       { label: 'Low Cost', value: 'cost-efficient', icon: <DollarSign className="w-5 h-5" />, tags: ['cost-efficient'] },
       { label: 'Best Quality', value: 'precision', icon: <Award className="w-5 h-5" />, tags: ['precision', 'frontier'] },
-    ]
+    ],
+  },
+  {
+    id: 'pay',
+    question: 'Willing to pay?',
+    subtitle: 'How much budget do you have for this model?',
+    maxSelections: 1,
+    options: [
+      { label: 'No — free only', value: 'pay-none', icon: <Ban className="w-5 h-5" /> },
+      { label: 'A little', value: 'pay-little', icon: <Coins className="w-5 h-5" /> },
+      { label: 'A lot', value: 'pay-lot', icon: <Gem className="w-5 h-5" /> },
+    ],
+  },
+  {
+    id: 'structured',
+    question: 'Structured output?',
+    subtitle: 'Does the model need to return JSON your program consumes?',
+    maxSelections: 1,
+    options: [
+      { label: 'Yes — JSON / schema-constrained', value: 'need-structured', icon: <Braces className="w-5 h-5" /> },
+      { label: 'No', value: 'no-structured', icon: <FileText className="w-5 h-5" /> },
+    ],
   },
   {
     id: 'special',
@@ -58,194 +107,215 @@ const questions: Question[] = [
       { label: 'Massive Context (books, codebases)', value: 'ultra', icon: <ScrollText className="w-5 h-5" />, tags: ['ultra', 'long'] },
       { label: 'Must be Open Source', value: 'open-source', icon: <Lock className="w-5 h-5" />, tags: ['open-source'] },
       { label: 'Visible Reasoning (see how it thinks)', value: 'visible-reasoning', icon: <Eye className="w-5 h-5" />, tags: ['reasoning', 'visible-reasoning'] },
-    ]
+    ],
   },
 ]
 
-type ModelProfile = {
-  slug: string
-  name: string
-  tags: string[]
+// Questions the user may skip without picking anything.
+const OPTIONAL_QUESTIONS = new Set(['code-usage', 'structured', 'special'])
+
+type Answers = Record<string, string[]>
+
+// ── Aggregated selection state ──────────────────────────────────────────────
+// Everything downstream (eliminations + scoring) reads from this one struct.
+
+type Selection = {
+  tags: Set<ModelTagId>
+  pay: 'none' | 'little' | 'lot' | null
+  codeUse: 'script' | 'agentic' | null
+  needsStructured: boolean
+}
+
+function buildSelection(answers: Answers): Selection {
+  const tags = new Set<ModelTagId>()
+  for (const question of questions) {
+    for (const value of answers[question.id] ?? []) {
+      const option = question.options.find((o) => o.value === value)
+      option?.tags?.forEach((tag) => tags.add(tag))
+    }
+  }
+
+  const payValue = answers.pay?.[0]
+  const pay: Selection['pay'] =
+    payValue === 'pay-none' ? 'none' : payValue === 'pay-little' ? 'little' : payValue === 'pay-lot' ? 'lot' : null
+
+  const codeValue = answers['code-usage']?.[0]
+  const codeUse: Selection['codeUse'] =
+    codeValue === 'script' ? 'script' : codeValue === 'agentic-code' ? 'agentic' : null
+
+  return {
+    tags,
+    pay,
+    codeUse,
+    needsStructured: (answers.structured ?? []).includes('need-structured'),
+  }
+}
+
+// ── Hard-constraint eliminations (data-driven) ──────────────────────────────
+// Eliminations exist ONLY for genuine hard constraints. Reasons describe a
+// missing capability the user explicitly required — never "weak at X" inferred
+// from a tag being absent. Everything soft (task fit, priorities) is scoring.
+
+type Elimination = {
+  id: string
+  appliesWhen: (selection: Selection) => boolean
+  predicate: (model: PickerModel) => boolean
   reason: string
-  strengths: string[]
-  weaknesses?: string[]
 }
 
-type ModelPickerClientProps = {
-  modelProfiles: ModelProfile[]
+const ELIMINATIONS: Elimination[] = [
+  {
+    id: 'image-gen',
+    appliesWhen: (s) => s.tags.has('image-gen'),
+    predicate: (m) => !m.tags.includes('image-gen'),
+    reason: 'No image generation',
+  },
+  {
+    id: 'video-gen',
+    appliesWhen: (s) => s.tags.has('video-gen'),
+    predicate: (m) => !m.tags.includes('video-gen'),
+    reason: 'No video generation',
+  },
+  {
+    id: 'search',
+    appliesWhen: (s) => s.tags.has('search'),
+    predicate: (m) => !m.tags.includes('search'),
+    reason: 'No web search',
+  },
+  {
+    id: 'open-source',
+    appliesWhen: (s) => s.tags.has('open-source'),
+    predicate: (m) => !m.tags.includes('open-source') && !m.tags.includes('open-weights'),
+    reason: 'Not open source',
+  },
+  {
+    id: 'visible-reasoning',
+    appliesWhen: (s) => s.tags.has('visible-reasoning'),
+    predicate: (m) => !m.tags.includes('visible-reasoning'),
+    reason: 'No visible reasoning',
+  },
+  {
+    id: 'ultra-context',
+    appliesWhen: (s) => s.tags.has('ultra'),
+    predicate: (m) => !m.tags.includes('ultra') && !m.tags.includes('long'),
+    reason: 'Context too small',
+  },
+  {
+    id: 'structured-output',
+    appliesWhen: (s) => s.needsStructured,
+    predicate: (m) => !m.tags.includes('structured-output'),
+    reason: 'No structured output support',
+  },
+  {
+    id: 'agentic-code',
+    appliesWhen: (s) => s.codeUse === 'agentic',
+    predicate: (m) => !m.tags.includes('tool-use') && !m.tags.includes('agentic-swarm'),
+    reason: 'No agentic tool use',
+  },
+  {
+    id: 'pay-none',
+    appliesWhen: (s) => s.pay === 'none',
+    predicate: (m) => !m.hasFreeAccess,
+    reason: 'No free access path',
+  },
+  {
+    id: 'pay-little',
+    appliesWhen: (s) => s.pay === 'little',
+    predicate: (m) => m.priceBand === 'premium',
+    reason: 'Above your budget',
+  },
+]
+
+// ── Single scoring function used everywhere ─────────────────────────────────
+
+function scoreModel(model: PickerModel, selection: Selection): number {
+  let score = 0
+
+  selection.tags.forEach((tag) => {
+    if (model.tags.includes(tag)) score += 10
+  })
+
+  // Priority boosts (priorities question).
+  if (selection.tags.has('speed') && model.tags.includes('speed')) score += 5
+  if (selection.tags.has('cost-efficient') && model.tags.includes('cost-efficient')) score += 5
+  if (selection.tags.has('precision') && model.tags.includes('precision')) score += 5
+  if (selection.tags.has('frontier') && model.tags.includes('frontier')) score += 5
+
+  // Willing to pay "a lot" → nudge toward frontier/precision models.
+  if (selection.pay === 'lot') {
+    if (model.tags.includes('frontier')) score += 5
+    if (model.tags.includes('precision')) score += 5
+  }
+
+  // Single-file/script coding → favor fast, cost-efficient models.
+  if (selection.codeUse === 'script') {
+    if (model.tags.includes('speed')) score += 5
+    if (model.tags.includes('cost-efficient')) score += 5
+  }
+
+  return score
 }
 
-// Calculate which models are eliminated based on required tags
 type ModelStatus = {
-  model: ModelProfile
+  model: PickerModel
   score: number
   eliminated: boolean
   reason?: string
 }
 
-function calculateModelStatuses(
-  modelProfiles: ModelProfile[],
-  selectedTags: string[]
-): ModelStatus[] {
-  return modelProfiles.map(model => {
-    let score = 0
-    let eliminated = false
-    let reason = ''
-
-    // Check for hard requirements that eliminate models
-    
-    // Video generation requirement
-    if (selectedTags.includes('video-gen') && !model.tags.includes('video-gen')) {
-      eliminated = true
-      reason = 'No video generation'
+function calculateModelStatuses(models: PickerModel[], selection: Selection): ModelStatus[] {
+  return models.map((model) => {
+    const elimination = ELIMINATIONS.find(
+      (rule) => rule.appliesWhen(selection) && rule.predicate(model)
+    )
+    if (elimination) {
+      return { model, score: 0, eliminated: true, reason: elimination.reason }
     }
-    
-    // Image generation requirement  
-    if (!eliminated && selectedTags.includes('image-gen') && !model.tags.includes('image-gen')) {
-      eliminated = true
-      reason = 'No image generation'
-    }
-    
-    // Search requirement
-    if (!eliminated && selectedTags.includes('search') && !model.tags.includes('search')) {
-      eliminated = true
-      reason = 'No web search'
-    }
-    
-    // Open source requirement
-    if (!eliminated && selectedTags.includes('open-source') && !model.tags.includes('open-source')) {
-      eliminated = true
-      reason = 'Not open source'
-    }
-    
-    // Visible reasoning requirement (only DeepSeek R1 has this)
-    if (!eliminated && selectedTags.includes('visible-reasoning') && model.slug !== 'deepseek-r1') {
-      eliminated = true
-      reason = 'No visible reasoning'
-    }
-    
-    // Massive context requirement
-    if (!eliminated && selectedTags.includes('ultra') && !model.tags.includes('ultra') && !model.tags.includes('long')) {
-      eliminated = true
-      reason = 'Context too small'
-    }
-    
-    // TASK-SPECIFIC ELIMINATIONS - make questions actually filter models
-    
-    // Worldbuilding/Roleplay - only models specifically tuned for this
-    if (!eliminated && selectedTags.includes('worldbuilding')) {
-      if (!model.tags.includes('worldbuilding') && !model.tags.includes('roleplay')) {
-        eliminated = true
-        reason = 'Not tuned for fiction/roleplay'
-      }
-    }
-    
-    // Coding requirement - eliminate models weak at coding
-    if (!eliminated && selectedTags.includes('coding')) {
-      if (!model.tags.includes('coding')) {
-        eliminated = true
-        reason = 'Weak coding capability'
-      }
-    }
-    
-    // Writing requirement - eliminate models weak at writing
-    if (!eliminated && selectedTags.includes('writing')) {
-      if (!model.tags.includes('writing')) {
-        eliminated = true
-        reason = 'Weak writing capability'
-      }
-    }
-    
-    // Autonomous tasks - require tool-use capabilities
-    if (!eliminated && selectedTags.includes('tool-use')) {
-      if (!model.tags.includes('tool-use') && !model.tags.includes('agentic-swarm')) {
-        eliminated = true
-        reason = 'No tool/agent capabilities'
-      }
-    }
-    
-    // Math/Reasoning - eliminate models without reasoning capabilities  
-    if (!eliminated && selectedTags.includes('math')) {
-      if (!model.tags.includes('math') && !model.tags.includes('reasoning')) {
-        eliminated = true
-        reason = 'Weak math/reasoning'
-      }
-    }
-    
-    // Research/Analysis - requires analysis tag or frontier capability
-    if (!eliminated && selectedTags.includes('analysis')) {
-      if (!model.tags.includes('analysis') && !model.tags.includes('frontier')) {
-        eliminated = true
-        reason = 'Not suited for research'
-      }
-    }
-    
-    // Ideation/Creativity - require frontier models for best results
-    if (!eliminated && selectedTags.includes('ideation')) {
-      if (!model.tags.includes('frontier') && !model.tags.includes('creativity')) {
-        eliminated = true
-        reason = 'Not creative enough'
-      }
-    }
-
-    // Score calculation for non-eliminated models
-    if (!eliminated) {
-      for (const tag of selectedTags) {
-        if (model.tags.includes(tag)) {
-          score += 10
-        }
-      }
-      
-      // Priority bonuses
-      if (selectedTags.includes('speed') && model.tags.includes('speed')) score += 5
-      if (selectedTags.includes('cost-efficient') && model.tags.includes('cost-efficient')) score += 5
-      if (selectedTags.includes('precision') && model.tags.includes('frontier')) score += 5
-    }
-
-    return { model, score, eliminated, reason }
+    return { model, score: scoreModel(model, selection), eliminated: false }
   })
 }
 
-// Component to render the cage of model balls
-function ModelCage({ 
-  modelStatuses
-}: { 
-  modelStatuses: ModelStatus[]
-}) {
+function getRecommendations(statuses: ModelStatus[]): PickerModel[] {
+  return statuses
+    .filter((status) => !status.eliminated && status.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map((status) => status.model)
+}
+
+// ── Model cage (unchanged UX: gray palette, hover tooltips, fade-out) ───────
+
+function ModelCage({ modelStatuses }: { modelStatuses: ModelStatus[] }) {
   return (
     <div className="mb-8">
       <div className="mb-3">
         <h3 className="text-sm font-medium text-gray-700">Model Cage</h3>
       </div>
-      
-      {/* Cage container */}
+
       <div className="relative bg-gray-100 rounded-xl p-4 border-2 border-gray-200">
-        {/* Grid of model balls */}
         <div className="flex flex-wrap gap-3 justify-center">
           {modelStatuses.map((status) => (
             <div
               key={status.model.slug}
               className={`
                 relative group transition-all duration-500 ease-out
-                ${status.eliminated 
-                  ? 'opacity-20 scale-75 grayscale' 
+                ${status.eliminated
+                  ? 'opacity-20 scale-75 grayscale'
                   : 'opacity-100 scale-100 hover:scale-110'
                 }
               `}
             >
-              {/* Ball */}
               <div className={`
                 w-12 h-12 rounded-full flex items-center justify-center
                 transition-all duration-300
-                ${status.eliminated 
-                  ? 'bg-gray-300' 
+                ${status.eliminated
+                  ? 'bg-gray-300'
                   : 'bg-white shadow-md border-2 border-gray-200 hover:border-gray-400'
                 }
               `}>
                 <ModelIconClient name={status.model.name} size={28} />
               </div>
-              
-              {/* Tooltip on hover */}
+
               <div className={`
                 absolute bottom-full left-1/2 -translate-x-1/2 mb-2
                 px-2 py-1 bg-gray-900 text-white text-xs rounded
@@ -257,8 +327,7 @@ function ModelCage({
                   <span className="block text-gray-400">{status.reason}</span>
                 )}
               </div>
-              
-              {/* Eliminated X mark */}
+
               {status.eliminated && (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <X className="w-6 h-6 text-gray-500" />
@@ -272,119 +341,48 @@ function ModelCage({
   )
 }
 
-function scoreModel(model: ModelProfile, selectedTags: string[]): number {
-  let score = 0
-  
-  // Score based on tag matches
-  for (const tag of selectedTags) {
-    if (model.tags.includes(tag)) {
-      score += 10
-    }
-  }
-  
-  // Bonus for being a frontier model if quality is priority
-  if (selectedTags.includes('precision') && model.tags.includes('frontier')) {
-    score += 5
-  }
-  
-  // Bonus for visible reasoning specifically
-  if (selectedTags.includes('visible-reasoning') && model.slug === 'deepseek-r1') {
-    score += 20
-  }
-  
-  // Bonus for search capabilities
-  if (selectedTags.includes('search')) {
-    if (model.tags.includes('search')) score += 15
-  }
-  
-  // Bonus for video generation
-  if (selectedTags.includes('video-gen')) {
-    if (model.tags.includes('video-gen')) score += 15
-  }
-  
-  // Penalty for weaknesses
-  if (model.weaknesses) {
-    for (const weakness of model.weaknesses) {
-      if (selectedTags.some(tag => weakness.toLowerCase().includes(tag))) {
-        score -= 5
-      }
-    }
-  }
-  
-  return score
+type ModelPickerClientProps = {
+  modelProfiles: PickerModel[]
 }
 
-function getRecommendations(modelProfiles: ModelProfile[], selectedTags: string[]): ModelProfile[] {
-  const statuses = calculateModelStatuses(modelProfiles, selectedTags)
-  const scored = statuses
-    .filter((status) => !status.eliminated)
-    .map(({ model, score }) => ({
-      model,
-      score: Math.max(score, scoreModel(model, selectedTags)),
-    }))
-  
-  // Sort by score descending
-  scored.sort((a, b) => b.score - a.score)
-  
-  // Return top 3 (or fewer if scores are low)
-  return scored
-    .filter(s => s.score > 0)
-    .slice(0, 3)
-    .map(s => s.model)
-}
+const emptyAnswers = (): Answers =>
+  questions.reduce<Answers>((acc, question) => {
+    acc[question.id] = []
+    return acc
+  }, {})
 
 export default function ModelPickerClient({ modelProfiles }: ModelPickerClientProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [answers, setAnswers] = useState<Record<string, string[]>>({
-    output: [],
-    task: [],
-    priorities: [],
-    special: []
-  })
+  const [answers, setAnswers] = useState<Answers>(emptyAnswers)
   const [showResult, setShowResult] = useState(false)
 
   const currentQ = questions[currentQuestion]
 
-  // Calculate selected tags based on current answers
-  const selectedTags = (() => {
-    const tags: string[] = []
-    for (const [questionId, selectedValues] of Object.entries(answers)) {
-      const question = questions.find(q => q.id === questionId)
-      if (question) {
-        for (const value of selectedValues) {
-          const option = question.options.find(o => o.value === value)
-          if (option) {
-            tags.push(...option.tags)
-          }
-        }
-      }
-    }
-    return Array.from(new Set(tags))
-  })()
-
-  // Calculate model statuses for the cage
-  const modelStatuses = calculateModelStatuses(modelProfiles, selectedTags)
+  const selection = buildSelection(answers)
+  const modelStatuses = calculateModelStatuses(modelProfiles, selection)
 
   const handleToggle = (value: string) => {
     const currentValues = answers[currentQ.id] || []
     const isSelected = currentValues.includes(value)
-    
+
     let newValues: string[]
     if (isSelected) {
-      newValues = currentValues.filter(v => v !== value)
+      newValues = currentValues.filter((v) => v !== value)
+    } else if (currentQ.maxSelections === 1) {
+      // Radio-style: replace whatever was picked.
+      newValues = [value]
+    } else if (currentQ.maxSelections && currentValues.length >= currentQ.maxSelections) {
+      return
     } else {
-      if (currentQ.maxSelections && currentValues.length >= currentQ.maxSelections) {
-        return
-      }
       newValues = [...currentValues, value]
     }
-    
+
     setAnswers({ ...answers, [currentQ.id]: newValues })
   }
 
-  const canProceed = currentQ.id === 'special' 
-    ? true // Special requirements are optional
-    : answers[currentQ.id]?.length > 0
+  const canProceed = OPTIONAL_QUESTIONS.has(currentQ.id)
+    ? true
+    : (answers[currentQ.id]?.length ?? 0) > 0
 
   const handleNext = () => {
     if (!canProceed) return
@@ -403,12 +401,12 @@ export default function ModelPickerClient({ modelProfiles }: ModelPickerClientPr
 
   const handleReset = () => {
     setCurrentQuestion(0)
-    setAnswers({ output: [], task: [], priorities: [], special: [] })
+    setAnswers(emptyAnswers())
     setShowResult(false)
   }
 
   if (showResult) {
-    const recommendations = getRecommendations(modelProfiles, selectedTags)
+    const recommendations = getRecommendations(modelStatuses)
     const primary = recommendations[0]
     const alternatives = recommendations.slice(1)
 
@@ -425,9 +423,9 @@ export default function ModelPickerClient({ modelProfiles }: ModelPickerClientPr
                 <h2 className="text-2xl font-bold">{primary.name}</h2>
               </div>
               <p className="mt-2 text-gray-300">{primary.reason}</p>
-              
+
               <div className="mt-4 flex flex-wrap gap-2">
-                {primary.strengths.map(strength => (
+                {primary.strengths.map((strength) => (
                   <span key={strength} className="px-2 py-1 bg-gray-800 rounded text-xs text-gray-300">
                     {strength}
                   </span>
@@ -452,7 +450,7 @@ export default function ModelPickerClient({ modelProfiles }: ModelPickerClientPr
                     </div>
                     <p className="text-sm text-gray-600 mt-1">{alt.reason}</p>
                     <div className="mt-2 flex flex-wrap gap-1">
-                      {alt.strengths.slice(0, 3).map(strength => (
+                      {alt.strengths.slice(0, 3).map((strength) => (
                         <span key={strength} className="px-2 py-0.5 bg-gray-100 rounded text-xs text-gray-500">
                           {strength}
                         </span>
@@ -545,7 +543,7 @@ export default function ModelPickerClient({ modelProfiles }: ModelPickerClientPr
           ) : (
             <div />
           )}
-          
+
           <button
             onClick={handleNext}
             disabled={!canProceed}

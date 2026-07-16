@@ -28,5 +28,14 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Validate models
+        run: npm run lint:models -- --strict
+
+      - name: Check report citations
+        run: npm run lint:citations
+
+      - name: Check report freshness
+        run: npm run lint:freshness
+
       - name: Check abbreviation usage
         run: npm run lint:abbr

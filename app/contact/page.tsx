@@ -66,10 +66,10 @@ export default function ContactPage() {
             If your question isn't answered above, you can email us at:
           </p>
           <a
-            href="mailto:hello@megaminds.com"
+            href="mailto:admin@megaminds.com"
             className="mt-4 inline-block text-lg font-medium text-gray-900 hover:underline"
           >
-            hello@megaminds.com
+            admin@megaminds.com
           </a>
         </div>
       </div>

@@ -220,6 +220,11 @@ export const deepseekV3_2: ModelProfile = {
             content: null,
         },
     ],
+    editorial: {
+        status: 'flagged-for-rewrite',
+        reason: 'Pre-pipeline report: 5 uncited sections, no chatLimits, 3 benchmark entries lack per-entry sources, no author/updatedAt',
+        flaggedAt: '2026-07-14',
+    },
     governance: {
         lastUpdated: '2025-12-05',
         dataSources: [

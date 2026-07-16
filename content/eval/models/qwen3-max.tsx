@@ -31,6 +31,7 @@ export const qwen3Max: ModelProfile = {
             'reasoning',
             'coding',
             'tool-use',
+            'structured-output',
             'math',
             'frontier',
             // Modality
@@ -178,7 +179,7 @@ export const qwen3Max: ModelProfile = {
         // ═══════════════════════════════════════════════════════════════════════════
 
         {
-            id: 'the-max-moment',
+            id: 'why-it-matters',
             title: 'The Max Moment',
             subtitle: 'Why It Matters',
             content: null,
@@ -287,7 +288,7 @@ export const qwen3Max: ModelProfile = {
         // ═══════════════════════════════════════════════════════════════════════════
 
         {
-            id: 'limitations',
+            id: 'issues',
             title: 'Known Limitations',
             subtitle: 'Constraints and Risks',
             content: null,
@@ -304,6 +305,11 @@ export const qwen3Max: ModelProfile = {
             content: null,
         },
     ],
+    editorial: {
+        status: 'flagged-for-rewrite',
+        reason: 'Pre-pipeline report: 3 uncited sections, 7 benchmark entries lack per-entry sources, no author/updatedAt',
+        flaggedAt: '2026-07-14',
+    },
     governance: {
         lastUpdated: '2026-01-25',
         dataSources: [

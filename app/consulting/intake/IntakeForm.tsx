@@ -4,6 +4,10 @@ import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { ArrowRight, ArrowLeft, Send, CheckCircle } from 'lucide-react'
 
+// Paste your Formspree endpoint here (Formspree dashboard > your form > "Integration").
+// It looks like: https://formspree.io/f/abcdwxyz  — submissions email admin@megaminds.com.
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID'
+
 type FormData = {
   // Basic info
   name: string
@@ -63,6 +67,8 @@ export default function IntakeForm() {
     type: intakeType === 'personal' || intakeType === 'business' ? intakeType : '',
   })
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
@@ -76,10 +82,38 @@ export default function IntakeForm() {
     }
   }
 
-  const handleSubmit = () => {
-    // TODO: Submit to Supabase or API
-    console.log('Submitting:', formData)
-    setSubmitted(true)
+  const handleSubmit = async () => {
+    setSubmitting(true)
+    setError('')
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          currentTools: formData.currentTools.join(', ') || 'None selected',
+          _subject: `New consulting intake: ${formData.name || 'Unknown'}`,
+        }),
+      })
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => null)
+        throw new Error(body?.errors?.[0]?.message || 'Submission failed')
+      }
+
+      setSubmitted(true)
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? `Something went wrong: ${err.message}. Please try again or email admin@megaminds.com.`
+          : 'Something went wrong. Please try again or email admin@megaminds.com.'
+      )
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const handleToolToggle = (tool: string) => {
@@ -172,13 +206,18 @@ export default function IntakeForm() {
           ) : (
             <button
               onClick={handleSubmit}
-              className="inline-flex items-center gap-2 rounded-md bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors"
+              disabled={submitting}
+              className="inline-flex items-center gap-2 rounded-md bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Submit
+              {submitting ? 'Sending...' : 'Submit'}
               <Send className="w-4 h-4" />
             </button>
           )}
         </div>
+
+        {error && (
+          <p className="mt-4 text-sm text-red-600">{error}</p>
+        )}
       </div>
     </div>
   )

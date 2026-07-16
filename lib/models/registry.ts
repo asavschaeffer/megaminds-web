@@ -1,6 +1,7 @@
 import type { ModelProfile, ModelSlug } from './types'
 import type { ModelTagId } from './tags'
 import { validateTagConflicts, validateTagCoverage, validateTagIds } from './tags'
+import { validateModelProfile } from './schemas'
 import { hydrateModelWithMdx } from './build-model'
 import { deepseekR1 } from '@/content/eval/models/deepseek-r1'
 import { deepseekV3_2 } from '@/content/eval/models/deepseek-v3-2'
@@ -44,7 +45,21 @@ if (tagErrors.length > 0) {
   throw new Error(tagErrors.join('\n'))
 }
 
+// Zod schema validation: fail the build if any model's shape is invalid.
+const schemaErrors = MODELS.flatMap((model) => {
+  const result = validateModelProfile(model)
+  if (result.success) return []
+  const issues = result.error.issues
+    .map((issue) => `    ${issue.path.join('.') || '(root)'}: ${issue.message}`)
+    .join('\n')
+  return [`Model "${model.slug}" failed schema validation:\n${issues}`]
+})
+if (schemaErrors.length > 0) {
+  throw new Error(schemaErrors.join('\n\n'))
+}
+
 // Hydrate models with MDX content (after tag validation uses original data)
+// hydrateModelWithMdx also cross-checks MDX section ids against TSX sections and throws on orphans.
 const HYDRATED_MODELS: ModelProfile[] = MODELS.map(hydrateModelWithMdx)
 
 const MODEL_BY_SLUG = new Map<ModelSlug, ModelProfile>(HYDRATED_MODELS.map((model) => [model.slug, model]))

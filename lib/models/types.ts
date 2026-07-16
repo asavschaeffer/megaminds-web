@@ -161,6 +161,14 @@ export interface Governance {
   confidence?: ConfidenceScores
 }
 
+export type EditorialStatus = 'current' | 'flagged-for-rewrite'
+
+export interface Editorial {
+  status: EditorialStatus
+  reason?: string
+  flaggedAt?: string
+}
+
 export interface ModelLinks {
   chat?: string
   playground?: string
@@ -221,6 +229,7 @@ export interface ModelProfile {
   updatedAt?: string
   author?: string
   governance?: Governance
+  editorial?: Editorial
 }
 
 export interface ModelHeaderProps {

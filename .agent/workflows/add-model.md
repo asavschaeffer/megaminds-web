@@ -4,6 +4,12 @@ description: How to add a new AI model evaluation to the Megaminds platform
 
 # Model Integration Workflow
 
+> **Superseded:** the canonical, end-to-end methodology now lives in
+> `.claude/skills/add-model/SKILL.md` (invoke as `/add-model`). It covers the
+> editorial constitution, research-brief generation, the subject self-interview,
+> the section catalog, and the picker signal contract. The steps below remain
+> as a quick mechanical reference; where they disagree, the skill wins.
+
 This workflow documents how to add a new AI model evaluation to the Megaminds platform.
 
 ## Prerequisites

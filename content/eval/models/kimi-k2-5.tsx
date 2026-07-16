@@ -393,6 +393,11 @@ export const kimiK25: ModelProfile = {
             content: null,
         },
     ],
+    editorial: {
+        status: 'flagged-for-rewrite',
+        reason: 'Pre-pipeline report: 4 uncited sections, 7 benchmark entries lack per-entry sources, no author/updatedAt',
+        flaggedAt: '2026-07-14',
+    },
     governance: {
         lastUpdated: '2026-01-27',
         dataSources: [

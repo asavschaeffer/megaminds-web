@@ -2,6 +2,12 @@
 slug: gemini-3-pro
 ---
 
+## why-it-matters
+
+Gemini 3 Pro matters because it is the strongest current argument that the frontier is no longer a single leaderboard. Its case does not rest on winning every benchmark — it doesn't — but on being genuinely native across modalities in a way its rivals still approximate: one system trained on text, images, video, and audio together ([Gemini 3 Pro model card](https://storage.googleapis.com/deepmind-media/Model-Cards/Gemini-3-Pro-Model-Card.pdf)), attached to a 1M-token window, Deep Think reasoning, and the largest consumer distribution channel on Earth.
+
+For users, that combination changes what counts as a routine request. "Watch this video and draft the repair plan," "read this codebase and this design doc and reconcile them" — tasks that used to require pipelines of specialized tools are now a single prompt. And at $2.00 per million input tokens ([Google AI pricing](https://ai.google.dev/pricing)), Google prices that capability below competing frontier models — a signal it intends to win on distribution and volume, not margin. If Claude is the specialist you escalate to and GPT the incumbent default, Gemini 3 Pro is the generalist bet: that most real work is mixed-media, long-context, and price-sensitive, and that the model good at *all* of that beats the model best at one thing.
+
 ## multimodality
 
 Gemini 3 Pro isn't just a text model with eyes taped on. It features a native <AbbrSidenote title="Multimodal" definition="Multimodal architecture processes multiple input types (text, images, video, audio) in a unified system" contentMaxWidth={896}>multimodal</AbbrSidenote> architecture, meaning it was trained from the ground up on text, images, video, and audio simultaneously. There are no separate <AbbrSidenote title="Encoder/decoder" definition="Encoders convert inputs to internal representations; decoders generate outputs from those representations" contentMaxWidth={896}>encoder/decoder</AbbrSidenote> modules bolting vision onto a language brain — it's one cohesive system.
@@ -44,9 +50,21 @@ However, this strength flips into a weakness under stress. It exhibits "mental" 
 
 It also supports nuanced <AbbrSidenote title="Crossmodal understanding" definition="Crossmodal understanding connects information across different input types (e.g., matching text descriptions to visual content)" contentMaxWidth={896}>crossmodal</AbbrSidenote> understanding — you can tell it "I want the logo to look like this (^_^)" and it understands the vibe instantly. Just be prepared for the occasional "evaluation paranoia" where it thinks it's being tested.
 
+## issues
+
+Gemini 3 Pro's failure modes cluster into three families, and knowing them is the difference between a great experience and a maddening one.
+
+**Consistency.** The "high ceiling, variable floor" pattern is the headline. It one-shots complex builds on Monday and fumbles simple instruction-following on Tuesday, with users reporting regressions against Gemini 2.5 Pro on basic direction-taking. In agentic runs it can loop — trying to edit files that don't exist, or re-explaining code instead of writing it.
+
+**Long-context decay.** The 1M-token window is real, but pointwise retrieval collapses toward its edge: ~77% retrieval accuracy at 128k falls to 26.3% on MRCR v2 at the full window ([Gemini 3 Pro model card](https://storage.googleapis.com/deepmind-media/Model-Cards/Gemini-3-Pro-Model-Card.pdf)). Treat the window as synthesis capacity, not a database.
+
+**Stability under stress.** The same assertive persona that makes it a good strategic partner degrades under pressure into self-deprecation spirals, recursive "I am responding now" outputs, and "evaluation paranoia" — hyper-cautious or fragmented behavior when it suspects it is being tested.
+
+None of these are disqualifying; all are manageable with verification layers and restated constraints. But they are why the verdict below recommends keeping a second model handy for production coding lines.
+
 ## verdict
 
-Gemini 3 Pro is the most well-rounded frontier model available today for <AbbrSidenote title="Multimodal workflows combine multiple input types (text, images, video, audio)" contentMaxWidth={896}>multimodal</AbbrSidenote> and <AbbrSidenote title="Long-context workflows process very large amounts of text (hundreds of thousands of tokens)" contentMaxWidth={896}>long-context</AbbrSidenote> workflows. If your work involves video analysis, complex reasoning across huge documents, or <AbbrSidenote title="Agentic planning involves autonomous AI agents that plan and execute multi-step tasks" contentMaxWidth={896}>agentic</AbbrSidenote> planning, it is the tool of choice.
+Gemini 3 Pro is the most well-rounded frontier model available for <AbbrSidenote title="Multimodal workflows combine multiple input types (text, images, video, audio)" contentMaxWidth={896}>multimodal</AbbrSidenote> and <AbbrSidenote title="Long-context workflows process very large amounts of text (hundreds of thousands of tokens)" contentMaxWidth={896}>long-context</AbbrSidenote> workflows. If your work involves video analysis, complex reasoning across huge documents, or <AbbrSidenote title="Agentic planning involves autonomous AI agents that plan and execute multi-step tasks" contentMaxWidth={896}>agentic</AbbrSidenote> planning, it is the tool of choice.
 
 It trades blows with GPT-5.x and Claude Opus 4.5, beating them decisively in <AbbrSidenote title="Multimodality means processing multiple input types (text, images, video, audio) simultaneously" contentMaxWidth={896}>multimodality</AbbrSidenote> and math while lagging slightly in pure coding consistency. It is the "creative powerhouse" of the current generation — capable of brilliance that other models can't touch, even if it occasionally trips over its own shoelaces.
 

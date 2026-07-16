@@ -206,6 +206,12 @@ export const gemini3Flash: ModelProfile = {
   ],
   sections: [
     {
+      id: 'why-it-matters',
+      title: 'Why It Matters',
+      subtitle: 'Capability Repriced, Defaults Rewritten',
+      content: null,
+    },
+    {
       id: 'multimodality',
       title: 'Native Multimodality',
       subtitle: 'Integrated Sensing and Reasoning',
@@ -276,6 +282,11 @@ export const gemini3Flash: ModelProfile = {
     },
   ],
 
+  editorial: {
+    status: 'flagged-for-rewrite',
+    reason: 'Pre-pipeline report: 0 uncited sections but 6 benchmark entries lack per-entry sources, no author/updatedAt',
+    flaggedAt: '2026-07-14',
+  },
   governance: {
     lastUpdated: '2025-12-18',
     dataSources: [

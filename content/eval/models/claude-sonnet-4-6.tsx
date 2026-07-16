@@ -38,6 +38,7 @@ export const claudeSonnet46: ModelProfile = {
       'coding',
       'tool-use',
       'function-calling',
+      'structured-output',
       'text',
       'vision',
       'multimodal',
@@ -161,6 +162,11 @@ export const claudeSonnet46: ModelProfile = {
       content: null,
     },
   ],
+  editorial: {
+    status: 'flagged-for-rewrite',
+    reason: 'Pre-pipeline report: 4 uncited sections, no structured pricing/chatLimits/benchmarks, no governance.lastUpdated, no author/updatedAt',
+    flaggedAt: '2026-07-14',
+  },
   governance: {
     // TODO(research): confirm lastUpdated and add real source URLs once published
     dataSources: [

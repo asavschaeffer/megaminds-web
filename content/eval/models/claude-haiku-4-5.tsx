@@ -40,6 +40,7 @@ export const claudeHaiku45: ModelProfile = {
       'instruction',
       'tool-use',
       'function-calling',
+      'structured-output',
       // modality
       'text',
       // licensing
@@ -150,6 +151,11 @@ export const claudeHaiku45: ModelProfile = {
       content: null,
     },
   ],
+  editorial: {
+    status: 'flagged-for-rewrite',
+    reason: 'Pre-pipeline report: 1 uncited section (issues), no structured pricing/chatLimits/benchmarks, no governance.lastUpdated, no author/updatedAt',
+    flaggedAt: '2026-07-14',
+  },
   governance: {
     // lastUpdated omitted — TODO(research): set on publish
     dataSources: [
