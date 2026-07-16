@@ -1,0 +1,6 @@
+<svg viewBox="0 0 24 24" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="12" cy="12" r="12" fill="#000" />
+  <g fill="#fff" transform="translate(12 12) scale(0.6) translate(-12 -12)">
+<title>Vercel</title><path d="M12 0l12 20.785H0L12 0z"></path>
+  </g>
+</svg>

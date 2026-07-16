@@ -26,7 +26,9 @@ yarn-error.log*
 .vscode/
 *.swp
 *.swo
-.claude/
+
+# Claude Code: local settings stay untracked; skills are part of the repo
+.claude/settings.local.json
 
 # OS
 .DS_Store
@@ -34,10 +36,6 @@ Thumbs.db
 
 # Vercel
 .vercel
-
-# Icons (using Lucide instead - but keep PWA/favicon icons)
-# public/icons/ is used for PWA icons, specific Lucide icons should be ignored if needed
-public/icons/
 
 # TypeScript
 *.tsbuildinfo
