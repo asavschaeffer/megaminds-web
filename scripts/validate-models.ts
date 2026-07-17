@@ -13,7 +13,9 @@
  *   1. Novel sections not in SECTION_CATALOG.
  *   2. Picker-signal coverage (which models have each declared signal).
  *   3. Module-completeness audit (missing pricing / benchmarks / metadata).
- *   4. Malformed MDX `## ` headings the section parser silently drops.
+ *   4. Rewrite queue (editorial.status === 'flagged-for-rewrite').
+ *   5. Analysis-item length (essay creep in the strengths/weaknesses table).
+ *   6. Malformed MDX `## ` headings the section parser silently drops.
  *
  * Flags:
  *   --strict   exit 1 when a required section is missing (CI uses this).
@@ -29,7 +31,7 @@ import { REQUIRED_SECTION_IDS } from '../lib/models/sections'
 import { getNovelSectionIds } from '../lib/models/section-catalog'
 import { PICKER_SIGNALS, tagSignalStatus, type PickerSignal } from '../lib/models/picker-signals'
 import { buildPickerModel } from '../lib/models/picker'
-import type { ModelProfile } from '../lib/models/types'
+import type { AnalysisItem, ModelProfile } from '../lib/models/types'
 
 const strict = process.argv.includes('--strict')
 const jsonMode = process.argv.includes('--json')
@@ -154,7 +156,43 @@ function auditRewriteQueue(models: ModelProfile[]): RewriteQueueRow[] {
     }))
 }
 
-// ——— 6. malformed MDX headings (warn-only) ———
+// ——— 6. analysis item length (warn-only) ———
+
+/**
+ * The strengths/weaknesses/unknowns table renders as a scannable checklist
+ * (components/eval/model-page/widgets/strengths-weaknesses.tsx shows only
+ * item text, one ✓/✗/? line each). Items longer than this read as essays and
+ * defeat the widget; the argument belongs in the report sections, with the
+ * table as its index.
+ */
+const ANALYSIS_ITEM_WORD_CAP = 15
+
+interface AnalysisLengthRow {
+  slug: string
+  over: { list: string; words: number; excerpt: string }[]
+}
+
+function auditAnalysisLength(models: ModelProfile[]): AnalysisLengthRow[] {
+  const itemText = (item: string | AnalysisItem) => (typeof item === 'string' ? item : item.text)
+  const lists = ['strengths', 'weaknesses', 'unknowns'] as const
+  return models
+    .map((model) => {
+      const over: AnalysisLengthRow['over'] = []
+      for (const list of lists) {
+        for (const item of model.analysis?.[list] ?? []) {
+          const text = itemText(item)
+          const words = text.split(/\s+/).filter(Boolean).length
+          if (words > ANALYSIS_ITEM_WORD_CAP) {
+            over.push({ list, words, excerpt: text.length > 60 ? `${text.slice(0, 60)}…` : text })
+          }
+        }
+      }
+      return { slug: model.slug, over }
+    })
+    .filter((row) => row.over.length > 0)
+}
+
+// ——— 7. malformed MDX headings (warn-only) ———
 
 const HEADING_ID_RE = /^[a-z0-9-]+$/
 
@@ -307,6 +345,23 @@ function printRewriteQueue(rows: RewriteQueueRow[]): void {
   console.log(`\n${rows.length} model(s) flagged for rewrite.\n`)
 }
 
+function printAnalysisLength(rows: AnalysisLengthRow[]): void {
+  console.log(`== Analysis items over ${ANALYSIS_ITEM_WORD_CAP} words (essay creep in the pros/cons table) ==`)
+  if (rows.length === 0) {
+    console.log('None — every strengths/weaknesses/unknowns item is scannable.\n')
+    return
+  }
+  for (const row of rows) {
+    console.log(`${row.slug}: ${row.over.length} item(s) over cap`)
+    for (const item of row.over) {
+      console.log(`  ${item.list} (${item.words}w): ${item.excerpt}`)
+    }
+  }
+  console.log(
+    '\nFix: cut each item to one scannable claim; move the argument into a report section (detail/source fields exist for structured overflow).\n'
+  )
+}
+
 function printMalformedHeadings(rows: MalformedHeading[]): void {
   console.log('== Malformed MDX headings (dropped by parseSections) ==')
   if (rows.length === 0) {
@@ -331,6 +386,7 @@ function main() {
   const coverage = auditPickerCoverage(models)
   const completeness = auditCompleteness(models)
   const rewriteQueue = auditRewriteQueue(models)
+  const analysisLength = auditAnalysisLength(models)
   const malformed = auditMalformedHeadings()
 
   const incomplete = required.filter((r) => r.missing.length > 0)
@@ -355,6 +411,7 @@ function main() {
       },
       moduleCompleteness: completeness,
       rewriteQueue,
+      analysisItemLength: { wordCap: ANALYSIS_ITEM_WORD_CAP, rows: analysisLength },
       malformedHeadings: malformed,
     }
     console.log(JSON.stringify(output, null, 2))
@@ -383,6 +440,7 @@ function main() {
   printPickerCoverage(models, coverage)
   printCompleteness(completeness)
   printRewriteQueue(rewriteQueue)
+  printAnalysisLength(analysisLength)
   printMalformedHeadings(malformed)
 
   if (requiredFailed) {

@@ -42,6 +42,8 @@ export const templateModel: ModelProfile = {
       { label: 'Vendor pricing page', href: 'https://example.com/pricing', provider: 'Provider Name' },
     ],
   },
+  // Each item: one scannable claim, ≤15 words (lint:models flags overruns).
+  // The widget renders single checklist lines; argue the claim in a section.
   analysis: {
     strengths: [
       'Primary strength (e.g., exceptional reasoning quality)',

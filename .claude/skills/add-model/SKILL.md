@@ -90,7 +90,7 @@ Copy structure from `template.tsx`. Fill **every** module or mark it honestly:
 - `apiRates` — the model's own sourced rates, with `pricingSources`; competitor comparisons are computed from the registry at render time (never hand-pick rivals). `chatLimits` for chat-plan tiers
 - `benchmarks` — each score with `source`
 - `sentimentFeed` — real quotes with URLs and dates
-- `analysis` — strengths / weaknesses / unknowns (put genuine unknowns here; the picker coverage report reads absence as unknown, and this is where you say why)
+- `analysis` — strengths / weaknesses / unknowns (put genuine unknowns here; the picker coverage report reads absence as unknown, and this is where you say why). **Each item is one scannable claim, ≤15 words** — the widget renders them as single ✓/✗/? checklist lines, and `lint:models` flags overruns. The argument, numbers, and citations for a claim live in the report sections; the table is the index, not the essay. Structured overflow goes in the `detail`/`source` fields (`AnalysisItemSchema`), not in longer text
 - `sections` — required four (`why-it-matters`, `economics`, `issues`, `verdict`) plus whatever the model deserves
 
 **Inventing sections is encouraged.** Check `lib/models/section-catalog.ts` first — reuse an existing id if the idea recurs (e.g. `from-the-inside`, `geopolitics`, `deployment`). If you coin a new id, **add it to the catalog in the same change** with a one-line description and `origin: '<slug>'`. `lint:models` warns on uncataloged ids.
