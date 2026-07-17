@@ -1,7 +1,16 @@
 import { CheckCircle2, HelpCircle, XCircle } from 'lucide-react'
 import type { AnalysisItem, StrengthsWeaknessesProps } from '@/lib/models/types'
 
-const renderItem = (item: string | AnalysisItem) => (typeof item === 'string' ? item : item.text)
+const itemText = (item: string | AnalysisItem) => (typeof item === 'string' ? item : item.text)
+
+// HACK (2026-07-16): the analysis table is a scannable index — one claim per
+// line — but authors overflow it into 20-37 word essays (see lint:models
+// "essay creep" audit and the ≤15-word rule in the add-model skill). Until the
+// schema redesign gives overflow a real home, `line-clamp` caps every item at
+// two lines so a non-compliant item can never turn the table into a wall of
+// prose; the full text stays reachable via the native title tooltip. A
+// compliant ≤15-word claim never truncates.
+const clampText = 'line-clamp-2'
 
 export const StrengthsWeaknesses = ({
   strengths = [],
@@ -21,7 +30,9 @@ export const StrengthsWeaknesses = ({
               <span className="text-green-500 dark:text-green-400 mt-0.5 shrink-0" aria-hidden="true">
                 ✓
               </span>
-              <span>{renderItem(strength)}</span>
+              <span className={clampText} title={itemText(strength)}>
+                {itemText(strength)}
+              </span>
             </dd>
           ))}
         </dl>
@@ -38,7 +49,9 @@ export const StrengthsWeaknesses = ({
               <span className="text-red-500 dark:text-red-400 mt-0.5 shrink-0" aria-hidden="true">
                 ✗
               </span>
-              <span>{renderItem(weakness)}</span>
+              <span className={clampText} title={itemText(weakness)}>
+                {itemText(weakness)}
+              </span>
             </dd>
           ))}
         </dl>
@@ -52,11 +65,16 @@ export const StrengthsWeaknesses = ({
           </dt>
           <div className="flex flex-wrap gap-3">
             {unknowns.map((unknown, idx) => (
-              <dd key={idx} className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300">
-                <span className="text-amber-500 dark:text-amber-400 shrink-0" aria-hidden="true">
+              <dd
+                key={idx}
+                className="flex max-w-md items-start gap-2 text-sm text-neutral-700 dark:text-neutral-300"
+              >
+                <span className="text-amber-500 dark:text-amber-400 mt-0.5 shrink-0" aria-hidden="true">
                   ?
                 </span>
-                <span>{renderItem(unknown)}</span>
+                <span className={clampText} title={itemText(unknown)}>
+                  {itemText(unknown)}
+                </span>
               </dd>
             ))}
           </div>
