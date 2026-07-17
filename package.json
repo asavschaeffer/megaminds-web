@@ -14,8 +14,10 @@
     "lint:freshness": "node scripts/check-model-freshness.js",
     "research:brief": "tsx --tsconfig scripts/tsconfig.json scripts/generate-research-brief.ts",
     "research:interview": "node scripts/interview-model.mjs",
+    "research:probe": "node scripts/interview-model.mjs",
     "research:deep": "node scripts/deep-research.mjs",
-    "research:scratchpad": "node scripts/new-scratchpad.mjs"
+    "research:scratchpad": "node scripts/new-scratchpad.mjs",
+    "research:all": "node scripts/research-pipeline.mjs"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.0.0",

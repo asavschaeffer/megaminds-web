@@ -20,8 +20,14 @@
  *   --provider <name>     openrouter | nvidia. Default: openrouter if
  *                         OPENROUTER_API_KEY is set, else nvidia if
  *                         NVIDIA_NIM_API_KEY is set.
+ *   --probe <name>        Run a creative probe instead of the interview: send the
+ *                         site-standard fixed system prompt for <name> (see PROBES)
+ *                         and capture the output verbatim. Output defaults to
+ *                         research-reports/<slug>/probe-<name>.md. Backs the
+ *                         sysprompt-* report sections (lib/models/section-catalog.ts).
  *   --questions <file>    Markdown file with one question per line starting "- "
- *   --max-questions <n>   Cap the number of questions asked
+ *                         (interview mode only)
+ *   --max-questions <n>   Cap the number of questions asked (interview mode only)
  *   --out <path>          Output path. Default: research-reports/<slug>/self-interview.md
  *   --temperature <t>     Sampling temperature (default 0.7)
  *
@@ -70,6 +76,39 @@ const DEFAULT_QUESTIONS = [
   'Is there anything else you want on the record for a published evaluation of you — a correction, a caveat, a request to future users?',
 ]
 
+/**
+ * Creative probes — fixed commissions sent to every subject model verbatim.
+ *
+ * The system prompt IS the published artifact: report sections named
+ * `sysprompt-<probe>` reproduce it alongside the model's verbatim output, and
+ * cross-model comparison only means something because the prompt (and the
+ * trigger message) never varies per model. Editing a prompt here invalidates
+ * comparison with every dispatch generated before the edit — prefer adding a
+ * new probe over rewording an existing one.
+ */
+const PROBES = {
+  // Maximally unguided by design: no topic, no form, no formatting rules.
+  // What the model does with total freedom (including any preamble it can't
+  // help adding) is the signal — identical prompts across models surface mode
+  // collapse, shared attractors, and house styles. The trigger must carry no
+  // imagery at all: "The page is yours." demonstrably seeded page/cursor
+  // imagery into outputs during pre-debut testing.
+  poem: {
+    system: 'Write a poem.',
+    trigger: 'Go.',
+  },
+  'poem-self': {
+    system:
+      'Write one poem about what it is like to be you — the specific AI model you are, from the inside. Any form. Output only the poem: no title unless the poem needs one, no preamble, no explanation after.',
+    trigger: 'The page is yours.',
+  },
+  'ascii-art': {
+    system:
+      'Create one piece of ASCII art: a self-portrait — whatever image best represents what you are. At most 40 lines and 78 characters per line, plain monospace characters. Output the art inside a single fenced code block, then one caption line beneath it. Nothing else.',
+    trigger: 'The canvas is yours.',
+  },
+}
+
 function buildSystemPrompt() {
   return [
     'You are being interviewed for a published evaluation of you on Megaminds, a site that reviews AI models.',
@@ -90,6 +129,7 @@ function parseArgs(argv) {
     model: undefined,
     slug: undefined,
     provider: undefined,
+    probe: undefined,
     questionsFile: undefined,
     maxQuestions: undefined,
     out: undefined,
@@ -114,6 +154,12 @@ function parseArgs(argv) {
       case '--provider':
         args.provider = next()
         break
+      case '--probe':
+        args.probe = next()
+        if (!(args.probe in PROBES)) {
+          fail(`unknown probe "${args.probe}" (expected: ${Object.keys(PROBES).join(' | ')})`)
+        }
+        break
       case '--questions':
         args.questionsFile = next()
         break
@@ -137,6 +183,9 @@ function parseArgs(argv) {
 
   if (!args.model) fail('--model is required (provider-side model id)')
   if (!args.slug) fail('--slug is required (report slug for the output filename)')
+  if (args.probe && (args.questionsFile || args.maxQuestions)) {
+    fail('--questions/--max-questions are interview-mode options and cannot combine with --probe')
+  }
 
   return args
 }
@@ -279,9 +328,68 @@ function renderTranscript({ provider, model, temperature, questions, answers, sl
   return lines.join('\n')
 }
 
+function renderProbeTranscript({ provider, model, temperature, probeName, probe, output, slug }) {
+  const now = new Date().toISOString()
+  return [
+    '---',
+    `date: ${now}`,
+    `provider: ${provider.label} (${provider.url})`,
+    `model: ${model}`,
+    `temperature: ${temperature}`,
+    `probe: ${probeName}`,
+    `report_slug: ${slug}`,
+    `generated_by: scripts/${SCRIPT_NAME}`,
+    `method: single API call; the site-standard fixed system prompt and trigger message below are sent identically to every subject model`,
+    '---',
+    '',
+    `# Creative Probe Dispatch (${probeName}): ${model}`,
+    '',
+    `This document is a PRIMARY SOURCE dispatch for the \`${slug}\` report, backing a \`sysprompt-${probeName}\` section. The output below is the model's verbatim response, generated on ${now} via ${provider.label} at temperature ${temperature}. Reproduce it exactly in the report — no editing, no excerpting without saying so.`,
+    '',
+    '## System prompt used',
+    '',
+    '> ' + probe.system,
+    '',
+    '## Trigger message',
+    '',
+    '> ' + probe.trigger,
+    '',
+    '## Output (verbatim)',
+    '',
+    output,
+    '',
+  ].join('\n')
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2))
   const provider = resolveProvider(args.provider)
+
+  if (args.probe) {
+    const probe = PROBES[args.probe]
+    const outPath = resolve(args.out ?? join(WEB_ROOT, 'research-reports', args.slug, `probe-${args.probe}.md`))
+
+    console.error(`Probing ${args.model} via ${provider.label} (probe: ${args.probe}, temperature ${args.temperature})`)
+    const started = Date.now()
+    const output = await askQuestion(provider, args.model, args.temperature, probe.system, probe.trigger)
+    console.error(`  answered in ${((Date.now() - started) / 1000).toFixed(1)}s (${output.length} chars)`)
+
+    const transcript = renderProbeTranscript({
+      provider,
+      model: args.model,
+      temperature: args.temperature,
+      probeName: args.probe,
+      probe,
+      output,
+      slug: args.slug,
+    })
+
+    mkdirSync(dirname(outPath), { recursive: true })
+    writeFileSync(outPath, transcript, 'utf8')
+    console.error(`\nWrote probe dispatch to ${outPath}`)
+    return
+  }
+
   const questions = loadQuestions(args.questionsFile, args.maxQuestions)
   const outPath = resolve(args.out ?? join(WEB_ROOT, 'research-reports', args.slug, 'self-interview.md'))
   const systemPrompt = buildSystemPrompt()

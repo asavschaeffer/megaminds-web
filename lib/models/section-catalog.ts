@@ -302,6 +302,27 @@ export const SECTION_CATALOG: Record<string, SectionCatalogEntry> = {
     origin: 'claude-sonnet-4-5',
     description: 'Screen/cursor/terminal control capability',
   },
+  'sysprompt-poem': {
+    id: 'sysprompt-poem',
+    status: 'bespoke',
+    origin: 'glm-5-2',
+    description:
+      'Creative probe: the maximally unguided poem commission ("Write a poem." — no topic, no form), identical for every model; output shown verbatim with provenance. The unguidedness is the instrument — it surfaces mode collapse and house style. Source from the probe dispatch (research:probe)',
+  },
+  'sysprompt-poem-self': {
+    id: 'sysprompt-poem-self',
+    status: 'bespoke',
+    origin: 'glm-5-2',
+    description:
+      'Creative probe: the introspective poem commission (what it is like to be you, from the inside), fixed system prompt identical for every model; output shown verbatim with provenance. Source from the probe dispatch (research:probe)',
+  },
+  'sysprompt-ascii-art': {
+    id: 'sysprompt-ascii-art',
+    status: 'bespoke',
+    origin: 'glm-5-2',
+    description:
+      'Creative probe: the subject model answers the site-standard ASCII self-portrait commission (fixed system prompt, identical for every model); output shown verbatim in a code block with provenance. Source it from the probe dispatch (research:probe)',
+  },
 }
 
 export function isCatalogedSectionId(id: string): boolean {

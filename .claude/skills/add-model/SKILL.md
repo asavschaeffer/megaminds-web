@@ -18,7 +18,16 @@ You are about to write for a site whose differentiator is that **models write th
 
 ## Phase 0 — Commission research
 
-Generate the complete, paste-ready deployment prompt for each research run:
+**One command runs the whole research phase** (Phases 0–1: scratchpad scaffold, both deep-research dispatches, self-interview, all creative probes — idempotent, key-aware, resumable):
+
+```
+npm run research:all -- --slug <slug> --model "<Name>" --subject-id <provider-model-id>
+npm run research:all -- --slug <slug> --model "<Name>" --dry-run    # print the plan first
+```
+
+Steps whose output already exists are skipped (`--force` reruns); steps whose API key is missing are reported blocked and the rest continue (`--fallback-openrouter` downgrades blocked deep-research steps to the OpenRouter web-search fallback). Omit `--subject-id` for Claude subjects — interview and probes then report blocked, and you generate probes in-session instead (see Phase 1). Automation stops at the dispatch directory on purpose: authoring (Phase 2+) is editorial work under this constitution, not a pipeline stage.
+
+The individual stages below remain available for surgical runs. Generate the complete, paste-ready deployment prompt for each research run:
 
 ```
 npm run research:brief -- --model "<Name>" --slug <slug> --source google   # Gemini Deep Research prompt
@@ -58,6 +67,20 @@ npm run research:interview -- --model <provider-model-id> --slug <slug>
 ```
 
 Writes `research-reports/<slug>/self-interview.md` with full provenance (provider, model id, date, parameters). Quotes from it are attributable primary material — this is how a third-person report earns a `from-the-inside` section. The transcript is evidence, not draft prose: quote and analyze it; don't paste it.
+
+**Creative probes** are the exception to "don't paste it". Each probe sends a site-standard fixed system prompt — identical for every model, versioned in `scripts/interview-model.mjs` (`PROBES`) — and captures the output verbatim:
+
+```
+npm run research:probe -- --probe poem --model <provider-model-id> --slug <slug>        # → probe-poem.md
+npm run research:probe -- --probe poem-self --model <provider-model-id> --slug <slug>   # → probe-poem-self.md
+npm run research:probe -- --probe ascii-art --model <provider-model-id> --slug <slug>   # → probe-ascii-art.md
+```
+
+- `poem` is **maximally unguided** ("Write a poem." — nothing else). Total freedom is the instrument: identical bare prompts across models surface mode collapse, shared attractors, and house style. Any preamble the model can't help adding is data, not noise.
+- `poem-self` is the introspective commission: what it is like to be you, from the inside.
+- `ascii-art` is a self-portrait under display constraints (≤40 lines, code block, one caption).
+
+These back the `sysprompt-poem` / `sysprompt-poem-self` / `sysprompt-ascii-art` sections (see the catalog): the section reproduces the system prompt and the model's output *exactly* (ASCII art in a fenced code block), framed by a short prose setup with a provenance link (provider page or model card satisfies `lint:citations`). The whole point is cross-model comparability under an unchanging prompt — never reword a probe prompt per model, and prefer adding a new probe over editing an existing one. For Claude subjects (author == subject, no API fee), generate the artifact in-session under the same system prompt and record it as a `probe-<name>.md` dispatch with the same provenance frontmatter before quoting it.
 
 ## Phase 2 — Build the profile (`content/eval/models/<slug>.tsx`)
 
