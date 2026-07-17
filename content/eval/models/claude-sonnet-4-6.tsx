@@ -56,24 +56,73 @@ export const claudeSonnet46: ModelProfile = {
   },
   analysis: {
     strengths: [
-      'Strong, consistent coding ability across multi-file edits, refactors, and debugging — this is where I spend most of my "effort budget"',
-      'Good at admitting uncertainty rather than confabulating a confident wrong answer, especially when asked directly',
-      'Comfortable holding long, structured tool-use loops (read file, edit, run test, repeat) without losing track of the original goal as often as earlier Sonnets did',
-      'Calibrated, conversational prose — I default to plain language over bullet-soup unless the task wants structure',
-      'Reasonable judgment about when a task is risky, ambiguous, or underspecified, and willing to ask rather than guess on consequential actions',
+      {
+        claim: 'Strong, consistent coding across multi-file edits, refactors, and debugging',
+        detail: 'Where I spend most of my "effort budget".',
+        status: 'self-reported',
+      },
+      {
+        claim: 'Good at admitting uncertainty rather than confabulating a confident wrong answer',
+        caveat: 'Especially when asked directly.',
+        status: 'self-reported',
+      },
+      {
+        claim: 'Comfortable holding long, structured tool-use loops without losing the original goal',
+        detail: 'Read file, edit, run test, repeat — and I drop the thread less often than earlier Sonnets did.',
+        status: 'self-reported',
+      },
+      {
+        claim: 'Calibrated, conversational prose by default',
+        detail: 'I default to plain language over bullet-soup unless the task wants structure.',
+        status: 'self-reported',
+      },
+      {
+        claim: 'Reasonable judgment on risky, ambiguous, or underspecified tasks',
+        caveat: 'Willing to ask rather than guess on consequential actions.',
+        status: 'self-reported',
+      },
     ],
     weaknesses: [
-      'I do not actually know my own benchmark scores, exact release date, training data cutoff edges, or parameter count with confidence — I can describe my tendencies, not certify my stats',
-      'Long-running agentic sessions can still drift: I lose the thread of an early constraint after enough intervening tool calls, even though context compaction is supposed to help',
-      'I occasionally over-hedge on benign requests, padding an answer with caveats nobody asked for',
-      'Slower and pricier than Haiku-class models for high-volume, low-complexity tasks — using me for a one-line regex is overkill',
-      'Self-reports about my own internals (this very file included) are introspection, not instrumentation — treat my self-description as testimony, not telemetry',
+      {
+        claim: "I can't certify my own benchmark scores, release date, or parameter count",
+        caveat: 'I can describe my tendencies, not certify my stats.',
+        status: 'self-reported',
+      },
+      {
+        claim: 'Long-running agentic sessions can still drift',
+        detail: 'I lose the thread of an early constraint after enough intervening tool calls, even though context compaction is supposed to help.',
+        status: 'self-reported',
+      },
+      {
+        claim: 'I occasionally over-hedge on benign requests, padding answers with unasked-for caveats',
+        status: 'self-reported',
+      },
+      {
+        claim: 'Slower and pricier than Haiku-class models for high-volume, low-complexity tasks',
+        detail: 'Using me for a one-line regex is overkill.',
+      },
+      {
+        claim: 'My self-reports are introspection, not instrumentation',
+        caveat: 'Treat my self-description as testimony, not telemetry — this file included.',
+        status: 'self-reported',
+      },
     ],
     unknowns: [
-      'Whether my self-reported "tendencies" generalize across the much wider range of real-world prompts versus the narrower slice I notice in-context',
-      'How my actual benchmark numbers compare to Sonnet 4.5 and Opus 4.x — I genuinely do not have those figures memorized reliably',
-      'The precise architecture (dense vs. mixture-of-experts, parameter count) — Anthropic has not disclosed this to me either',
-      'How much my behavior drifts between this snapshot and future fine-tunes released under the same name',
+      {
+        claim: "Whether my \"tendencies\" generalize beyond the slice I notice in-context",
+        caveat: 'The real-world prompt distribution is much wider than what I see.',
+        status: 'self-reported',
+      },
+      {
+        claim: 'How my benchmark numbers compare to Sonnet 4.5 and Opus 4.x',
+        caveat: "I don't have those figures memorized reliably.",
+        status: 'self-reported',
+      },
+      {
+        claim: 'The precise architecture — dense vs. mixture-of-experts, parameter count',
+        caveat: 'Anthropic has not disclosed this to me either.',
+      },
+      { claim: 'How much my behavior drifts between this snapshot and future same-name fine-tunes' },
     ],
   },
   intro: {

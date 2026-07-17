@@ -58,22 +58,26 @@ export const qwen3Max: ModelProfile = {
     },
     analysis: {
         strengths: [
-            'Test-Time Scaling: Dynamic compute allocation achieves 100% on AIME 25 and HMMT through "thinking budget" mechanism',
-            'Agentic superiority: 74.8 on Tau2-Bench outperforms Claude Opus 4 and DeepSeek-V3.1 on tool calling',
-            'MoE efficiency: 128 experts with 8 active per token, 30% MFU improvement via PAI-FlashMoE',
-            'OpenAI SDK compatible: Drop-in replacement requiring only base_url and model name changes',
-            'Enterprise validated: Hamilton accounting automation, widespread adoption in finance and healthcare',
+            {
+                claim: 'Test-Time Scaling: dynamic compute hits 100% on AIME 25 and HMMT',
+                detail: 'Via a "thinking budget" mechanism that shifts compute from pre-training to inference.',
+                status: 'observed',
+            },
+            { claim: 'Agentic superiority: 74.8 on Tau2-Bench beats Claude Opus 4 and DeepSeek-V3.1' },
+            { claim: 'MoE efficiency: 128 experts, 8 active per token, 30% MFU gain via PAI-FlashMoE' },
+            { claim: 'OpenAI SDK compatible: drop-in replacement changing only base_url and model name' },
+            { claim: 'Enterprise validated: Hamilton accounting automation, adoption in finance and healthcare' },
         ],
         weaknesses: [
-            'Domain-specific limits: Only 15% pass rate on FinBen financial reasoning benchmark after 48-hour runtime',
-            'SWE-bench gap: 69.6% vs GPT-5.2 (80%) indicates precision engineering remains a weakness',
-            'Censorship layer: Political topics trigger upstream filter refusals before reaching the model',
-            'Premium pricing: $0.861/M input + $3.441/M output positions it at the expensive end',
+            { claim: 'Domain limits: only 15% on FinBen financial reasoning after 48-hour runtime' },
+            { claim: 'SWE-bench gap: 69.6% vs GPT-5.2 (80%) — precision engineering remains weak' },
+            { claim: 'Censorship layer: political topics trigger upstream filter refusals before the model' },
+            { claim: 'Premium pricing: $0.861/M input + $3.441/M output sits at the expensive end' },
         ],
         unknowns: [
-            'Long-term routing stability in MoE architecture after removing shared experts',
-            'Hallucination risk in high-stakes applications requiring factual accuracy',
-            'Actual hardware infrastructure given US export controls on high-end GPUs',
+            { claim: 'Long-term routing stability in MoE architecture after removing shared experts' },
+            { claim: 'Hallucination risk in high-stakes applications requiring factual accuracy' },
+            { claim: 'Actual hardware infrastructure given US export controls on high-end GPUs' },
         ],
     },
     intro: {

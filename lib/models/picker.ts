@@ -25,8 +25,7 @@ export interface PickerModel {
   hasFreeAccess: boolean
 }
 
-const analysisText = (item: string | AnalysisItem): string =>
-  typeof item === 'string' ? item : item.text
+const analysisText = (item: AnalysisItem): string => item.claim
 
 /**
  * Blended $/M-token price using a 3:1 input:output weighting, which better

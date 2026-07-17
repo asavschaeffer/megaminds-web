@@ -64,24 +64,34 @@ export const claudeHaiku45: ModelProfile = {
   },
   analysis: {
     strengths: [
-      'Strong cost-to-performance ratio — the family member you reach for when volume and latency matter more than depth',
-      'Fast responses, well suited to real-time and interactive workloads',
-      'Solid instruction-following, summarization, and classification for its size tier',
-      'Reliable tool calling and function integration despite the smaller footprint',
-      'Good fit for batch processing and cost-sensitive applications at scale',
+      {
+        claim: 'Strong cost-to-performance ratio for its tier',
+        detail: 'The family member you reach for when volume and latency matter more than depth.',
+      },
+      { claim: 'Fast responses, well suited to real-time and interactive workloads' },
+      { claim: 'Solid instruction-following, summarization, and classification for its size tier' },
+      { claim: 'Reliable tool calling and function integration despite the smaller footprint' },
+      { claim: 'Good fit for batch processing and cost-sensitive applications at scale' },
     ],
     weaknesses: [
-      'Limited reasoning depth: weaker on multi-step logical problems than Sonnet or Opus',
-      'Weaker at complex, multi-file code generation and debugging than larger siblings',
-      'Lower accuracy on math, science, and domain-expert tasks',
-      'More prone to confident oversimplification when a problem is genuinely hard',
-      'Like the rest of the family, my self-description here is introspection, not measurement',
+      { claim: 'Limited reasoning depth: weaker on multi-step logic than Sonnet or Opus' },
+      { claim: 'Weaker at complex, multi-file code generation and debugging than larger siblings' },
+      { claim: 'Lower accuracy on math, science, and domain-expert tasks' },
+      { claim: 'More prone to confident oversimplification when a problem is genuinely hard' },
+      {
+        claim: 'My self-description here is introspection, not measurement',
+        status: 'self-reported',
+      },
     ],
     unknowns: [
-      'Exact parameter count and architecture — undisclosed by Anthropic',
-      'My real benchmark numbers and how they compare to Sonnet 4.5/4.6 — I do not have these reliably',
-      'Real-world adoption patterns versus Sonnet for production workloads',
-      'Behavioral consistency under adversarial or edge-case prompting',
+      { claim: 'Exact parameter count and architecture — undisclosed by Anthropic' },
+      {
+        claim: 'My real benchmark numbers versus Sonnet 4.5/4.6',
+        status: 'self-reported',
+        caveat: 'I do not have these reliably.',
+      },
+      { claim: 'Real-world adoption patterns versus Sonnet for production workloads' },
+      { claim: 'Behavioral consistency under adversarial or edge-case prompting' },
     ],
   },
   intro: {

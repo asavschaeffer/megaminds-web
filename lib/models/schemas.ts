@@ -48,18 +48,83 @@ export const OrganizationIdSchema = z.custom<OrganizationId>(
 const ReactNodeSchema = z.custom<ReactNode>()
 const BrandStyleSchema = z.custom<BrandStyle>()
 
-// ——— analysis ———
+// ——— norm-critical primitive brands ———
+//
+// Two atoms the editorial constitution cares about, branded so a raw string
+// can't stand in for a validated one anywhere downstream — construction is
+// forced through the schema. These are the ONLY brands in the model system;
+// brand proliferation is ceremony.
 
-export const AnalysisItemSchema = z.object({
-  text: z.string(),
-  detail: z.string().optional(),
-  source: z.string().optional(),
+/** ISO calendar date (YYYY-MM-DD). Display formatting happens at render time. */
+export const IsoDateSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Dates are ISO YYYY-MM-DD; format for display at render time, do not store display strings')
+  .brand<'IsoDate'>()
+
+/** An https URL. The site cites primary sources; http and bare labels are not citations. */
+export const HttpsUrlSchema = z
+  .url()
+  .refine((u) => u.startsWith('https://'), 'Citations must be https URLs')
+  .brand<'HttpsUrl'>()
+
+// ——— citations (provenance as a first-class type) ———
+//
+// "Never invent a number" compiles to: no external fact enters the registry
+// without a URL. A citation is a structured source, not a bare string.
+
+export const CitationSchema = z.strictObject({
+  url: HttpsUrlSchema,
+  /** Human label; derive from hostname when absent. */
+  label: z.string().max(80).optional(),
+  kind: z.enum(['primary', 'vendor-docs', 'benchmark', 'press', 'community']).optional(),
+  accessed: IsoDateSchema.optional(),
 })
 
-export const ModelAnalysisSchema = z.object({
-  strengths: z.array(z.union([z.string(), AnalysisItemSchema])),
-  weaknesses: z.array(z.union([z.string(), AnalysisItemSchema])),
-  unknowns: z.array(z.union([z.string(), AnalysisItemSchema])).optional(),
+// ——— analysis (the scannable ✓/✗/? index) ———
+//
+// The container is shaped so the right behavior is the path of least
+// resistance. `claim` is the ONLY required field and is capped at one
+// scannable line, so a short claim is the low-friction default. Everything
+// that used to bloat the claim now has a typed home to be SORTED into —
+// models sort well; the earlier schema asked them to COMPRESS, which is
+// high-friction and, for honest self-assessment, impossible without lying.
+//   - status  the claim's epistemic provenance (drains "…but I can't verify this")
+//   - caveat  a co-equal honest qualification (drains the hedge without subordinating it)
+//   - detail  longer elaboration, shown on demand
+//   - source  a primary citation
+// The cap is pressure to sort, not punishment for length. See the add-model
+// skill (Phase 2) and section-catalog for the editorial rationale.
+
+const MAX_CLAIM_WORDS = 15
+const claimWordCount = (s: string) => s.trim().split(/\s+/).filter(Boolean).length
+
+/**
+ * Epistemic provenance of a claim. `self-reported` is the load-bearing value:
+ * it collapses a whole "self-reports may be confabulated, check primary
+ * sources" hedge-essay into one tag, and tells the reader to weigh the item as
+ * first-person testimony rather than external fact.
+ */
+export const AnalysisStatusSchema = z.enum(['observed', 'inferred', 'self-reported'])
+
+export const AnalysisItemSchema = z.strictObject({
+  claim: z
+    .string()
+    .trim()
+    .min(1)
+    .max(140, 'Claim too long — this is a checklist line, not a sentence. Move elaboration into `detail`.')
+    .refine((s) => claimWordCount(s) <= MAX_CLAIM_WORDS, {
+      message: `Analysis claims are checklist lines: one claim, ≤${MAX_CLAIM_WORDS} words. Put the hedge in \`caveat\`, provenance in \`status\`, elaboration in \`detail\` — don't compress, sort.`,
+    }),
+  status: AnalysisStatusSchema.optional(),
+  caveat: z.string().trim().max(200).optional(),
+  detail: z.string().trim().max(600).optional(),
+  source: CitationSchema.optional(),
+})
+
+export const ModelAnalysisSchema = z.strictObject({
+  strengths: z.array(AnalysisItemSchema).min(1).max(8),
+  weaknesses: z.array(AnalysisItemSchema).min(1).max(8),
+  unknowns: z.array(AnalysisItemSchema).min(1).max(6).optional(),
 })
 
 // ——— pricing (the profile's own sourced rates; comparisons are computed) ———

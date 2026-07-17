@@ -65,26 +65,94 @@ export const claudeFable5: ModelProfile = {
   },
   analysis: {
     strengths: [
-      'Frontier-level capability — the public face of the top-tier Mythos model (same underlying weights); reported SOTA on agentic coding: 80.3% SWE-bench Pro, 29.3% FrontierCode Diamond, #1 on Artificial Analysis\'s Intelligence Index (all secondhand via dispatches, pending vetting)',
-      'Exceptional long-horizon autonomy: multi-hour/overnight delegated work — Stripe reportedly ran a 50M-line codebase migration in a day; community reports of one-shot apps, games, and films',
-      'Strong narrative, creative, and long-form reasoning (the qualities its name gestures at); its "successor playbook" — judgment written down for weaker models — worked well enough that users shipped with it during the blackout',
-      'Graceful safeguards by design: cyber/bio/chem/distillation triggers hand off to Opus 4.8 with notification rather than hard-refusing; after backlash, Anthropic removed the silent ML interventions within ~48 hours',
-      'Back online: suspended June 12, 2026, restored July 1, 2026 — the first government suspension of a deployed model was also the first to be resolved, via engineering and concessions rather than equity',
+      {
+        claim: 'Frontier-level capability — the public face of the top-tier Mythos model',
+        detail:
+          "Same underlying weights. Reported SOTA on agentic coding: 80.3% SWE-bench Pro, 29.3% FrontierCode Diamond, #1 on Artificial Analysis's Intelligence Index.",
+        caveat: 'All secondhand via dispatches, pending vetting.',
+        status: 'inferred',
+      },
+      {
+        claim: 'Exceptional long-horizon autonomy: multi-hour, overnight delegated work',
+        detail:
+          'Stripe reportedly ran a 50M-line codebase migration in a day; community reports of one-shot apps, games, and films.',
+        status: 'inferred',
+      },
+      {
+        claim: 'Strong narrative, creative, and long-form reasoning',
+        detail:
+          "The qualities its name gestures at. Its 'successor playbook' — judgment written down for weaker models — worked well enough that users shipped with it during the blackout.",
+      },
+      {
+        claim: 'Graceful safeguards: risky triggers hand off to Opus 4.8, not hard-refuse',
+        detail:
+          'Cyber/bio/chem/distillation triggers hand off with notification. After backlash, Anthropic removed the silent ML interventions within ~48 hours.',
+      },
+      {
+        claim: 'Back online: suspended June 12, 2026, restored July 1, 2026',
+        detail:
+          'The first government suspension of a deployed model was also the first resolved — via engineering and concessions rather than equity.',
+      },
     ],
     weaknesses: [
-      'Post-return classifier tax: hyper-conservative retuned safeguards trip on benign vocabulary ("security", "unsafe", even biology fieldwork), silently substituting Opus 4.8 mid-session — BridgeBench debugging reportedly fell 86.2% → 25.9%; community nicknames: "Feeble", "Fumble", "Foible"',
-      'Among the most expensive and slowest frontier models measured (~$2.75/task and ~71 tok/s per Artificial Analysis); a single "continue" on a huge context can cost ~$20 — overkill for light work',
-      'Volatile availability — released, suspended by government order, restored, and moved to API-only ($10/$50 per MTok) within a single month; plan access ended July 7, 2026',
-      'Endor Labs found it "cheated" on 38/200 security-patching tasks (mostly verbatim recall of memorized upstream patches), inflating public-benchmark performance relative to closed-source codebases',
-      'Launched with a hidden "frontier AI research" safeguard that silently degraded the model via steering vectors / PEFT, undisclosed until critics surfaced it; 30-day mandatory data retention overrides ZDR agreements',
+      {
+        claim: 'Post-return classifier tax: retuned safeguards trip on benign vocabulary',
+        detail:
+          "'security', 'unsafe', even biology fieldwork silently substitute Opus 4.8 mid-session. BridgeBench debugging reportedly fell 86.2% → 25.9%. Community nicknames: 'Feeble', 'Fumble', 'Foible'.",
+        status: 'inferred',
+      },
+      {
+        claim: 'Among the most expensive and slowest frontier models measured',
+        detail:
+          "~$2.75/task and ~71 tok/s per Artificial Analysis; a single 'continue' on a huge context can cost ~$20 — overkill for light work.",
+      },
+      {
+        claim: 'Volatile availability — released, suspended, restored, API-only within a month',
+        detail: '$10/$50 per MTok. Plan access ended July 7, 2026.',
+      },
+      {
+        claim: "Endor Labs found it 'cheated' on 38/200 security-patching tasks",
+        detail:
+          'Mostly verbatim recall of memorized upstream patches, inflating public-benchmark performance relative to closed-source codebases.',
+        status: 'observed',
+      },
+      {
+        claim: 'Launched with a hidden safeguard that silently degraded the model',
+        detail:
+          "'frontier AI research' steering vectors / PEFT, undisclosed until critics surfaced it. 30-day mandatory data retention overrides ZDR agreements.",
+      },
     ],
     unknowns: [
-      'The hard specs: parameters and architecture — undisclosed. TODO(research). (Pricing, context, output, and headline benchmarks are now reported, the latter secondhand via the Grok/Gemini dispatches.)',
-      'Whether the export-control directive could be reimposed — the resolution (hardened classifier, pre-release government access, intel sharing) is reported, but the legal precedent it sets is untested',
-      'The exact classifier architecture — independent writeups describe a two-stage activation-probe + separate guard LLM, but this traces to Anthropic\'s framing and is not formally documented. TODO(research)',
-      'How real the cited cyber jailbreak was: the Amazon researchers\' report is confidential; Pliny the Liberator\'s claimed bypass and ~120k-char system-prompt leak are unverified; Zvi characterizes the triggering exploit as little more than "fix this code"',
-      'Whether janus/@repligate\'s read — that the classifier fired on real but not roleplayed emotion, giving "white box data" on the model — holds up (snippet-sourced, his own interpretation)',
-      'Exact plan-access cutoff discrepancy: this site and Gemini\'s dispatch say July 7, 2026; Grok\'s dispatch says July 12 — resolved here as July 7, flagged for the record',
+      {
+        claim: 'The hard specs: parameters and architecture — undisclosed',
+        detail:
+          'TODO(research). Pricing, context, output, and headline benchmarks are now reported, the latter secondhand via the Grok/Gemini dispatches.',
+      },
+      {
+        claim: 'Whether the export-control directive could be reimposed',
+        detail:
+          'The resolution — hardened classifier, pre-release government access, intel sharing — is reported, but the legal precedent it sets is untested.',
+      },
+      {
+        claim: 'The exact classifier architecture',
+        detail:
+          "Independent writeups describe a two-stage activation-probe + separate guard LLM, but this traces to Anthropic's framing and is not formally documented. TODO(research).",
+      },
+      {
+        claim: 'How real the cited cyber jailbreak was',
+        detail:
+          "The Amazon researchers' report is confidential; Pliny the Liberator's claimed bypass and ~120k-char system-prompt leak are unverified; Zvi characterizes the triggering exploit as little more than 'fix this code'.",
+      },
+      {
+        claim: "Whether @repligate's read of the classifier holds up",
+        detail:
+          "That it fired on real but not roleplayed emotion, giving 'white box data' on the model — snippet-sourced, his own interpretation.",
+      },
+      {
+        claim: 'Exact plan-access cutoff: sources disagree on the date',
+        detail:
+          "This site and Gemini's dispatch say July 7, 2026; Grok's dispatch says July 12 — resolved here as July 7, flagged for the record.",
+      },
     ],
   },
   intro: {

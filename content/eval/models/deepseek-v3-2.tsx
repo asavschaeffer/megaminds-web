@@ -43,17 +43,17 @@ export const deepseekV3_2: ModelProfile = {
     },
     analysis: {
         strengths: [
-            'Exceptional mathematical and coding reasoning',
-            'High parameter efficiency via Mixture-of-Experts',
-            'Strong hallucination mitigation specific to reasoning tasks',
+            { claim: 'Exceptional mathematical and coding reasoning' },
+            { claim: 'High parameter efficiency via Mixture-of-Experts' },
+            { claim: 'Strong hallucination mitigation specific to reasoning tasks' },
         ],
         weaknesses: [
-            'Extremely high hardware requirements for self-hosting',
-            'Latency trade-offs in "Think" mode',
+            { claim: 'Extremely high hardware requirements for self-hosting' },
+            { claim: 'Latency trade-offs in "Think" mode' },
         ],
         unknowns: [
-            'Multilingual superiority in low-resource languages',
-            'Long-term cost of GRPO-induced high token consumption',
+            { claim: 'Multilingual superiority in low-resource languages' },
+            { claim: 'Long-term cost of GRPO-induced high token consumption' },
         ],
     },
     intro: {

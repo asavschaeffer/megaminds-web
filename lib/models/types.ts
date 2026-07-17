@@ -12,10 +12,12 @@ import type { z } from 'zod'
 import type { ModelTagId } from './tags'
 import type {
   AnalysisItemSchema,
+  AnalysisStatusSchema,
   ApiPricingSchema,
   BenchmarkScoreSchema,
   ChatProviderSchema,
   ChatTierSchema,
+  CitationSchema,
   ContentSectionSchema,
   DataSourceSchema,
   DefinitionSchema,
@@ -24,6 +26,8 @@ import type {
   ExpandableBlockSchema,
   GlossarySchema,
   GovernanceSchema,
+  HttpsUrlSchema,
+  IsoDateSchema,
   ModelAnalysisSchema,
   ModelLinksSchema,
   ModelMetaSchema,
@@ -43,6 +47,10 @@ export type SectionVariant = z.infer<typeof SectionVariantSchema>
 export type NameOrder = z.infer<typeof NameOrderSchema>
 export type EditorialStatus = z.infer<typeof EditorialStatusSchema>
 
+export type IsoDate = z.infer<typeof IsoDateSchema>
+export type HttpsUrl = z.infer<typeof HttpsUrlSchema>
+export type Citation = z.infer<typeof CitationSchema>
+export type AnalysisStatus = z.infer<typeof AnalysisStatusSchema>
 export type AnalysisItem = z.infer<typeof AnalysisItemSchema>
 export type ModelAnalysis = z.infer<typeof ModelAnalysisSchema>
 export type ApiPricing = z.infer<typeof ApiPricingSchema>
@@ -121,9 +129,9 @@ export interface ModelHeaderProps {
 }
 
 export interface StrengthsWeaknessesProps {
-  strengths?: (string | AnalysisItem)[]
-  weaknesses?: (string | AnalysisItem)[]
-  unknowns?: (string | AnalysisItem)[]
+  strengths?: AnalysisItem[]
+  weaknesses?: AnalysisItem[]
+  unknowns?: AnalysisItem[]
 }
 
 export interface BenchmarkChartProps {

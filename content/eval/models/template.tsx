@@ -42,21 +42,34 @@ export const templateModel: ModelProfile = {
       { label: 'Vendor pricing page', href: 'https://example.com/pricing', provider: 'Provider Name' },
     ],
   },
-  // Each item: one scannable claim, ≤15 words (lint:models flags overruns).
-  // The widget renders single checklist lines; argue the claim in a section.
+  // The scannable ✓/✗/? index. `claim` is one line, ≤15 words — the schema
+  // REJECTS longer claims at load. Don't compress nuance out; SORT it into the
+  // typed fields: `caveat` for an honest hedge (rendered co-equal), `status`
+  // for provenance ('observed' | 'inferred' | 'self-reported'), `detail` for
+  // elaboration, `source` for a primary citation. The argument lives in the
+  // report sections; this table is the index, not the essay.
   analysis: {
     strengths: [
-      'Primary strength (e.g., exceptional reasoning quality)',
-      'Secondary strength (e.g., strong code generation)',
-      'Differentiator (e.g., transparent reasoning traces)',
+      { claim: 'Exceptional reasoning quality on multi-step problems', status: 'observed' },
+      {
+        claim: 'Strong code generation across languages',
+        caveat: 'Weaker on niche or very recent frameworks.',
+      },
+      { claim: 'Transparent reasoning traces you can audit' },
     ],
     weaknesses: [
-      'Primary limitation (e.g., slower responses)',
-      'Known gap (e.g., limited multimodal support)',
+      { claim: 'Slower first-token latency than peer models', status: 'observed' },
+      {
+        claim: 'Limited multimodal support',
+        detail: 'Text and image input only; no audio or video, and image output is not supported.',
+      },
     ],
     unknowns: [
-      'Open question (e.g., real-world safety behavior at scale)',
-      'Open question (e.g., training data composition)',
+      {
+        claim: 'Real-world safety behavior at scale',
+        caveat: 'No independent red-team results published yet.',
+      },
+      { claim: 'Training-data composition', status: 'self-reported' },
     ],
   },
   intro: {

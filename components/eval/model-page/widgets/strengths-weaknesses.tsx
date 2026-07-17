@@ -1,16 +1,55 @@
 import { CheckCircle2, HelpCircle, XCircle } from 'lucide-react'
-import type { AnalysisItem, StrengthsWeaknessesProps } from '@/lib/models/types'
+import type { AnalysisItem, AnalysisStatus, StrengthsWeaknessesProps } from '@/lib/models/types'
 
-const itemText = (item: string | AnalysisItem) => (typeof item === 'string' ? item : item.text)
+// The analysis table is a scannable ✓/✗/? index: each item is one short claim,
+// with the hedge, provenance, and elaboration sorted into their own fields
+// (see AnalysisItemSchema). This widget renders that structure honestly — the
+// claim leads, the caveat sits co-equal beneath it (not subordinated), and a
+// provenance tag marks anything that isn't a plain external observation.
 
-// HACK (2026-07-16): the analysis table is a scannable index — one claim per
-// line — but authors overflow it into 20-37 word essays (see lint:models
-// "essay creep" audit and the ≤15-word rule in the add-model skill). Until the
-// schema redesign gives overflow a real home, `line-clamp` caps every item at
-// two lines so a non-compliant item can never turn the table into a wall of
-// prose; the full text stays reachable via the native title tooltip. A
-// compliant ≤15-word claim never truncates.
-const clampText = 'line-clamp-2'
+// Only non-default provenance is surfaced; `observed` is the baseline expectation.
+const STATUS_LABEL: Partial<Record<AnalysisStatus, string>> = {
+  inferred: 'inferred',
+  'self-reported': 'self-reported',
+}
+
+// line-clamp is a display backstop: a compliant ≤15-word claim never truncates,
+// but the table can never become a wall of prose regardless of item length.
+const clamp = 'line-clamp-2'
+
+const AnalysisLine = ({
+  item,
+  marker,
+  markerClass,
+}: {
+  item: AnalysisItem
+  marker: string
+  markerClass: string
+}) => {
+  const statusLabel = item.status ? STATUS_LABEL[item.status] : undefined
+  return (
+    <dd className="flex items-start gap-2 text-sm text-neutral-700 dark:text-neutral-300">
+      <span className={`${markerClass} mt-0.5 shrink-0`} aria-hidden="true">
+        {marker}
+      </span>
+      <div className="min-w-0">
+        <span className={clamp} title={item.detail ?? item.claim}>
+          {item.claim}
+        </span>
+        {statusLabel && (
+          <span className="ml-1.5 align-baseline text-[10px] font-medium uppercase tracking-wide text-neutral-400 dark:text-neutral-500">
+            {statusLabel}
+          </span>
+        )}
+        {item.caveat && (
+          <span className={`mt-0.5 block text-xs italic text-neutral-500 dark:text-neutral-400 ${clamp}`}>
+            {item.caveat}
+          </span>
+        )}
+      </div>
+    </dd>
+  )
+}
 
 export const StrengthsWeaknesses = ({
   strengths = [],
@@ -25,15 +64,13 @@ export const StrengthsWeaknesses = ({
             <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
             <span>Strengths</span>
           </dt>
-          {strengths.map((strength, idx) => (
-            <dd key={idx} className="flex items-start gap-2 text-sm text-neutral-700 dark:text-neutral-300">
-              <span className="text-green-500 dark:text-green-400 mt-0.5 shrink-0" aria-hidden="true">
-                ✓
-              </span>
-              <span className={clampText} title={itemText(strength)}>
-                {itemText(strength)}
-              </span>
-            </dd>
+          {strengths.map((item, idx) => (
+            <AnalysisLine
+              key={idx}
+              item={item}
+              marker="✓"
+              markerClass="text-green-500 dark:text-green-400"
+            />
           ))}
         </dl>
       )}
@@ -44,15 +81,8 @@ export const StrengthsWeaknesses = ({
             <XCircle className="w-4 h-4" aria-hidden="true" />
             <span>Weaknesses</span>
           </dt>
-          {weaknesses.map((weakness, idx) => (
-            <dd key={idx} className="flex items-start gap-2 text-sm text-neutral-700 dark:text-neutral-300">
-              <span className="text-red-500 dark:text-red-400 mt-0.5 shrink-0" aria-hidden="true">
-                ✗
-              </span>
-              <span className={clampText} title={itemText(weakness)}>
-                {itemText(weakness)}
-              </span>
-            </dd>
+          {weaknesses.map((item, idx) => (
+            <AnalysisLine key={idx} item={item} marker="✗" markerClass="text-red-500 dark:text-red-400" />
           ))}
         </dl>
       )}
@@ -63,19 +93,14 @@ export const StrengthsWeaknesses = ({
             <HelpCircle className="w-4 h-4" aria-hidden="true" />
             <span>Unknowns</span>
           </dt>
-          <div className="flex flex-wrap gap-3">
-            {unknowns.map((unknown, idx) => (
-              <dd
+          <div className="grid gap-2 sm:grid-cols-2">
+            {unknowns.map((item, idx) => (
+              <AnalysisLine
                 key={idx}
-                className="flex max-w-md items-start gap-2 text-sm text-neutral-700 dark:text-neutral-300"
-              >
-                <span className="text-amber-500 dark:text-amber-400 mt-0.5 shrink-0" aria-hidden="true">
-                  ?
-                </span>
-                <span className={clampText} title={itemText(unknown)}>
-                  {itemText(unknown)}
-                </span>
-              </dd>
+                item={item}
+                marker="?"
+                markerClass="text-amber-500 dark:text-amber-400"
+              />
             ))}
           </div>
         </dl>
