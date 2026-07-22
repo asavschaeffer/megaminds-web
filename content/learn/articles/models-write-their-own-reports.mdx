@@ -1,0 +1,155 @@
+---
+title: "Models Write Their Own Reports: The Megaminds Research-to-Draft Pipeline"
+description: "How we generate a model evaluation for free—driving Gemini and Grok's research UIs from a browser, then letting the subject model author its own review over the dispatches."
+date: "2026-07-22"
+readTime: "14 min"
+tags: ["workflow", "pipeline", "research", "agentic", "meta"]
+---
+
+Megaminds has one rule that shapes everything else: **the model writes its own report.** GLM writes GLM's review; Grok writes Grok's; Claude writes Claude's. We are not in the business of summarizing a press kit—we want the model's own voice, including the parts a press kit would cut.
+
+That rule creates a problem. To let a model write honestly about itself, you first have to hand it honest, cited raw material about itself—and gathering that at frontier depth normally costs money (Gemini's Deep Research API, xAI's Grok API, both paid). This article walks the pipeline we built so the whole thing runs for **free**, end to end: a generated brief, research harvested by *driving the consumer web UIs from a browser*, and a subject model that authors its own draft over the dispatches.
+
+We'll use a real run as the case study: **GLM 5.2**, from empty folder to a seven-section draft it wrote itself.
+
+---
+
+## The shape of the pipeline
+
+```
+brief (generated from code)
+   │
+   ├── google.md   ← Gemini Deep Research   (browser, headless)
+   └── x.md        ← Grok DeepSearch        (browser, CDP-attach)
+   │
+   ▼
+draft.mdx  ← the SUBJECT model authors its own report over the dispatches
+   │
+   ▼
+content/eval/models/<slug>.{tsx,mdx}  ← typed profile + prose, lint-gated
+```
+
+Four stages: **brief → research → self-authoring → integration.** Each is a small, single-purpose script; nothing is a monolith.
+
+---
+
+## Stage 1 — The brief writes itself
+
+You never hand-write a research brief. `generate-research-brief.ts` assembles it *from the code*—it imports the picker-signal registry, the section catalog, and the profile schema, and turns each into a research question:
+
+- Every **picker signal** (does it do vision? is it open-weights? what's the price band?) becomes a "establish this, with a citation" line.
+- Every **required section** becomes a coverage requirement.
+- The **structured-data schema** (pricing, benchmarks, context window, license…) becomes a checklist of fields to source.
+
+The payoff: the day someone adds a new picker question to the site, the *next* brief automatically asks researchers to establish it. The brief can't drift out of sync with what the site actually needs, because it's derived from the same source of truth the site renders from.
+
+The brief is then prefixed with a **researcher persona**. There are two, because the two research surfaces have different jobs:
+
+- `google-researcher.md` — the desk researcher: source-obsessed, primary-source-first, "every claim carries a URL," preserves contradictions instead of smoothing them.
+- `x-researcher.md` — the field reporter: **X.com is the primary source**, harvest attributed practitioner quotes (positive, neutral, *and* critical), verbatim, with handles and dates.
+
+One command emits the complete, paste-ready prompt for either surface.
+
+---
+
+## Stage 2 — Research by driving a browser
+
+Here's the crux. The real multi-query research agents—Gemini **Deep Research** and Grok **DeepSearch**—are extraordinary, and they're included in subscriptions you may already have. But only through the *web UI*; the APIs are separately, unavoidably paid. So the free path is to **drive the logged-in web sessions from a browser** with Playwright, and scrape the finished report.
+
+That turns out to be two very different engineering problems, because the two sites defend themselves differently.
+
+### Gemini: fully headless
+
+Google's login shows "this browser or app may not be secure" to automated Chrome. But that check keys on two signals—the `--enable-automation` launch flag and `navigator.webdriver`—and both can be switched off:
+
+```js
+chromium.launchPersistentContext(profileDir, {
+  channel: 'chrome',                                   // real system Chrome
+  headless: true,
+  ignoreDefaultArgs: ['--enable-automation'],
+  args: ['--disable-blink-features=AutomationControlled'],
+})
+```
+
+With those flags, a one-time sign-in into a dedicated profile *sticks*, and every later run is fully headless and hands-off. Driving the run is then just UI choreography, discovered by probing the live DOM:
+
+1. Enable Deep Research: it's a toggle inside the **"Upload & tools"** menu (the Pro tier is remembered by the profile).
+2. Paste the brief, submit. Deep Research returns a **research plan** and waits behind a **"Start research"** button—so the driver polls for that button (its arrival scales with prompt size) and clicks it.
+3. Wait for completion: the run is finished when the "Stop response" control disappears and stays gone.
+4. Open the report and read it out of the `immersive-panel`, convert HTML → Markdown, and write `google.md` with provenance frontmatter.
+
+### Grok: not headless, and that's fine
+
+Grok's login (`accounts.x.ai`) sits behind a **Cloudflare block that hard-refuses any automated browser**—and unlike Google's check, it fingerprints far deeper than `navigator.webdriver`. De-automation doesn't beat it. (The tell, if you try: a background request to `accounts.x.ai` comes back as an HTML block page, and the app throws `Unexpected token '<', "<!DOCTYPE"… is not valid JSON`.)
+
+The fix isn't to defeat Cloudflare—it's to stop *being* an automated browser. Launch a **normal** Chrome yourself with a debugging port, sign into Grok once like a human, and have the tool **attach over CDP**:
+
+```bash
+chrome.exe --remote-debugging-port=9223 \
+  --user-data-dir="…/.research-browser/cdp-profile" https://grok.com
+# then: research-browser --source x --cdp http://localhost:9223
+```
+
+Cloudflare sees a real browser (because it *is* one); Playwright just attaches to the tab. Expert tier is set via the model picker, DeepSearch is triggered by a `Use DeepSearch:` prefix carried in the persona prompt, and the response is read from the largest markdown panel that has headings.
+
+**The lesson worth keeping:** "make it headless" is not one goal. One site's bot-defense yields to a launch flag; another's doesn't yield at all, and the right move is to route around it—attach to a genuine session instead of impersonating one.
+
+---
+
+## Stage 3 — The subject writes its own report
+
+Now the model authors. `author-report.mjs` concatenates every dispatch in the report's folder plus the authoring **constitution** (`report-writer.md`) into one system prefix, then drives the subject model through a **stateful, section-by-section** pass:
+
+1. A **plan turn**: the model returns its thesis and an ordered list of sections (JSON).
+2. One **section turn each**, in reading order, verdict last. The conversation *accretes*—every section turn sees the actual sections written before it, so the report picks up its own threads instead of repeating itself, and the verdict sees the whole thing.
+
+Why section-by-section instead of one big call? A single 13k-token shot visibly loses steam toward the end—worse for reasoning models, whose hidden reasoning shares the completion budget. Splitting keeps each turn pointed, and the static prefix (constitution + dispatches) is cached once, so later turns read it at a fraction of the cost.
+
+The backend is chosen by the model's own id: an OpenRouter route like `z-ai/glm-5.2`, whose vendor prefix picks the path. For non-Claude subjects, **NVIDIA NIM** (`NVIDIA_NIM_API_KEY`) is fast, generous, and free-tier friendly—which is exactly what we used.
+
+> One portability note that cost a `400`: NVIDIA NIM (and most plain OpenAI-compatible servers) reject OpenRouter-only extensions like the `usage` opt-in and `cache_control` content parts. Gate those to OpenRouter and every OpenAI-compatible backend works.
+
+The output is a **non-destructive draft**—`research-reports/<slug>/draft.mdx`. Authoring stops there. Citation-vetting, MDX fixes, and final smoothing are the editor's pass, by design; the model's prose is never ghost-rewritten.
+
+---
+
+## Stage 4 — Integration
+
+The draft becomes a live catalogue entry in two typed files: a **profile** (`<slug>.tsx`—metadata, tags, sourced pricing and benchmarks, real sentiment quotes, and a strengths/weaknesses/unknowns table whose claims are capped at 15 words so nuance sorts into structured fields instead of bloating the line) and the **prose** (`<slug>.mdx`, section ids matching the profile exactly). Then a wall of gates has to go green:
+
+```bash
+npm run lint:models -- --strict   # schema, tags, section catalog, picker-signal coverage
+npm run lint:citations            # new sections must cite primary sources
+npm run lint:freshness            # no "today/this week"; present tense only
+npx tsc --noEmit
+npm run build
+```
+
+Absence is meaningful here: a missing tag means "not established," never "no." The picker eliminates on *verified* capability, so you grant only the positives you can prove from the dispatches.
+
+---
+
+## Case study: GLM 5.2, empty folder to draft
+
+The dispatches came back rich. Gemini's `google.md`: ~35k characters, **73 sourced citations**. Grok's `x.md`: ~12k characters, **10 citations**, X-primary, with real practitioner quotes.
+
+Then GLM 5.2 authored its own report from them—seven sections, ~32k characters, and it planned the structure itself. Some of what it did unprompted:
+
+- **Invented sections it deserved**: alongside the required `why-it-matters` / `economics` / `issues` / `verdict`, it added `architecture-and-context`, `coding-and-agentic-capabilities`, and `tool-call-reliability`—the last one because the dispatches surfaced a real, recurring complaint about fragile tool-call parsing.
+- **A thesis with teeth**: *the first open-weight model to genuinely threaten closed-source dominance in long-horizon agentic coding—but hampered by fragile tool-call parsing, making it a triumph for enterprise self-hosting and a liability for synchronous pipelines.* That's not a press release; it's a model naming its own weakness.
+- **Used the site's own components correctly**, learned from the constitution—`<AbbrSidenote>` with real definitions for DeepSeek Sparse Attention, IndexShare, and Multi-Token Prediction.
+- **Flagged its own uncertainty**: on the Coding Plan pricing, sourced from a secondary aggregator, it wrote *"treat as medium confidence"*—the exact epistemic honesty the constitution asks for, offered without being told.
+
+Total marginal cost of the run: nothing. The research rode subscription web UIs; the authoring rode NVIDIA NIM's free tier.
+
+---
+
+## Why do it this way
+
+Three principles carried the weight:
+
+1. **Derive, don't duplicate.** The brief is generated from the same registries the site renders from, so research requirements can't drift from site requirements.
+2. **The author is the subject.** A model writing about itself, under a candor norm, produces something a summary never will—including honest self-assessment the schema now has a structured home for.
+3. **Route around walls; don't pretend they aren't there.** Headless where headless works (Gemini), a real attached session where it doesn't (Grok), free backends where they exist (NVIDIA NIM). Each defense met with the cheapest honest answer, not a heroic one.
+
+The predecessor to this pipeline was a manual, ~25-minute, error-prone file-by-file integration ([documented here](/learn/articles/model-integration-workflow), and now history). The machinery exists so the writing can be free—and so the creativity goes into the prose, where a model is talking about the one subject it knows best.
