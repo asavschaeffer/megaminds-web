@@ -10,8 +10,14 @@ export type PromptMeta = {
   description: string
   category: string
   models: string[]
-  difficulty: 'beginner' | 'intermediate' | 'advanced'
-  successRate: number
+  // 'user' = a tested copy-paste prompt (carries difficulty + successRate).
+  // 'system' = a system prompt used by the site's own pipeline (carries role +
+  // source). Defaults to 'user' when omitted, for back-compatibility.
+  kind?: 'user' | 'system'
+  difficulty?: 'beginner' | 'intermediate' | 'advanced'
+  successRate?: number
+  role?: string
+  source?: string
   date: string
   submitter: 'megaminds' | 'community'
 }
@@ -50,6 +56,23 @@ export function getPromptsByCategory(category: string): PromptContent[] {
       ...data,
     } as PromptContent
   }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+}
+
+// Get a single prompt by category + slug
+export function getPrompt(category: string, slug: string): PromptContent | null {
+  const filePath = path.join(contentDirectory, 'prompts', category, `${slug}.mdx`)
+  if (!fs.existsSync(filePath)) {
+    return null
+  }
+  const { data, content } = matter(fs.readFileSync(filePath, 'utf8'))
+  return { slug, content, ...data } as PromptContent
+}
+
+// Every (category, slug) pair — for static generation of per-prompt pages
+export function getAllPromptParams(): { category: string; slug: string }[] {
+  return getPromptCategories().flatMap((category) =>
+    getPromptsByCategory(category.slug).map((prompt) => ({ category: category.slug, slug: prompt.slug }))
+  )
 }
 
 // Get all prompt categories

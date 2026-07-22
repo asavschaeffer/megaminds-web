@@ -45,10 +45,10 @@ The payoff: the day someone adds a new picker question to the site, the *next* b
 
 The brief is then prefixed with a **researcher persona**. There are two, because the two research surfaces have different jobs:
 
-- `google-researcher.md` — the desk researcher: source-obsessed, primary-source-first, "every claim carries a URL," preserves contradictions instead of smoothing them.
-- `x-researcher.md` — the field reporter: **X.com is the primary source**, harvest attributed practitioner quotes (positive, neutral, *and* critical), verbatim, with handles and dates.
+- [**Web researcher**](/tools/prompts/model-evaluation/google-deep-research) (`google-researcher.md`) — the desk researcher: source-obsessed, primary-source-first, "every claim carries a URL," preserves contradictions instead of smoothing them.
+- [**X.com researcher**](/tools/prompts/model-evaluation/x-deepsearch) (`x-researcher.md`) — the field reporter: **X.com is the primary source**, harvest attributed practitioner quotes (positive, neutral, *and* critical), verbatim, with handles and dates.
 
-One command emits the complete, paste-ready prompt for either surface.
+One command emits the complete, paste-ready prompt for either surface. Both personas — with the report-writer constitution and the creative probes — live in the [prompt library](/tools/prompts/model-evaluation).
 
 ---
 
@@ -98,7 +98,7 @@ Cloudflare sees a real browser (because it *is* one); Playwright just attaches t
 
 ## Stage 3 — The subject writes its own report
 
-Now the model authors. `author-report.mjs` concatenates every dispatch in the report's folder plus the authoring **constitution** (`report-writer.md`) into one system prefix, then drives the subject model through a **stateful, section-by-section** pass:
+Now the model authors. `author-report.mjs` concatenates every dispatch in the report's folder plus the authoring [**constitution**](/tools/prompts/model-evaluation/report-writer) (`report-writer.md`) into one system prefix, then drives the subject model through a **stateful, section-by-section** pass:
 
 1. A **plan turn**: the model returns its thesis and an ordered list of sections (JSON).
 2. One **section turn each**, in reading order, verdict last. The conversation *accretes*—every section turn sees the actual sections written before it, so the report picks up its own threads instead of repeating itself, and the verdict sees the whole thing.

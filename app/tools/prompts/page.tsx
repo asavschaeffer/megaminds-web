@@ -9,6 +9,7 @@ export const metadata = {
 
 const categoryDescriptions: Record<string, string> = {
   finance: 'Portfolio analysis, financial planning, investing strategies',
+  'model-evaluation': "Megaminds' own machinery — the research and report-writing system prompts that power the pipeline",
 }
 
 export default function PromptsPage() {
