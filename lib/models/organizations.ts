@@ -237,9 +237,9 @@ export const ORGANIZATIONS: Record<OrganizationId, Organization> = {
   },
   zhipu: {
     id: 'zhipu',
-    name: 'Zhipu AI',
-    description: 'Chinese AI company behind GLM',
-    website: 'https://www.zhipuai.cn',
+    name: 'Z.ai',
+    description: 'Chinese AI company behind the GLM models (formerly Zhipu AI)',
+    website: 'https://z.ai',
     iconId: 'zhipu',
     region: 'China',
     type: 'company',

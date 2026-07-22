@@ -302,6 +302,27 @@ export const SECTION_CATALOG: Record<string, SectionCatalogEntry> = {
     origin: 'claude-sonnet-4-5',
     description: 'Screen/cursor/terminal control capability',
   },
+  'architecture-and-context': {
+    id: 'architecture-and-context',
+    status: 'bespoke',
+    origin: 'glm-5-2',
+    description:
+      'Long-context architecture (sparse attention, cross-layer index reuse, MTP) and usable-recall evidence in one section, when the mechanism and the window are the same story',
+  },
+  'coding-and-agentic-capabilities': {
+    id: 'coding-and-agentic-capabilities',
+    status: 'bespoke',
+    origin: 'glm-5-2',
+    description:
+      'Combined coding + long-horizon agentic capability section for models where software engineering and autonomous tool use are one continuous story',
+  },
+  'tool-call-reliability': {
+    id: 'tool-call-reliability',
+    status: 'bespoke',
+    origin: 'glm-5-2',
+    description:
+      'The gap between advertised function-calling/structured-output and real serving-stack reliability: parsing failures, tool-call leakage, harness sensitivity',
+  },
   'sysprompt-poem': {
     id: 'sysprompt-poem',
     status: 'bespoke',

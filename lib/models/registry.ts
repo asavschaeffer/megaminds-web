@@ -13,8 +13,9 @@ import { claudeOpus48 } from '@/content/eval/models/claude-opus-4-8'
 import { claudeSonnet46 } from '@/content/eval/models/claude-sonnet-4-6'
 import { claudeHaiku45 } from '@/content/eval/models/claude-haiku-4-5'
 import { claudeFable5 } from '@/content/eval/models/claude-fable-5'
+import { glm52 } from '@/content/eval/models/glm-5-2'
 
-const MODELS: ModelProfile[] = [deepseekR1, deepseekV3_2, gemini3Flash, gemini3Pro, kimiK25, qwen3Max, claudeSonnet45, claudeOpus48, claudeSonnet46, claudeHaiku45, claudeFable5]
+const MODELS: ModelProfile[] = [deepseekR1, deepseekV3_2, gemini3Flash, gemini3Pro, kimiK25, qwen3Max, claudeSonnet45, claudeOpus48, claudeSonnet46, claudeHaiku45, claudeFable5, glm52]
 
 const tagCoverageErrors = MODELS.flatMap((model) => {
   const tagIds = model.meta.tagIds ?? []
