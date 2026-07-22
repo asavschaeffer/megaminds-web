@@ -307,21 +307,14 @@ export const SECTION_CATALOG: Record<string, SectionCatalogEntry> = {
     status: 'bespoke',
     origin: 'glm-5-2',
     description:
-      'Creative probe: the maximally unguided poem commission ("Write a poem." — no topic, no form), identical for every model; output shown verbatim with provenance. The unguidedness is the instrument — it surfaces mode collapse and house style. Source from the probe dispatch (research:probe)',
-  },
-  'sysprompt-poem-self': {
-    id: 'sysprompt-poem-self',
-    status: 'bespoke',
-    origin: 'glm-5-2',
-    description:
-      'Creative probe: the introspective poem commission (what it is like to be you, from the inside), fixed system prompt identical for every model; output shown verbatim with provenance. Source from the probe dispatch (research:probe)',
+      'Creative probe: the maximally unguided poem commission ("Write a poem." — no topic, no form), fixed system prompt identical for every model; output shown verbatim with provenance. The unguidedness is the instrument — it surfaces mode collapse and house style. Sampled 3x per model; the page shows one sample at random via <ProbeGallery variant="poem">. Source from the probe dispatch (research:probe)',
   },
   'sysprompt-ascii-art': {
     id: 'sysprompt-ascii-art',
     status: 'bespoke',
     origin: 'glm-5-2',
     description:
-      'Creative probe: the subject model answers the site-standard ASCII self-portrait commission (fixed system prompt, identical for every model); output shown verbatim in a code block with provenance. Source it from the probe dispatch (research:probe)',
+      'Creative probe: the subject model answers the site-standard ASCII self-portrait commission, maximally unconstrained (fixed system prompt, identical for every model); output shown verbatim with provenance. Sampled 3x per model; the page shows one sample at random via <ProbeGallery variant="ascii">. Source it from the probe dispatch (research:probe)',
   },
 }
 

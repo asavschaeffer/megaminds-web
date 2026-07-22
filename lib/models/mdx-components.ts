@@ -1,4 +1,5 @@
 import { AbbrSidenote, GlossarySidenote, Sidenote } from '@/components/shared/sidenote'
+import { ProbeGallery } from '@/components/eval/model-page/probe-gallery'
 
 /**
  * Component map for MDX rendering in model pages.
@@ -13,6 +14,9 @@ export const modelMdxComponents = {
   Sidenote,
   // `Aside` is an ergonomic alias for the same component.
   Aside: Sidenote,
+  // Random-sample viewer for the poem / ASCII-art probes (3 samples per
+  // model). See components/eval/model-page/probe-gallery.tsx for usage.
+  ProbeGallery,
   // <data> element passes through as a native HTML element
   data: 'data' as unknown as React.ComponentType,
   // <q> element passes through as a native HTML element

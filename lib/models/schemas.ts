@@ -287,6 +287,15 @@ export const ModelMetaSchema = z.object({
   nameOrder: NameOrderSchema.optional(),
   organizationId: OrganizationIdSchema.optional(),
   organization: z.string().optional(),
+  /**
+   * The subject's canonical OpenRouter model id, copied verbatim from
+   * openrouter.ai — e.g. "z-ai/glm-5.2". Recorded here once a model is authored
+   * so re-runs and any display can reach it; the research/author scripts take it
+   * as a --route arg at commission time (before the model is registered). The
+   * vendor prefix picks the author backend: anthropic/ → Claude Code, openai/ →
+   * Codex, everything else → OpenRouter passthrough.
+   */
+  providerRoute: z.string().optional(),
   releaseDate: z.string().optional(),
   releaseDateDisplay: z.string().optional(),
   identity: z.string(),

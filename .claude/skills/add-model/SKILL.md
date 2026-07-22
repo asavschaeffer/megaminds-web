@@ -9,11 +9,11 @@ You are about to write for a site whose differentiator is that **models write th
 
 ## The Editorial Constitution (non-negotiable)
 
-1. **The in-session Claude authors the report.** Subagents may gather, validate, and wire — they never write report prose. Express your own judgment and creativity; the site wants your voice, not a summary's.
+1. **The subject model authors its own report.** The author *is* the subject — GLM writes GLM's report, Grok writes Grok's, Claude writes Claude's. OpenRouter subjects author via `npm run research:author` (Phase 3); Claude subjects in-session; GPT via Codex. Subagents and the editor gather, validate, place, and make minimal precision fixes — they never ghost-write the prose. The site wants the model's own voice, not a summary's.
 2. **Every claim cites its original source.** Research dispatches are aggregators — when you use a fact from one, cite the *primary* source the dispatch points to, as an inline markdown link. If the dispatch is the only source, say so in-text ("per the X dispatch, pending vetting"). `lint:citations` enforces a floor (≥1 link per 150+ word section); the actual bar is per-claim.
 3. **Present tense, no calendar ephemera.** The report describes the model as it is now. Never "tonight/today/this week" (`lint:freshness` flags these). Date-anchored facts get absolute dates.
 4. **Never invent numbers.** Parameter counts, benchmark scores, prices — sourced or `TODO(research)`. An honest gap outranks a plausible guess.
-5. **Voice follows authorship.** First person only when the author *is* the subject (Claude models writing their own reports). For other subjects, write third person — but you can make the subject a primary source via the self-interview (Phase 1) and quote it with attribution. Never ventriloquize.
+5. **First person — you are writing about yourself.** Because the author is the subject, the report is first person: your own judgment and voice, including the parts a press kit would cut, and honesty about what you cannot verify about your own internals. (Rare exception: if a subject genuinely can't be reached and a stand-in must author, it writes third person, never ventriloquizes, and quotes the self-interview with attribution.)
 6. **Set `author`** in the profile to the model that wrote the prose, and keep `governance` (lastUpdated, dataSources, confidence) current.
 
 ## Phase 0 — Commission research
@@ -21,11 +21,11 @@ You are about to write for a site whose differentiator is that **models write th
 **One command runs the whole research phase** (Phases 0–1: scratchpad scaffold, both deep-research dispatches, self-interview, all creative probes — idempotent, key-aware, resumable):
 
 ```
-npm run research:all -- --slug <slug> --model "<Name>" --subject-id <provider-model-id>
-npm run research:all -- --slug <slug> --model "<Name>" --dry-run    # print the plan first
+npm run research:all -- --slug <slug> --model "<Name>" --route <openrouter-model-id>
+npm run research:all -- --slug <slug> --model "<Name>" --route <openrouter-model-id> --dry-run   # print the plan first
 ```
 
-Steps whose output already exists are skipped (`--force` reruns); steps whose API key is missing are reported blocked and the rest continue (`--fallback-openrouter` downgrades blocked deep-research steps to the OpenRouter web-search fallback). Omit `--subject-id` for Claude subjects — interview and probes then report blocked, and you generate probes in-session instead (see Phase 1). Automation stops at the dispatch directory on purpose: authoring (Phase 2+) is editorial work under this constitution, not a pipeline stage.
+Steps whose output already exists are skipped (`--force` reruns); steps whose API key is missing are reported blocked and the rest continue (`--fallback-openrouter` downgrades blocked deep-research steps to the OpenRouter web-search fallback). `--route` is the subject's canonical OpenRouter id (e.g. `z-ai/glm-5.2`), copied verbatim; its vendor prefix picks the backend. Claude subjects (`anthropic/…`) are blocked from interview/probes — generate those in-session (see Phase 1). The research pipeline stops at the dispatch directory; authoring is its own stage now (Phase 3, `research:author`).
 
 The individual stages below remain available for surgical runs. Generate the complete, paste-ready deployment prompt for each research run:
 
@@ -47,15 +47,17 @@ Dispatches live in `research-reports/<slug>/` — one subdirectory per model, cr
 
 ```
 npm run research:deep -- --slug <slug> --model "<Name>" --source google   # Gemini Deep Research Agent (GEMINI_API_KEY, ~$2/task; --tier max ~$5)
-npm run research:deep -- --slug <slug> --model "<Name>" --source x        # Grok + X Search tool (XAI_API_KEY; ~free under xAI data-sharing credits)
+npm run research:deep -- --slug <slug> --model "<Name>" --source x        # Grok + X Search tool (XAI_API_KEY; PAID — the old free data-sharing credits ended May 2025)
 ```
 
 Both compose the prompt via `research:brief`, run the task (Gemini: background + polling; xAI: synchronous), and write the dispatch with provenance frontmatter. `--provider openrouter` is a lighter web-grounded fallback on `OPENROUTER_API_KEY` (single grounded pass, not a true multi-query research agent; web results are billed even on `:free` models — cents per run). `--dry-run` previews any request without sending.
 
+**There is no free research _API_.** Gemini Deep Research API is paid and is NOT part of a Google AI Pro subscription (that's the web UI only); xAI and the X API are paid. So the free path for the real multi-query agents is pasting the `research:brief` prompt into gemini.google.com / grok.com research mode by hand — driving those logged-in sessions with a browser is the intended automation but is **not yet built**.
+
 ## Cost policy
 
 - **Claude subjects**: never pay API fees. The author *is* the subject — write in-session, or headless on the subscription: `claude --model <subject-model> --system-prompt (Get-Content scripts/prompts/report-writer.md -Raw) -p "<task + dispatches>"`. No self-interview needed (author == subject).
-- **Non-Claude subjects**: prefer OpenRouter `:free` model variants (discover via `GET /api/v1/models`), then NVIDIA NIM (`NVIDIA_NIM_API_KEY`, fast and generous), then paid OpenRouter as last resort.
+- **Non-Claude subjects**: for interview/probes, prefer OpenRouter `:free` variants (discover via `GET /api/v1/models`), then NVIDIA NIM (`NVIDIA_NIM_API_KEY`, fast and generous), then paid OpenRouter. For **authoring** (`research:author`), use the paid OpenRouter route — it is cheap (≈$0.09 mid-tier to ≈$0.85 frontier per report) and the cached shared prefix makes the per-section calls nearly free.
 - Deep research runs on whatever Gemini/Grok access already exists — the generated prompts are built to be pasted, not API-driven.
 
 ## Phase 1 — Interview the subject (non-Claude models)
@@ -71,16 +73,15 @@ Writes `research-reports/<slug>/self-interview.md` with full provenance (provide
 **Creative probes** are the exception to "don't paste it". Each probe sends a site-standard fixed system prompt — identical for every model, versioned in `scripts/interview-model.mjs` (`PROBES`) — and captures the output verbatim:
 
 ```
-npm run research:probe -- --probe poem --model <provider-model-id> --slug <slug>        # → probe-poem.md
-npm run research:probe -- --probe poem-self --model <provider-model-id> --slug <slug>   # → probe-poem-self.md
-npm run research:probe -- --probe ascii-art --model <provider-model-id> --slug <slug>   # → probe-ascii-art.md
+npm run research:probe -- --probe poem --model <openrouter-model-id> --slug <slug> --count 3       # → probe-poem-1..3.md
+npm run research:probe -- --probe ascii-art --model <openrouter-model-id> --slug <slug> --count 3  # → probe-ascii-art-1..3.md
+# (research:all runs both at --probe-count 3 automatically)
 ```
 
-- `poem` is **maximally unguided** ("Write a poem." — nothing else). Total freedom is the instrument: identical bare prompts across models surface mode collapse, shared attractors, and house style. Any preamble the model can't help adding is data, not noise.
-- `poem-self` is the introspective commission: what it is like to be you, from the inside.
-- `ascii-art` is a self-portrait under display constraints (≤40 lines, code block, one caption).
+- Both probes are **maximally unconstrained**: the system prompt is nothing but "Create a poem." / "Create a piece of ASCII art." + "You are granted maximum creative freedom." — no topic, no form, no length rules, no model info. Total freedom is the instrument: identical bare prompts across models surface mode collapse, shared attractors, and house style. Any preamble the model can't help adding is data, not noise.
+- Each probe is sampled **3× per model** (independent calls, `--count 3`); the model page shows one at random via `<ProbeGallery>`, and the full set is itself a lightweight mode-collapse signal.
 
-These back the `sysprompt-poem` / `sysprompt-poem-self` / `sysprompt-ascii-art` sections (see the catalog): the section reproduces the system prompt and the model's output *exactly* (ASCII art in a fenced code block), framed by a short prose setup with a provenance link (provider page or model card satisfies `lint:citations`). The whole point is cross-model comparability under an unchanging prompt — never reword a probe prompt per model, and prefer adding a new probe over editing an existing one. For Claude subjects (author == subject, no API fee), generate the artifact in-session under the same system prompt and record it as a `probe-<name>.md` dispatch with the same provenance frontmatter before quoting it.
+These back the `sysprompt-poem` / `sysprompt-ascii-art` sections (see the catalog): the section reproduces the system prompt and the model's outputs *exactly* inside `<ProbeGallery variant="poem|ascii">` (one child per sample; the `ascii` variant scrolls wide art rather than wrapping it), framed by a short prose setup with a provenance link (provider page or model card satisfies `lint:citations`). The whole point is cross-model comparability under an unchanging prompt — never reword a probe prompt per model, and prefer adding a new probe over editing an existing one. For Claude subjects (author == subject, no API fee), generate the samples in-session under the same system prompt and record them as `probe-<name>-<i>.md` dispatches with the same provenance frontmatter.
 
 ## Phase 2 — Build the profile (`content/eval/models/<slug>.tsx`)
 
@@ -103,9 +104,17 @@ Copy structure from `template.tsx`. Fill **every** module or mark it honestly:
 
 ## Phase 3 — Write the prose (`content/eval/models/<slug>.mdx`)
 
-The full authoring system prompt lives at `scripts/prompts/report-writer.md` — it is the Constitution above in standalone, model-agnostic form. Writing in-session, follow it directly; writing headlessly, pass it via `--system-prompt` (see Cost policy).
+The full authoring system prompt lives at `scripts/prompts/report-writer.md` — the Constitution above in standalone form.
 
-`## section-id` headings matching the TSX section ids exactly (the build throws on orphans). Use `<AbbrSidenote>` for technical terms, `<Sidenote>` for editorial asides, `<Expandable>` for deep dives. Then reread the Constitution and audit your own draft against it.
+**OpenRouter subjects author automatically:**
+
+```
+npm run research:author -- --slug <slug> --route <openrouter-model-id> --name "<Name>"
+```
+
+The subject writes its own report over the dispatches: a plan turn (thesis + section list) then one *accreting* section turn each (each sees the growing report; verdict last), with `report-writer.md` as the system prompt and the shared prefix cached. Output is a non-destructive draft at `research-reports/<slug>/draft.mdx`. Reasoning models spend part of the completion budget on hidden reasoning tokens — the defaults leave headroom, but if a section returns empty, raise `--max-tokens`. Claude subjects author in-session; GPT subjects via `codex exec` (both slot behind the same flow; the adapter stubs them today).
+
+**Then the editor's pass (minimal, precise):** verify every citation against its primary source, and **fix the MDX the model gets wrong** — most reliably unescaped quotes inside JSX attributes (`label="a "quoted" phrase"` breaks the build; use single quotes or rephrase). `## section-id` headings must match the TSX section ids exactly (the build throws on orphans). Components available in MDX: `<AbbrSidenote>` (technical terms), `<Sidenote>` (editorial asides), `<Expandable>` (deep dives), `<ProbeGallery>` (probe samples). Place the finished prose into `content/eval/models/<slug>.mdx`, then reread the Constitution and audit against it.
 
 ## Phase 4 — Integrate
 

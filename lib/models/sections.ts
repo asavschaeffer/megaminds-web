@@ -34,7 +34,6 @@ export const SECTION_ORDER: Record<string, number> = {
   issues: 60,
   personality: 65,
   'sysprompt-poem': 66,
-  'sysprompt-poem-self': 67,
   'sysprompt-ascii-art': 68,
   'in-the-wild': 70,
   'tools-and-bugs': 75,

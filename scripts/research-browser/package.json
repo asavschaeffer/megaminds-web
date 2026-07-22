@@ -1,0 +1,11 @@
+{
+  "name": "research-browser",
+  "private": true,
+  "type": "module",
+  "description": "Browser-driven deep-research dispatch runner (Gemini Deep Research + Grok DeepSearch, CDP/persistent Chrome). Isolated tool package so Playwright/Turndown never enter the Next app dependency graph.",
+  "dependencies": {
+    "playwright-core": "^1.49.0",
+    "turndown": "^7.2.0",
+    "turndown-plugin-gfm": "^1.0.2"
+  }
+}

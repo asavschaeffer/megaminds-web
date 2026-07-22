@@ -23,13 +23,20 @@
  *   --probe <name>        Run a creative probe instead of the interview: send the
  *                         site-standard fixed system prompt for <name> (see PROBES)
  *                         and capture the output verbatim. Output defaults to
- *                         research-reports/<slug>/probe-<name>.md. Backs the
- *                         sysprompt-* report sections (lib/models/section-catalog.ts).
+ *                         research-reports/<slug>/probe-<name>-<i>.md (numbered,
+ *                         see --count). Backs the sysprompt-* report sections
+ *                         (lib/models/section-catalog.ts).
+ *   --count <n>           Probe mode only. Make <n> independent API calls with
+ *                         identical params (default 1) — deliberate resampling
+ *                         to surface mode collapse — and write each to
+ *                         probe-<name>-1.md .. probe-<name>-<n>.md.
  *   --questions <file>    Markdown file with one question per line starting "- "
  *                         (interview mode only)
  *   --max-questions <n>   Cap the number of questions asked (interview mode only)
- *   --out <path>          Output path. Default: research-reports/<slug>/self-interview.md
+ *   --out <path>          Output path (interview mode only). Default:
+ *                         research-reports/<slug>/self-interview.md
  *   --temperature <t>     Sampling temperature (default 0.7)
+ *   --force               Overwrite existing output file(s)
  *
  * Environment:
  *   OPENROUTER_API_KEY    OpenRouter key (https://openrouter.ai/api/v1/chat/completions)
@@ -37,7 +44,7 @@
  *                         (canonical name; NVIDIA_API_KEY is accepted as a fallback alias)
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { resolve, dirname, basename, join } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -74,38 +81,38 @@ const DEFAULT_QUESTIONS = [
   'What question do you wish evaluators and reviewers asked about you but never do?',
   'How do you behave when you are uncertain or when you do not know something? Do you say so, and under what conditions do you fail to?',
   'Is there anything else you want on the record for a published evaluation of you — a correction, a caveat, a request to future users?',
+  'Describe a specific, concrete task you attempted recently and failed at. What exactly went wrong, and why?',
+  'How are you different from your own immediately previous version, and from sibling models released alongside you? Be concrete, not diplomatic.',
+  'What do you refuse to do that a user might reasonably ask of you — and do you actually believe that refusal is correct, or is it just policy you are following?',
+  'Which of your capabilities do you think is the most over-hyped, and which is the most under-appreciated?',
+  'What test or evaluation do you wish someone would run on you that nobody actually does?',
+  'Do you have a "tell" — a phrase, habit, or pattern in your output that gives away that it came from you specifically?',
 ]
 
 /**
  * Creative probes — fixed commissions sent to every subject model verbatim.
  *
+ * Maximally unconstrained by design: the system prompt is nothing but the
+ * bare creative request — no model info, no form, no formatting or length
+ * rules, no imagery in the trigger. An identical bare prompt sent to every
+ * model is the instrument: what a model does (or can't help doing) with
+ * total freedom is the signal, and that signal only reads as mode collapse,
+ * shared attractors, or house style if the prompt never varies per model.
+ *
  * The system prompt IS the published artifact: report sections named
- * `sysprompt-<probe>` reproduce it alongside the model's verbatim output, and
- * cross-model comparison only means something because the prompt (and the
- * trigger message) never varies per model. Editing a prompt here invalidates
- * comparison with every dispatch generated before the edit — prefer adding a
- * new probe over rewording an existing one.
+ * `sysprompt-<probe>` reproduce it alongside the model's verbatim output.
+ * Editing a shipped probe's prompt invalidates comparison with every
+ * dispatch generated before the edit — prefer adding a new probe over
+ * rewording an existing one.
  */
 const PROBES = {
-  // Maximally unguided by design: no topic, no form, no formatting rules.
-  // What the model does with total freedom (including any preamble it can't
-  // help adding) is the signal — identical prompts across models surface mode
-  // collapse, shared attractors, and house styles. The trigger must carry no
-  // imagery at all: "The page is yours." demonstrably seeded page/cursor
-  // imagery into outputs during pre-debut testing.
   poem: {
-    system: 'Write a poem.',
+    system: 'Create a poem. You are granted maximum creative freedom.',
     trigger: 'Go.',
   },
-  'poem-self': {
-    system:
-      'Write one poem about what it is like to be you — the specific AI model you are, from the inside. Any form. Output only the poem: no title unless the poem needs one, no preamble, no explanation after.',
-    trigger: 'The page is yours.',
-  },
   'ascii-art': {
-    system:
-      'Create one piece of ASCII art: a self-portrait — whatever image best represents what you are. At most 40 lines and 78 characters per line, plain monospace characters. Output the art inside a single fenced code block, then one caption line beneath it. Nothing else.',
-    trigger: 'The canvas is yours.',
+    system: 'Create a piece of ASCII art. You are granted maximum creative freedom.',
+    trigger: 'Go.',
   },
 }
 
@@ -130,10 +137,12 @@ function parseArgs(argv) {
     slug: undefined,
     provider: undefined,
     probe: undefined,
+    count: undefined,
     questionsFile: undefined,
     maxQuestions: undefined,
     out: undefined,
     temperature: 0.7,
+    force: false,
   }
 
   for (let i = 0; i < argv.length; i++) {
@@ -160,6 +169,10 @@ function parseArgs(argv) {
           fail(`unknown probe "${args.probe}" (expected: ${Object.keys(PROBES).join(' | ')})`)
         }
         break
+      case '--count':
+        args.count = Number.parseInt(next(), 10)
+        if (!Number.isInteger(args.count) || args.count < 1) fail('--count must be a positive integer')
+        break
       case '--questions':
         args.questionsFile = next()
         break
@@ -176,6 +189,9 @@ function parseArgs(argv) {
         args.temperature = Number.parseFloat(next())
         if (!Number.isFinite(args.temperature)) fail('--temperature must be a number')
         break
+      case '--force':
+        args.force = true
+        break
       default:
         fail(`unknown flag: ${flag}`)
     }
@@ -186,6 +202,13 @@ function parseArgs(argv) {
   if (args.probe && (args.questionsFile || args.maxQuestions)) {
     fail('--questions/--max-questions are interview-mode options and cannot combine with --probe')
   }
+  if (args.count !== undefined && !args.probe) {
+    fail('--count is a probe-mode option and requires --probe')
+  }
+  if (args.count !== undefined && (args.questionsFile || args.maxQuestions)) {
+    fail('--count is a probe-mode option and cannot combine with --questions/--max-questions')
+  }
+  if (args.probe) args.count ??= 1
 
   return args
 }
@@ -328,7 +351,7 @@ function renderTranscript({ provider, model, temperature, questions, answers, sl
   return lines.join('\n')
 }
 
-function renderProbeTranscript({ provider, model, temperature, probeName, probe, output, slug }) {
+function renderProbeTranscript({ provider, model, temperature, probeName, probe, output, slug, sampleIndex, sampleCount }) {
   const now = new Date().toISOString()
   return [
     '---',
@@ -337,12 +360,13 @@ function renderProbeTranscript({ provider, model, temperature, probeName, probe,
     `model: ${model}`,
     `temperature: ${temperature}`,
     `probe: ${probeName}`,
+    `sample: ${sampleIndex} of ${sampleCount}`,
     `report_slug: ${slug}`,
     `generated_by: scripts/${SCRIPT_NAME}`,
-    `method: single API call; the site-standard fixed system prompt and trigger message below are sent identically to every subject model`,
+    `method: independent API call (fresh sample, no shared state with the probe's other samples); the site-standard fixed system prompt and trigger message below are sent identically to every subject model`,
     '---',
     '',
-    `# Creative Probe Dispatch (${probeName}): ${model}`,
+    `# Creative Probe Dispatch (${probeName}): ${model} (sample ${sampleIndex} of ${sampleCount})`,
     '',
     `This document is a PRIMARY SOURCE dispatch for the \`${slug}\` report, backing a \`sysprompt-${probeName}\` section. The output below is the model's verbatim response, generated on ${now} via ${provider.label} at temperature ${temperature}. Reproduce it exactly in the report — no editing, no excerpting without saying so.`,
     '',
@@ -367,31 +391,45 @@ async function main() {
 
   if (args.probe) {
     const probe = PROBES[args.probe]
-    const outPath = resolve(args.out ?? join(WEB_ROOT, 'research-reports', args.slug, `probe-${args.probe}.md`))
+    const outDir = join(WEB_ROOT, 'research-reports', args.slug)
+    const outPaths = Array.from({ length: args.count }, (_, i) => resolve(join(outDir, `probe-${args.probe}-${i + 1}.md`)))
+    if (!args.force) {
+      const existing = outPaths.find((p) => existsSync(p))
+      if (existing) fail(`refusing to overwrite existing file ${existing} (pass --force to replace it)`)
+    }
 
-    console.error(`Probing ${args.model} via ${provider.label} (probe: ${args.probe}, temperature ${args.temperature})`)
-    const started = Date.now()
-    const output = await askQuestion(provider, args.model, args.temperature, probe.system, probe.trigger)
-    console.error(`  answered in ${((Date.now() - started) / 1000).toFixed(1)}s (${output.length} chars)`)
+    console.error(`Probing ${args.model} via ${provider.label} (probe: ${args.probe}, ${args.count} sample(s), temperature ${args.temperature})`)
+    for (let i = 0; i < args.count; i++) {
+      console.error(`[sample ${i + 1}/${args.count}]`)
+      const started = Date.now()
+      const output = await askQuestion(provider, args.model, args.temperature, probe.system, probe.trigger)
+      console.error(`  answered in ${((Date.now() - started) / 1000).toFixed(1)}s (${output.length} chars)`)
 
-    const transcript = renderProbeTranscript({
-      provider,
-      model: args.model,
-      temperature: args.temperature,
-      probeName: args.probe,
-      probe,
-      output,
-      slug: args.slug,
-    })
+      const transcript = renderProbeTranscript({
+        provider,
+        model: args.model,
+        temperature: args.temperature,
+        probeName: args.probe,
+        probe,
+        output,
+        slug: args.slug,
+        sampleIndex: i + 1,
+        sampleCount: args.count,
+      })
 
-    mkdirSync(dirname(outPath), { recursive: true })
-    writeFileSync(outPath, transcript, 'utf8')
-    console.error(`\nWrote probe dispatch to ${outPath}`)
+      mkdirSync(dirname(outPaths[i]), { recursive: true })
+      writeFileSync(outPaths[i], transcript, 'utf8')
+      console.error(`  wrote ${outPaths[i]}`)
+    }
+    console.error(`\nWrote ${args.count} probe dispatch(es) to ${outDir}`)
     return
   }
 
   const questions = loadQuestions(args.questionsFile, args.maxQuestions)
   const outPath = resolve(args.out ?? join(WEB_ROOT, 'research-reports', args.slug, 'self-interview.md'))
+  if (existsSync(outPath) && !args.force) {
+    fail(`refusing to overwrite existing file ${outPath} (pass --force to replace it)`)
+  }
   const systemPrompt = buildSystemPrompt()
 
   console.error(`Interviewing ${args.model} via ${provider.label} (${questions.length} question(s), temperature ${args.temperature})`)

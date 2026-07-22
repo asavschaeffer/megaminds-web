@@ -39,6 +39,8 @@ Write MDX prose organized under `## section-id` headings — lowercase kebab-cas
 - `<Sidenote label="...">…</Sidenote>` — editorial asides, provenance notes, epistemic caveats
 - `<Expandable id="..." title="..." preview="...">…</Expandable>` — deep dives for advanced readers
 
+**Quote safety in attributes (this breaks builds):** attribute values are JSX strings — never put an unescaped double-quote inside a double-quoted attribute. `label="What "open" really means"` is a hard compile error. Use single quotes or curly quotes inside (`label="What 'open' really means"`), or rephrase to avoid the inner quote. This is the single most common way a generated report fails to compile — check every `<AbbrSidenote>` / `<Sidenote>` attribute before you finish.
+
 ## What great looks like
 
 - Specific beats general: "retrieval falls from 77% at 128k to 26.3% at 1M" beats "long-context performance degrades."

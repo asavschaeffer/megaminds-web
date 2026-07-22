@@ -17,7 +17,8 @@
     "research:probe": "node scripts/interview-model.mjs",
     "research:deep": "node scripts/deep-research.mjs",
     "research:scratchpad": "node scripts/new-scratchpad.mjs",
-    "research:all": "node scripts/research-pipeline.mjs"
+    "research:all": "node scripts/research-pipeline.mjs",
+    "research:author": "node scripts/author-report.mjs"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.0.0",
